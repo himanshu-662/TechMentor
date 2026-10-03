@@ -147,15 +147,15 @@ export const TechMentorNav = ({ currentSuite = 'ecosystem', onNavigate, onLaunch
           className="flex items-center gap-3.5 group cursor-pointer select-none"
           title="TechMentor — Return to Home"
         >
-          <div className="w-11 h-11 rounded-xl bg-gradient-to-tr from-brand-600 via-indigo-600 to-cyan-500 p-0.5 shadow-lg shadow-brand-500/20 group-hover:shadow-brand-500/35 transition-all duration-300 group-hover:scale-105">
+          <div className="w-11 h-11 rounded-xl bg-gradient-to-tr from-emerald-500 via-cyan-500 via-purple-600 to-rose-500 p-0.5 shadow-lg shadow-purple-500/20 group-hover:shadow-cyan-500/35 transition-all duration-300 group-hover:scale-105">
             <div className="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
-              <Compass className="w-6 h-6 text-brand-400 group-hover:rotate-45 transition-transform duration-500" />
+              <Compass className="w-6 h-6 text-cyan-400 group-hover:text-white group-hover:rotate-45 transition-all duration-500" />
             </div>
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-xl font-black tracking-tight text-white group-hover:text-brand-300 transition-colors">
-                Tech<span className="text-brand-400">Mentor</span>
+              <span className="text-xl font-black tracking-tight text-white group-hover:opacity-95 transition-all">
+                Tech<span className="bg-gradient-to-r from-emerald-400 via-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">Mentor</span>
               </span>
             </div>
             <p className="text-[11px] text-slate-400 font-medium tracking-wide">

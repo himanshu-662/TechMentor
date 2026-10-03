@@ -21,14 +21,17 @@ import { SUITES_CONFIG } from './TechMentorNav';
 
 export const TechMentorFooter = ({ onNavigate, onLaunchStudio }) => {
   return (
-    <footer className="border-t border-slate-800/80 bg-slate-950/90 text-slate-400 py-16 relative z-10">
+    <footer className="border-t border-slate-800/80 bg-slate-950/90 text-slate-400 py-16 relative z-10 overflow-hidden">
+      {/* Multi-Spectrum Continuum Top Divider */}
+      <div className="h-1 w-full bg-gradient-to-r from-emerald-500 via-sky-500 via-rose-500 via-cyan-500 via-amber-500 to-purple-600 absolute top-0 left-0"></div>
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Top Callout Banner */}
-        <div className="mb-14 p-8 rounded-3xl bg-gradient-to-r from-slate-900 via-brand-950/30 to-slate-900 border border-brand-500/20 shadow-2xl relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="mb-14 p-8 rounded-3xl bg-gradient-to-r from-slate-900 via-slate-900/90 to-slate-900 border border-slate-800 shadow-2xl relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="space-y-2 text-center md:text-left">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-brand-500/10 text-brand-300 border border-brand-500/20">
-              <GraduationCap className="w-3.5 h-3.5 text-brand-400" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r from-emerald-500/10 via-cyan-500/10 to-purple-500/10 text-slate-300 border border-slate-700/60">
+              <GraduationCap className="w-3.5 h-3.5 text-cyan-400" />
               <span>Learn by Building from First Principles</span>
             </div>
             <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
@@ -54,15 +57,15 @@ export const TechMentorFooter = ({ onNavigate, onLaunchStudio }) => {
           <div className="lg:col-span-2 space-y-4">
             <div
               onClick={() => onNavigate && onNavigate('landing')}
-              className="flex items-center gap-3 cursor-pointer group"
+              className="flex items-center gap-3 cursor-pointer group select-none"
             >
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 via-indigo-600 to-cyan-500 p-0.5">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 via-cyan-500 via-purple-600 to-rose-500 p-0.5 shadow-md shadow-purple-500/10 group-hover:shadow-cyan-500/30 transition-all duration-300">
                 <div className="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
-                  <Compass className="w-5 h-5 text-brand-400 group-hover:rotate-45 transition-transform duration-300" />
+                  <Compass className="w-5 h-5 text-cyan-400 group-hover:text-white group-hover:rotate-45 transition-all duration-300" />
                 </div>
               </div>
-              <span className="text-xl font-black text-white tracking-tight">
-                Tech<span className="text-brand-400">Mentor</span>
+              <span className="text-xl font-black text-white tracking-tight group-hover:opacity-95 transition-all">
+                Tech<span className="bg-gradient-to-r from-emerald-400 via-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">Mentor</span>
               </span>
             </div>
             <p className="text-sm text-slate-400 leading-relaxed pr-6">
