@@ -461,7 +461,7 @@ X_capped = np.clip(X_raw, lower_fence, upper_fence)`
         </h1>
 
         {/* Crisp, Motivating Subtitle */}
-        <p className="mt-5 text-sm sm:text-base text-slate-400 max-w-2xl mx-auto font-normal leading-relaxed">
+        <p className="mt-5 text-xs sm:text-sm text-slate-400 max-w-xl mx-auto font-normal leading-relaxed">
           Step inside the black box. <strong className="text-slate-200 font-semibold">TechMentor</strong> powers your journey with first-principles engineering tools: <span className="text-brand-300 font-semibold">DataMentor</span> for transparent data preprocessing & ML, <span className="text-blue-400 font-semibold">AIMentor</span> for grounded RAG pipelines, and <span className="text-purple-400 font-semibold">Menti.ai</span> for Socratic AI tutoring.
         </p>
 

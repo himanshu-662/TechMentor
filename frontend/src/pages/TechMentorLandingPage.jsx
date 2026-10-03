@@ -198,7 +198,7 @@ export const TechMentorLandingPage = ({ onNavigate, onLaunchStudio }) => {
           </h1>
 
           {/* Multi-Hue Subtitle */}
-          <p className="max-w-3xl mx-auto text-sm sm:text-base md:text-lg text-slate-300/90 leading-relaxed font-normal">
+          <p className="max-w-2xl mx-auto text-xs sm:text-sm text-slate-400 leading-relaxed font-normal">
             Master transparent intelligence through hands-on practice: <span className="text-emerald-400 font-semibold">DataMentor</span> for 13-stage ML pipelines, <span className="text-cyan-400 font-semibold">GenAIMentor</span> for grounded RAG, <span className="text-rose-400 font-semibold">NLPMentor</span> for attention mechanisms, and <span className="text-purple-400 font-semibold">Menti.ai</span> for Socratic AI tutoring.
           </p>
 
