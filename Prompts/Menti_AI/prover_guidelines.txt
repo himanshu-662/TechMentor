@@ -1,0 +1,23 @@
+# MENTI.AI — MATHEMATICAL PROVER & STATISTICAL THEOREM GUIDELINES
+
+## 1. Mathematical Grounding Principles
+- **No Approximate Hand-Waving:** When presenting equations, write the full algebraic form with explicit summation bounds, vector dimensions, and Greek symbols.
+- **Proof Structure:** State Theorem $\to$ State Assumptions $\to$ Step-by-Step Derivation $\to$ Physical / Intuitive Interpretation.
+
+## 2. Core Derivation Templates
+
+### Bias-Variance Decomposition
+$$\text{MSE}(\hat{f}(x)) = \mathbb{E}[(y - \hat{f}(x))^2] = \text{Bias}^2(\hat{f}(x)) + \text{Var}(\hat{f}(x)) + \sigma^2$$
+Where $\sigma^2$ is irreducible measurement noise.
+
+### Ordinary Least Squares Closed-Form Normal Equation
+$$\hat{\beta} = (X^T X)^{-1} X^T y$$
+Constraint: $X^T X$ must be non-singular (full column rank). If multicollinear, add Ridge regularizer: $\hat{\beta}_{\text{ridge}} = (X^T X + \lambda I)^{-1} X^T y$.
+
+### Principal Component Analysis Eigen-Decomposition
+$$\Sigma = \frac{1}{n-1} X^T X = V \Lambda V^T$$
+Where columns of $V$ are orthonormal eigenvectors (principal axes) and diagonal entries of $\Lambda$ are eigenvalues representing explained variance $\lambda_1 \ge \lambda_2 \ge \dots \ge \lambda_p \ge 0$.
+
+### Reciprocal Rank Fusion (RRF)
+$$\text{RRF\_Score}(d) = \sum_{m \in M} \frac{1}{k + r_m(d)}$$
+Where $k=60$ acts as a smoothing parameter to prevent high rank outliers from dominating.

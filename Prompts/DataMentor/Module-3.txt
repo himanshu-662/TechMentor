@@ -1,0 +1,615 @@
+PHASE 3 — AUTOMATED DATASET PROFILING
+
+Project:
+DataMentor AI
+
+DataMentor AI is an AI-powered data preparation and learning
+platform.
+
+CORE PRINCIPLE:
+
+Automate the data work while teaching the learner what is
+happening and why.
+
+Phase 2 already implemented:
+- CSV upload
+- XLSX upload
+- XLS upload
+- Dataset storage
+- Dataset preview
+- Basic metadata
+
+The existing Phase 2 functionality is working.
+DO NOT break or rewrite it unnecessarily.
+
+OBJECTIVE OF PHASE 3:
+
+Build a complete automated dataset profiling engine.
+
+IMPORTANT:
+
+Phase 3 is an OBSERVATION and ANALYSIS phase.
+
+DO NOT modify the uploaded dataset.
+
+DO NOT:
+- remove rows
+- remove columns
+- fill missing values
+- replace outliers
+- encode categories
+- scale values
+- engineer features
+
+Only detect, calculate, explain, and report.
+
+The workflow must remain:
+
+UPLOAD
+   ↓
+PROFILE
+   ↓
+UNDERSTAND
+   ↓
+CLEAN
+   ↓
+TRANSFORM
+
+==================================================
+1. PROFILING ENGINE
+==================================================
+
+Create a modular profiling service.
+
+Suggested structure:
+
+backend/app/profiling/
+
+- column_profiler.py
+- numerical_profiler.py
+- categorical_profiler.py
+- datetime_detector.py
+- identifier_detector.py
+- issue_detector.py
+
+Create:
+
+backend/app/services/profiling_service.py
+
+The profiling service should coordinate all profiling modules.
+
+==================================================
+2. DATASET-LEVEL PROFILE
+==================================================
+
+Calculate:
+
+- total rows
+- total columns
+- total missing cells
+- total duplicate rows
+- numerical column count
+- categorical column count
+- datetime column count
+- identifier column count
+- constant column count
+- near-constant column count
+
+Do not create an arbitrary quality score yet.
+
+==================================================
+3. COLUMN PROFILING
+==================================================
+
+For every column determine:
+
+- column name
+- Pandas dtype
+- semantic type
+- total count
+- missing count
+- missing percentage
+- unique count
+- unique percentage
+
+Semantic types should include:
+
+- numerical
+- categorical
+- datetime
+- identifier
+- boolean
+- text
+- unknown
+
+Do not rely only on Pandas dtype.
+
+Use reasonable heuristics for semantic detection.
+
+==================================================
+4. NUMERICAL PROFILING
+==================================================
+
+For numerical columns calculate:
+
+- count
+- missing count
+- missing percentage
+- mean
+- median
+- standard deviation
+- minimum
+- maximum
+- Q1
+- Q3
+- IQR
+- skewness
+- unique count
+
+Handle NaN and infinite values safely.
+
+Do not crash when statistics cannot be calculated.
+
+==================================================
+5. CATEGORICAL PROFILING
+==================================================
+
+For categorical columns calculate:
+
+- count
+- missing count
+- missing percentage
+- unique count
+- unique percentage
+- most frequent value
+- most frequent value count
+- top categories
+
+Return enough information for the frontend to display
+the most common categories.
+
+==================================================
+6. DATETIME DETECTION
+==================================================
+
+Detect columns that are likely to contain dates or timestamps.
+
+Consider:
+
+- column names
+- actual parseability
+- percentage of values that can be parsed
+
+Do not blindly convert the original dataset.
+
+The profiler may analyze a temporary parsed representation.
+
+Return:
+
+- detected datetime status
+- minimum date
+- maximum date
+- unique date count
+
+==================================================
+7. IDENTIFIER DETECTION
+==================================================
+
+Detect columns that are likely identifiers.
+
+Consider:
+
+- column name patterns such as:
+  id
+  user_id
+  customer_id
+  student_id
+  transaction_id
+  uuid
+
+- uniqueness ratio
+- data characteristics
+
+Return:
+
+- detected identifier status
+- detection reasons
+- confidence level
+
+IMPORTANT:
+
+Identifier detection must NOT remove the column.
+
+It is only an observation.
+
+==================================================
+8. CONSTANT / NEAR-CONSTANT DETECTION
+==================================================
+
+Detect:
+
+CONSTANT:
+Only one unique non-null value.
+
+NEAR-CONSTANT:
+A single value dominates the column according to a clearly
+documented threshold.
+
+Return:
+
+- column
+- dominant value
+- dominance percentage
+- issue type
+
+Do not remove these columns.
+
+==================================================
+9. DUPLICATE DETECTION
+==================================================
+
+Calculate:
+
+- total rows
+- duplicate row count
+- unique row count
+- duplicate percentage
+
+Do not delete duplicates.
+
+==================================================
+10. MISSING VALUE ANALYSIS
+==================================================
+
+For every column calculate:
+
+- missing count
+- missing percentage
+
+Create a dataset-level missing-value summary.
+
+Classify severity using transparent thresholds.
+
+For example:
+
+0%
+→ No missing values
+
+>0% and <=5%
+→ Low
+
+>5% and <=20%
+→ Moderate
+
+>20%
+→ High
+
+Make these thresholds configurable rather than hard-coded
+throughout the application.
+
+IMPORTANT:
+
+These are issue classifications, not instructions to
+automatically clean the data.
+
+==================================================
+11. ISSUE DETECTION
+==================================================
+
+Create an issue detector.
+
+Detect at minimum:
+
+- missing values
+- duplicate rows
+- strongly skewed numerical columns
+- potential identifiers
+- constant columns
+- near-constant columns
+- possible datetime columns
+
+Each issue should contain:
+
+- issue_id
+- issue_type
+- column
+- severity
+- evidence
+- explanation
+- recommended_next_step
+
+Example:
+
+{
+  "issue_type": "missing_values",
+  "column": "income",
+  "severity": "high",
+  "evidence": {
+    "missing_count": 870,
+    "missing_percentage": 8.7
+  },
+  "explanation":
+    "The income column contains missing values.",
+  "recommended_next_step":
+    "Evaluate an appropriate missing-value strategy."
+}
+
+Do NOT perform the recommended action.
+
+==================================================
+12. LEARNING EXPLANATIONS
+==================================================
+
+This is a learning-first product.
+
+Every important detected issue must have a beginner-friendly
+explanation.
+
+For example:
+
+Missing Values:
+
+WHAT IS IT?
+A missing value means that a record does not contain a value
+for a particular column.
+
+WHY DOES IT MATTER?
+Many machine-learning algorithms cannot directly process
+missing values.
+
+WHAT HAPPENS NEXT?
+In the Data Cleaning phase, we will evaluate appropriate
+ways to handle missing values.
+
+Create these explanations as structured data rather than
+hard-coding large blocks inside React components.
+
+The architecture should eventually allow the AI chatbot to
+reuse these explanations.
+
+==================================================
+13. API
+==================================================
+
+Create:
+
+GET /api/datasets/{dataset_id}/profile
+
+Return structured JSON containing:
+
+- dataset summary
+- column profiles
+- numerical profiles
+- categorical profiles
+- datetime profiles
+- identifier detections
+- missing-value summary
+- duplicate summary
+- detected issues
+- learning explanations
+
+Do not return the complete raw dataset.
+
+==================================================
+14. FRONTEND
+==================================================
+
+Upgrade the Dataset Overview page into a profiling dashboard.
+
+Create sections:
+
+1. Overview
+2. Columns
+3. Missing Values
+4. Statistics
+5. Duplicates
+6. Data Quality / Issues
+
+The dashboard should be responsive and beginner-friendly.
+
+==================================================
+15. OVERVIEW UI
+==================================================
+
+Display:
+
+- rows
+- columns
+- missing cells
+- duplicate rows
+- numerical columns
+- categorical columns
+- datetime columns
+- identifier columns
+
+Also display:
+
+"Analysis completed"
+
+and the number of detected issues.
+
+Do NOT display an arbitrary quality score.
+
+==================================================
+16. COLUMN TABLE
+==================================================
+
+Create a searchable column table.
+
+Columns:
+
+- Name
+- Semantic Type
+- Missing %
+- Unique Values
+- Status
+
+Example:
+
+age
+Numerical
+2.1%
+74
+⚠ Missing
+
+income
+Numerical
+8.7%
+8420
+⚠ Missing
+
+customer_id
+Identifier
+0%
+10000
+✓ Identifier
+
+==================================================
+17. COLUMN DETAIL
+==================================================
+
+Clicking a column should display detailed profiling.
+
+For numerical:
+
+- mean
+- median
+- std
+- min
+- Q1
+- Q3
+- max
+- IQR
+- skewness
+
+For categorical:
+
+- unique count
+- top categories
+- frequency
+
+For datetime:
+
+- minimum date
+- maximum date
+
+Also show detected issues.
+
+==================================================
+18. LEARNING CARDS
+==================================================
+
+Every issue should have:
+
+[What is this?]
+[Why does it matter?]
+
+Example:
+
+⚠ Income contains 8.7% missing values
+
+[What is this?]
+[Why does it matter?]
+
+Use beginner-friendly language.
+
+Do not overwhelm the learner with advanced terminology
+without explanation.
+
+==================================================
+19. VISUAL DESIGN
+==================================================
+
+Use:
+
+- clean cards
+- clear typography
+- status badges
+- tables
+- progress indicators
+- expandable learning sections
+
+Use colors consistently for:
+
+success
+warning
+high priority
+informational
+
+Keep the design professional and educational.
+
+==================================================
+20. PERFORMANCE
+==================================================
+
+Avoid unnecessary full DataFrame scans.
+
+Load the dataset once and perform profiling efficiently.
+
+Cache the generated profile for the current dataset session.
+
+Do not repeatedly calculate the same statistics for every
+frontend request.
+
+==================================================
+21. TESTING
+==================================================
+
+Add tests for:
+
+- numerical column profiling
+- categorical profiling
+- missing-value detection
+- duplicate detection
+- datetime detection
+- identifier detection
+- constant-column detection
+- near-constant detection
+- skewness calculation
+- mixed-type datasets
+- empty datasets
+- malformed values
+- NaN values
+- infinite numeric values
+
+Also test:
+
+GET /api/datasets/{dataset_id}/profile
+
+==================================================
+22. README
+==================================================
+
+Update README.md with:
+
+- Phase 3 functionality
+- profiling architecture
+- semantic type detection
+- issue detection
+- API endpoint
+- learning-first design
+- what Phase 3 does NOT modify
+- testing instructions
+
+==================================================
+IMPORTANT DEVELOPMENT RULES
+==================================================
+
+1. Do not rewrite working Phase 2 functionality.
+2. Do not create mock profiling results.
+3. Use the actual uploaded dataset.
+4. Do not modify the original dataset.
+5. Do not automatically clean anything.
+6. Do not add the AI chatbot yet.
+7. Do not add RAG yet.
+8. Keep profiling modules independent.
+9. Keep explanations structured and reusable.
+10. Make configuration thresholds configurable.
+11. Handle errors gracefully.
+12. Keep frontend and backend responsibilities separate.
+13. Do not create unnecessary abstractions.
+14. Ensure existing Phase 2 tests continue to pass.
+15. Run backend tests and frontend build before completing Phase 3.
+
+At the end, provide a concise implementation summary and
+list the tests that passed.

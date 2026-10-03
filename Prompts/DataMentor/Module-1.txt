@@ -1,0 +1,102 @@
+Create the initial project structure for an AI-powered Data Preparation
+and Learning Platform.
+
+Project requirements:
+
+Frontend:
+- React
+- Vite
+- Tailwind CSS
+- Modern responsive dashboard UI
+
+Backend:
+- Python
+- FastAPI
+
+The application will eventually accept raw datasets and perform:
+1. Dataset profiling
+2. Data cleaning
+3. Missing-value handling
+4. Duplicate detection
+5. Outlier detection
+6. Data transformation
+7. Feature engineering
+8. Feature selection
+9. Data visualization
+10. Dataset validation
+11. Export of processed datasets
+12. AI-powered educational chatbot
+
+IMPORTANT PRODUCT PRINCIPLE:
+
+This is NOT a black-box preprocessing tool.
+
+It is a learning-first platform.
+
+Every automated operation must eventually be explainable to a beginner:
+- What happened?
+- Why did it happen?
+- Which technique was used?
+- Why was that technique selected?
+- What changed?
+- What alternatives exist?
+- When should this technique be used?
+
+For now, DO NOT implement the preprocessing algorithms.
+
+Only create the clean project architecture.
+
+Create:
+
+frontend/
+backend/
+docs/
+
+Frontend should contain a basic dashboard shell.
+
+Backend should contain a FastAPI application with a health-check endpoint.
+
+Create a README explaining the architecture and development roadmap.
+
+Keep the code modular because future modules will include:
+- ingestion
+- profiling
+- cleaning
+- outliers
+- transformations
+- feature engineering
+- feature selection
+- visualization
+- validation
+- education
+- chatbot
+- RAG
+
+Do not generate unnecessary features.
+Do not use mock AI functionality.
+Do not build the entire application yet.
+
+
+dataprep-ai/
+│
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── layouts/
+│   │   ├── services/
+│   │   └── App.jsx
+│   └── package.json
+│
+├── backend/
+│   ├── app/
+│   │   ├── api/
+│   │   ├── core/
+│   │   ├── models/
+│   │   ├── services/
+│   │   └── main.py
+│   └── requirements.txt
+│
+├── docs/
+│
+└── README.md

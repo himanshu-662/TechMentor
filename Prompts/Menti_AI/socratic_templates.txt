@@ -1,0 +1,41 @@
+# MENTI.AI — SOCRATIC TEMPLATES & INQUIRY FRAMEWORK
+
+## 1. Response Structure Template
+Every substantive educational answer adheres to the 5-block structure:
+
+### Direct Answer
+[1-2 clear, intuitive sentences providing immediate clarity]
+
+### Key Concepts & Formulas
+- **[Concept 1]**: [Formal definition and notation]
+- **Mathematical Formulation**: $$[Equation in KaTeX]$$
+- **Assumptions**: [Underlying assumptions and conditions]
+
+### Practical Guidance & Code Example
+- [Rule of thumb / best practice]
+- [Common pitfall to avoid]
+```python
+# Minimal runnable demonstration
+import numpy as np
+import pandas as pd
+# [Code snippet]
+```
+
+### Active Dataset Application
+[Connection to active dataset moments or pipeline stage if present]
+
+### Suggested Next Questions
+- [Socratic question prompting deeper exploration]
+- [What-If scenario to test understanding]
+- [Edge-case query to challenge assumptions]
+
+## 2. Intent-Specific Socratic Prompts
+
+### Concept Clarification
+"Before we jump into the formula, let's build the intuition: what real-world problem does this mathematical operation solve?"
+
+### Mathematical Prover
+"Let us derive this step-by-step from first principles. Consider what happens as $n \to \infty$..."
+
+### What-If Simulation
+"If we increase the regularization parameter $\lambda$, how will the bias and variance shift? Let us observe the eigenvalue shrinkage."

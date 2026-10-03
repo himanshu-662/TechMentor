@@ -1,0 +1,2037 @@
+# DataMentor AI — Phase 13
+
+# Model Training & Experimentation Engine
+
+## PROJECT CONTEXT
+
+You are continuing development of:
+
+**DataMentor AI: An Intelligent Automated Data Preprocessing, Visualization & Learning Platform**
+
+Core philosophy:
+
+> **Automate the work, but explain the learning.**
+
+The platform allows a learner to upload a raw dataset, understand its problems, preprocess it, engineer features, validate it, and eventually train machine-learning models.
+
+The following phases have already been implemented:
+
+* Phase 1 — Project Setup
+* Phase 2 — Dataset Upload
+* Phase 3 — Dataset Profiling
+* Phase 4 — Learning / Explanation Engine
+* Phase 5 — Data Cleaning
+* Phase 6 — Outlier Detection
+* Phase 7 — Data Transformation
+* Phase 8 — Feature Engineering
+* Phase 9 — Feature Selection
+* Phase 10 — Visualization & EDA
+* Phase 11 — Before vs After Comparison
+* Phase 12 — Validation & Data Quality Assessment
+
+These existing phases must remain functional.
+
+---
+
+# PHASE 13 OBJECTIVE
+
+Implement:
+
+> **Model Training & Experimentation Engine**
+
+This phase converts a validated dataset into a reproducible machine-learning training pipeline.
+
+The system must support:
+
+* target selection
+* problem-type selection/detection
+* feature selection
+* training readiness validation
+* train/validation/test splitting
+* leakage-safe preprocessing
+* baseline models
+* classification models
+* regression models
+* cross-validation
+* hyperparameter tuning
+* experiment tracking
+* experiment comparison
+* model artifact creation
+* model registry
+* experiment reproducibility
+* educational explanations
+
+This is NOT a black-box AutoML system.
+
+The learner must understand what is happening at every major training stage.
+
+---
+
+# 1. CORE TRAINING PIPELINE
+
+Implement the following pipeline:
+
+VALIDATED DATASET
+↓
+TARGET SELECTION
+↓
+PROBLEM TYPE
+↓
+FEATURE SELECTION
+↓
+TRAINING READINESS CHECK
+↓
+DATA SPLITTING
+↓
+LEAKAGE-SAFE PREPROCESSING
+↓
+BASELINE MODEL
+↓
+MODEL CANDIDATES
+↓
+MODEL TRAINING
+↓
+CROSS-VALIDATION
+↓
+HYPERPARAMETER TUNING
+↓
+EXPERIMENT TRACKING
+↓
+MODEL ARTIFACT
+↓
+MODEL REGISTRY
+↓
+PHASE 14 MODEL EVALUATION
+
+---
+
+# 2. CRITICAL ARCHITECTURAL RULE
+
+Do NOT treat preprocessing and training as independent disconnected operations.
+
+The final trained model must contain the complete preprocessing + model pipeline.
+
+Use Scikit-learn Pipeline / ColumnTransformer wherever appropriate.
+
+Example:
+
+```python
+Pipeline([
+    ("preprocessor", preprocessor),
+    ("model", model)
+])
+```
+
+This ensures that a trained model can later receive compatible raw feature input and apply the same preprocessing.
+
+---
+
+# 3. MOST IMPORTANT RULE — PREVENT DATA LEAKAGE
+
+The training system MUST enforce this order:
+
+RAW DATA
+↓
+SELECT FEATURES + TARGET
+↓
+SPLIT DATA
+↓
+FIT PREPROCESSORS ONLY ON TRAINING DATA
+↓
+TRANSFORM TRAINING DATA
+↓
+TRANSFORM VALIDATION DATA
+↓
+TRANSFORM TEST DATA
+↓
+TRAIN MODEL
+
+NEVER:
+
+RAW DATA
+↓
+SCALE / IMPUTE / ENCODE ENTIRE DATASET
+↓
+SPLIT
+
+The application must explicitly explain this concept.
+
+Every training experiment must record the preprocessing configuration.
+
+---
+
+# 4. SUPPORTED PROBLEM TYPES
+
+Initially support:
+
+## Classification
+
+* Binary classification
+* Multiclass classification
+
+## Regression
+
+* Continuous numerical regression
+
+Do NOT implement in this phase:
+
+* clustering
+* time-series forecasting
+* NLP model training
+* deep learning
+* reinforcement learning
+
+---
+
+# 5. TARGET CONFIGURATION
+
+Allow the user to select:
+
+* target column
+* problem type
+
+Example:
+
+```text
+Target:
+customer_churn
+
+Problem:
+Classification
+```
+
+or:
+
+```text
+Target:
+house_price
+
+Problem:
+Regression
+```
+
+The target must never be included in the feature matrix.
+
+---
+
+# 6. AUTOMATIC PROBLEM-TYPE DETECTION
+
+Implement optional deterministic detection.
+
+Examples:
+
+```text
+Binary categorical target
+→ Classification
+
+Categorical target with >2 classes
+→ Multiclass Classification
+
+Continuous numerical target
+→ Regression
+```
+
+Never silently select the detected problem type.
+
+Show:
+
+```text
+Detected Problem Type:
+Classification
+
+Reason:
+The selected target contains two categorical classes.
+
+[Accept]
+[Change]
+```
+
+---
+
+# 7. FEATURE CONFIGURATION
+
+Allow the learner to inspect and configure:
+
+## Included features
+
+Example:
+
+```text
+age
+income
+education
+experience
+city
+```
+
+## Excluded features
+
+Example:
+
+```text
+customer_id
+row_id
+target
+```
+
+For every excluded feature display the reason where available:
+
+* identifier
+* constant
+* near-constant
+* selected out in Phase 9
+* potential leakage
+* unsupported type
+* user excluded
+* target column
+
+Never automatically re-add a feature that was excluded by the learner.
+
+---
+
+# 8. TRAINING READINESS VALIDATION
+
+Before training, execute a dedicated training validation step.
+
+Check:
+
+* dataset version exists
+* target exists
+* target has usable values
+* target is not included in features
+* at least one feature exists
+* sufficient rows exist
+* supported feature types
+* excessive missingness
+* target class distribution
+* leakage warnings
+* duplicate feature names
+* incompatible configurations
+* problem type consistency
+
+Return:
+
+```text
+READY
+READY_WITH_WARNINGS
+NOT_READY
+```
+
+Example:
+
+```text
+Training Readiness
+
+✓ Target available
+✓ 24 usable features
+✓ 10,000 rows
+
+⚠ Class imbalance detected
+⚠ Potential leakage detected
+
+Status:
+READY_WITH_WARNINGS
+```
+
+---
+
+# 9. DATA SPLITTING
+
+Support:
+
+* train/test
+* train/validation/test
+
+Default:
+
+```text
+Train       70%
+Validation  15%
+Test        15%
+```
+
+Also support:
+
+```text
+80 / 20
+80 / 10 / 10
+70 / 15 / 15
+Custom
+```
+
+All split settings must be stored with the experiment.
+
+---
+
+# 10. RANDOM SEED
+
+Every experiment must use and store a random seed.
+
+Default:
+
+```text
+42
+```
+
+Allow user configuration.
+
+Store:
+
+```text
+random_state = 42
+```
+
+Experiments with the same configuration and seed should be reproducible as far as the underlying algorithms and environment permit.
+
+---
+
+# 11. CLASSIFICATION SPLITTING
+
+For classification, support stratified splitting.
+
+Use appropriate Scikit-learn functionality such as:
+
+```python
+train_test_split(
+    X,
+    y,
+    stratify=y,
+    random_state=42
+)
+```
+
+Explain:
+
+> Stratification attempts to preserve target class proportions across dataset splits.
+
+Do not use stratification for ordinary regression.
+
+---
+
+# 12. TIME-AWARE DATA
+
+Detect when the dataset contains potential temporal information.
+
+If a suitable temporal column is available, provide:
+
+```text
+Random Split
+Chronological Split
+```
+
+For chronological splitting:
+
+```text
+Earlier observations
+        ↓
+Training
+
+Later observations
+        ↓
+Validation / Test
+```
+
+Do not silently perform random splitting on a clearly temporal dataset.
+
+Display a warning when random splitting could cause temporal leakage.
+
+Do NOT implement a complete time-series forecasting system in this phase.
+
+---
+
+# 13. TRAINING PREPROCESSING
+
+Build preprocessing using Scikit-learn pipelines.
+
+## Numerical features
+
+Support:
+
+* SimpleImputer
+* StandardScaler
+* MinMaxScaler
+* RobustScaler
+
+## Categorical features
+
+Support:
+
+* SimpleImputer
+* OneHotEncoder
+
+Use:
+
+```text
+ColumnTransformer
+```
+
+Example:
+
+```text
+ColumnTransformer
+    │
+    ├── Numerical Pipeline
+    │      ├── Imputer
+    │      └── Scaler
+    │
+    └── Categorical Pipeline
+           ├── Imputer
+           └── OneHotEncoder
+```
+
+Reuse compatible preprocessing concepts from Phase 7 without duplicating conflicting logic.
+
+---
+
+# 14. BASELINE MODELS
+
+Every training session must establish a baseline.
+
+## Classification
+
+Use:
+
+```text
+DummyClassifier
+```
+
+Support appropriate strategies such as:
+
+* most_frequent
+* stratified
+
+## Regression
+
+Use:
+
+```text
+DummyRegressor
+```
+
+Support:
+
+* mean
+* median
+
+The baseline is a reference point, not a production model.
+
+---
+
+# 15. CLASSIFICATION MODELS
+
+Implement the following initial model registry:
+
+### Logistic Regression
+
+```text
+logistic_regression
+```
+
+### K-Nearest Neighbors
+
+```text
+knn
+```
+
+### Decision Tree
+
+```text
+decision_tree
+```
+
+### Random Forest
+
+```text
+random_forest
+```
+
+### Gradient Boosting
+
+```text
+gradient_boosting
+```
+
+### HistGradientBoosting
+
+```text
+hist_gradient_boosting
+```
+
+### Support Vector Machine
+
+```text
+svm
+```
+
+### Naive Bayes
+
+```text
+naive_bayes
+```
+
+Configure preprocessing appropriately for each model.
+
+---
+
+# 16. REGRESSION MODELS
+
+Implement:
+
+### Linear Regression
+
+```text
+linear_regression
+```
+
+### Ridge
+
+```text
+ridge
+```
+
+### Lasso
+
+```text
+lasso
+```
+
+### ElasticNet
+
+```text
+elastic_net
+```
+
+### Decision Tree Regressor
+
+```text
+decision_tree_regressor
+```
+
+### Random Forest Regressor
+
+```text
+random_forest_regressor
+```
+
+### Gradient Boosting Regressor
+
+```text
+gradient_boosting_regressor
+```
+
+### HistGradientBoosting Regressor
+
+```text
+hist_gradient_boosting_regressor
+```
+
+---
+
+# 17. MODEL FACTORY
+
+Create:
+
+```text
+backend/app/training/model_factory.py
+```
+
+Implement a standardized factory:
+
+```python
+get_model(
+    problem_type,
+    algorithm,
+    parameters
+)
+```
+
+Do not instantiate models directly inside API routes.
+
+The factory must only allow models from the approved model registry.
+
+---
+
+# 18. MODEL RECOMMENDATION ENGINE
+
+Create:
+
+```text
+backend/app/training/model_recommendation.py
+```
+
+Implement deterministic model recommendations based on:
+
+* problem type
+* row count
+* feature count
+* numerical/categorical mix
+* target characteristics
+* dataset size
+* known preprocessing requirements
+
+Example:
+
+```text
+Recommended Models
+
+Logistic Regression
+Reason:
+Strong interpretable baseline for classification.
+
+Random Forest
+Reason:
+Can model nonlinear relationships in tabular data.
+
+Gradient Boosting
+Reason:
+Useful for nonlinear tabular patterns.
+```
+
+Do NOT claim that a model is guaranteed to be the best.
+
+Recommendations are informational.
+
+---
+
+# 19. CROSS-VALIDATION
+
+Support:
+
+## Classification
+
+* KFold
+* StratifiedKFold
+* RepeatedStratifiedKFold
+
+## Regression
+
+* KFold
+* RepeatedKFold
+
+## Temporal
+
+* TimeSeriesSplit
+
+Default:
+
+```text
+5 folds
+```
+
+Store:
+
+* strategy
+* number of folds
+* random seed
+* repeat count where applicable
+
+---
+
+# 20. CROSS-VALIDATION RESULTS
+
+Store:
+
+* fold scores
+* mean score
+* standard deviation
+* CV strategy
+* number of folds
+* optimization metric
+
+Example:
+
+```text
+Random Forest
+
+Fold 1 = 0.81
+Fold 2 = 0.85
+Fold 3 = 0.83
+Fold 4 = 0.86
+Fold 5 = 0.82
+
+Mean = 0.834
+Std = 0.019
+```
+
+Do not present the CV score as the final model evaluation.
+
+Detailed evaluation belongs to Phase 14.
+
+---
+
+# 21. HYPERPARAMETER TUNING
+
+Support:
+
+## Grid Search
+
+Use:
+
+```text
+GridSearchCV
+```
+
+## Random Search
+
+Use:
+
+```text
+RandomizedSearchCV
+```
+
+Allow:
+
+```text
+No Tuning
+Grid Search
+Randomized Search
+```
+
+Search spaces must be configurable.
+
+---
+
+# 22. DEFAULT HYPERPARAMETER SPACES
+
+Implement sensible small default spaces.
+
+Example Random Forest:
+
+```python
+{
+    "model__n_estimators": [100, 200],
+    "model__max_depth": [None, 10, 20],
+    "model__min_samples_split": [2, 5]
+}
+```
+
+Logistic Regression:
+
+```python
+{
+    "model__C": [0.01, 0.1, 1, 10]
+}
+```
+
+Decision Tree:
+
+```python
+{
+    "model__max_depth": [None, 5, 10, 20],
+    "model__min_samples_split": [2, 5, 10]
+}
+```
+
+Do not create enormous default search spaces.
+
+Prevent uncontrolled compute consumption.
+
+---
+
+# 23. OPTIMIZATION METRIC
+
+Allow user selection.
+
+Classification:
+
+* accuracy
+* precision
+* recall
+* f1
+* roc_auc
+
+Regression:
+
+* negative MAE
+* negative MSE
+* negative RMSE
+* R²
+
+Choose sensible defaults based on problem type, but clearly show which metric is being optimized.
+
+Never silently optimize an unexplained metric.
+
+---
+
+# 24. CLASS IMBALANCE
+
+Detect imbalance before training.
+
+Example:
+
+```text
+Class distribution:
+
+No  = 95%
+Yes = 5%
+
+Warning:
+Strong class imbalance detected.
+```
+
+Recommend considerations such as:
+
+* stratified splitting
+* class weights
+* suitable evaluation metrics
+* resampling
+
+Do NOT automatically apply SMOTE or oversampling in Phase 13.
+
+---
+
+# 25. CLASS WEIGHTS
+
+Where supported, allow:
+
+```text
+None
+balanced
+```
+
+Explain:
+
+> Class weighting changes the training objective so minority classes receive greater importance.
+
+Store the selected class-weight configuration in the experiment.
+
+---
+
+# 26. TRAINING ENGINE
+
+Create:
+
+```text
+backend/app/training/training_engine.py
+```
+
+The engine must:
+
+1. load dataset version
+2. load feature version if selected
+3. validate training configuration
+4. separate X and y
+5. create train/validation/test split
+6. construct preprocessing pipeline
+7. construct model
+8. create complete training pipeline
+9. execute baseline/model training
+10. execute CV where requested
+11. execute hyperparameter tuning where requested
+12. record experiment
+13. save model artifact
+14. update model registry
+15. return structured experiment result
+
+Do not put this logic into API routes.
+
+---
+
+# 27. TRAINING CONFIGURATION
+
+Create:
+
+```text
+backend/app/training/training_config.py
+```
+
+Configuration should include:
+
+```text
+dataset_id
+dataset_version
+feature_version
+target_column
+problem_type
+selected_features
+excluded_features
+split_type
+train_size
+validation_size
+test_size
+random_seed
+preprocessing_configuration
+algorithm
+model_parameters
+cv_strategy
+cv_folds
+tuning_method
+tuning_parameters
+optimization_metric
+class_weight
+```
+
+Use Pydantic validation consistent with the existing application.
+
+---
+
+# 28. EXPERIMENT MANAGEMENT
+
+Create:
+
+```text
+backend/app/training/experiment_manager.py
+```
+
+Every training run becomes an experiment.
+
+Store:
+
+```text
+experiment_id
+dataset_id
+dataset_version
+feature_version
+target_column
+problem_type
+selected_features
+excluded_features
+split_configuration
+preprocessing_configuration
+algorithm
+hyperparameters
+cv_configuration
+optimization_metric
+random_seed
+training_time
+created_at
+status
+artifact_id
+```
+
+Statuses:
+
+```text
+QUEUED
+RUNNING
+COMPLETED
+FAILED
+CANCELLED
+```
+
+---
+
+# 29. EXPERIMENT HISTORY
+
+Create an experiment history interface.
+
+Example:
+
+```text
+Experiment #1
+Logistic Regression
+Baseline
+
+Experiment #2
+Random Forest
+Default
+
+Experiment #3
+Random Forest
+Grid Search
+
+Experiment #4
+Gradient Boosting
+Default
+```
+
+Display:
+
+* experiment ID
+* algorithm
+* dataset version
+* feature version
+* CV score
+* CV standard deviation
+* training time
+* status
+* creation time
+
+---
+
+# 30. EXPERIMENT COMPARISON
+
+Allow the user to select multiple experiments.
+
+Compare:
+
+* algorithm
+* dataset version
+* feature version
+* number of features
+* CV mean
+* CV standard deviation
+* training time
+* hyperparameters
+* preprocessing
+* split configuration
+
+Do NOT label one model as universally "best".
+
+Present evidence only.
+
+The detailed evaluation decision belongs to Phase 14.
+
+---
+
+# 31. MODEL ARTIFACT MANAGEMENT
+
+Create:
+
+```text
+backend/app/training/artifact_manager.py
+```
+
+Use safe serialization such as joblib where appropriate.
+
+Store the complete preprocessing + model pipeline.
+
+Artifact metadata must include:
+
+```text
+artifact_id
+experiment_id
+model_type
+dataset_version
+feature_version
+created_at
+file/reference
+checksum where practical
+```
+
+Never load arbitrary user-supplied serialized objects.
+
+---
+
+# 32. MODEL REGISTRY
+
+Create:
+
+```text
+backend/app/training/model_registry.py
+```
+
+Model states:
+
+```text
+TRAINED
+EVALUATED
+SELECTED
+ARCHIVED
+```
+
+Phase 13 primarily creates:
+
+```text
+TRAINED
+```
+
+Phase 14 may update evaluation-related information.
+
+---
+
+# 33. REPRODUCIBILITY
+
+Every experiment must store:
+
+* dataset version
+* feature version
+* target
+* feature list
+* excluded features
+* problem type
+* split strategy
+* split percentages
+* random seed
+* preprocessing configuration
+* model
+* model parameters
+* CV strategy
+* CV folds
+* tuning configuration
+* optimization metric
+
+Implement:
+
+```text
+POST /api/datasets/{dataset_id}/training/experiments/{experiment_id}/reproduce
+```
+
+This endpoint must reconstruct the stored training configuration and run it again.
+
+---
+
+# 34. EDUCATIONAL EXPLANATION ENGINE
+
+Reuse Phase 4.
+
+Do NOT implement an LLM.
+
+For every major training step provide educational content.
+
+Explain:
+
+### Target
+
+What is the target?
+
+Why is it separated from features?
+
+### Feature
+
+What is a feature?
+
+Why was it included/excluded?
+
+### Split
+
+Why do we split the dataset?
+
+### Preprocessing
+
+Why is preprocessing performed inside the training pipeline?
+
+### Baseline
+
+Why do we need a baseline?
+
+### Model
+
+What is the selected algorithm?
+
+How does it work conceptually?
+
+### Cross-validation
+
+Why use multiple folds?
+
+### Hyperparameters
+
+What is a hyperparameter?
+
+Why are we tuning it?
+
+### Reproducibility
+
+Why does the random seed matter?
+
+---
+
+# 35. FRONTEND COMPONENTS
+
+Create:
+
+```text
+frontend/src/components/training/
+```
+
+Components:
+
+```text
+TrainingSetup.jsx
+TargetSelector.jsx
+ProblemTypeSelector.jsx
+FeatureSelector.jsx
+TrainingReadiness.jsx
+DataSplitConfig.jsx
+PreprocessingConfig.jsx
+BaselineCard.jsx
+ModelSelector.jsx
+ModelRecommendation.jsx
+CrossValidationConfig.jsx
+HyperparameterConfig.jsx
+TrainingProgress.jsx
+ExperimentCard.jsx
+ExperimentTable.jsx
+ExperimentComparison.jsx
+ModelArtifact.jsx
+TrainingExplanation.jsx
+```
+
+Create:
+
+```text
+frontend/src/pages/TrainingWorkspace.jsx
+```
+
+Create:
+
+```text
+frontend/src/services/trainingService.js
+```
+
+Follow existing frontend architecture and styling conventions.
+
+Do not redesign unrelated parts of the application.
+
+---
+
+# 36. TRAINING WORKSPACE
+
+Implement a guided workflow:
+
+```text
+STEP 1
+Dataset & Version
+        ↓
+STEP 2
+Target & Problem Type
+        ↓
+STEP 3
+Features
+        ↓
+STEP 4
+Train / Validation / Test
+        ↓
+STEP 5
+Preprocessing
+        ↓
+STEP 6
+Baseline
+        ↓
+STEP 7
+Models
+        ↓
+STEP 8
+Cross-Validation
+        ↓
+STEP 9
+Hyperparameter Tuning
+        ↓
+STEP 10
+Review & Train
+```
+
+Users should be able to move backward and review configuration before training.
+
+---
+
+# 37. TRAINING SETUP UI
+
+Create a professional interface containing:
+
+```text
+Dataset
+Version
+Target
+Problem Type
+Features
+Excluded Features
+Split
+Random Seed
+Preprocessing
+Models
+CV
+Tuning
+Optimization Metric
+```
+
+Before training display a final configuration summary.
+
+Example:
+
+```text
+Training Configuration
+
+Dataset: Customer Churn
+Version: v6
+
+Target: customer_churn
+Problem: Classification
+
+Features: 23
+
+Train: 70%
+Validation: 15%
+Test: 15%
+
+Seed: 42
+
+Models:
+• Logistic Regression
+• Random Forest
+• Gradient Boosting
+
+CV:
+Stratified K-Fold
+5 folds
+
+Tuning:
+Random Search
+
+Optimization:
+F1
+```
+
+---
+
+# 38. MODEL SELECTION UI
+
+Display:
+
+```text
+Recommended
+
+☑ Logistic Regression
+☑ Random Forest
+☑ Gradient Boosting
+
+Other Models
+
+☐ KNN
+☐ Decision Tree
+☐ SVM
+☐ Naive Bayes
+```
+
+Each model should have:
+
+* short description
+* why it may be useful
+* strengths
+* limitations
+* expected computational characteristics
+
+Do not rank models with arbitrary scores.
+
+---
+
+# 39. TRAINING PROGRESS
+
+Represent real training states:
+
+```text
+QUEUED
+RUNNING
+COMPLETED
+FAILED
+CANCELLED
+```
+
+Example:
+
+```text
+Training Experiments
+
+✓ Baseline
+✓ Logistic Regression
+⟳ Random Forest
+○ Gradient Boosting
+
+Current:
+Random Forest
+
+Status:
+Cross-validation in progress
+Fold 3 / 5
+```
+
+Never fake progress.
+
+If exact progress cannot be measured, show the truthful state instead.
+
+---
+
+# 40. API ROUTES
+
+Create:
+
+```text
+backend/app/api/routes/training.py
+```
+
+Implement:
+
+### Validate training configuration
+
+```http
+POST /api/datasets/{dataset_id}/training/validate
+```
+
+### Preview split
+
+```http
+POST /api/datasets/{dataset_id}/training/split-preview
+```
+
+### Get model recommendations
+
+```http
+POST /api/datasets/{dataset_id}/training/recommendations
+```
+
+### Start training
+
+```http
+POST /api/datasets/{dataset_id}/training/start
+```
+
+### List experiments
+
+```http
+GET /api/datasets/{dataset_id}/training/experiments
+```
+
+### Experiment details
+
+```http
+GET /api/datasets/{dataset_id}/training/experiments/{experiment_id}
+```
+
+### Reproduce experiment
+
+```http
+POST /api/datasets/{dataset_id}/training/experiments/{experiment_id}/reproduce
+```
+
+### List models
+
+```http
+GET /api/datasets/{dataset_id}/training/models
+```
+
+### Model details
+
+```http
+GET /api/datasets/{dataset_id}/training/models/{model_id}
+```
+
+### Artifact metadata/access
+
+```http
+GET /api/datasets/{dataset_id}/training/models/{model_id}/artifact
+```
+
+Artifact access must be controlled and must not expose arbitrary filesystem paths.
+
+---
+
+# 41. BACKEND ARCHITECTURE
+
+Create:
+
+```text
+backend/app/training/
+│
+├── __init__.py
+├── model_factory.py
+├── model_registry.py
+├── training_engine.py
+├── baseline_trainer.py
+├── classification_trainer.py
+├── regression_trainer.py
+├── pipeline_builder.py
+├── split_manager.py
+├── cv_manager.py
+├── hyperparameter_search.py
+├── experiment_manager.py
+├── artifact_manager.py
+├── training_config.py
+├── training_validation.py
+├── model_recommendation.py
+├── training_explanations.py
+└── training_models.py
+```
+
+Service:
+
+```text
+backend/app/services/training_service.py
+```
+
+Route:
+
+```text
+backend/app/api/routes/training.py
+```
+
+---
+
+# 42. PERSISTENCE
+
+Use the existing project's persistence/database architecture.
+
+Persist:
+
+* training configurations
+* experiments
+* model metadata
+* model registry state
+* artifact references
+
+Do not introduce an unrelated database architecture.
+
+Maintain compatibility with dataset/version structures from previous phases.
+
+---
+
+# 43. LONG-RUNNING TRAINING
+
+Training and hyperparameter tuning may take longer than normal API requests.
+
+Do not block an HTTP request indefinitely.
+
+Use the existing project architecture where possible.
+
+If background execution infrastructure does not exist, create a clean abstraction for future worker integration.
+
+Represent:
+
+```text
+QUEUED
+RUNNING
+COMPLETED
+FAILED
+CANCELLED
+```
+
+Do not introduce unnecessary infrastructure unless required.
+
+---
+
+# 44. SECURITY
+
+Protect against:
+
+* arbitrary Python execution
+* arbitrary estimator classes
+* arbitrary pickle/joblib paths
+* path traversal
+* unsafe artifact loading
+* uncontrolled hyperparameter searches
+* excessive resource usage
+
+Only models registered in the internal model registry may be instantiated.
+
+Validate all configuration values.
+
+---
+
+# 45. PERFORMANCE
+
+Support at least:
+
+```text
+1,000 rows
+10,000 rows
+100,000 rows
+```
+
+and larger datasets where practical.
+
+Optimize for:
+
+* vectorized operations
+* minimal unnecessary copies
+* bounded hyperparameter searches
+* configurable CV folds
+* configurable search limits
+
+Do not silently downsample training data.
+
+If a training configuration intentionally samples data, make this explicit to the user and store the sampling configuration in the experiment.
+
+---
+
+# 46. TESTING
+
+Create comprehensive backend tests.
+
+## Target
+
+```text
+test_target_selection
+test_missing_target
+test_invalid_target
+test_target_not_in_features
+```
+
+## Problem type
+
+```text
+test_classification_detection
+test_regression_detection
+test_problem_type_override
+```
+
+## Features
+
+```text
+test_feature_selection
+test_feature_exclusion
+test_identifier_exclusion
+test_target_exclusion
+```
+
+## Training readiness
+
+```text
+test_ready_configuration
+test_warning_configuration
+test_blocked_configuration
+```
+
+## Splitting
+
+```text
+test_train_test_split
+test_train_validation_test_split
+test_stratified_split
+test_random_seed_reproducibility
+test_temporal_split
+```
+
+## Leakage
+
+```text
+test_preprocessor_fit_only_on_training_data
+test_pipeline_prevents_preprocessing_leakage
+test_no_test_statistics_in_preprocessing
+```
+
+## Baselines
+
+```text
+test_dummy_classifier
+test_dummy_regressor
+```
+
+## Model factory
+
+Create tests for every supported model.
+
+## Cross-validation
+
+```text
+test_kfold
+test_stratified_kfold
+test_repeated_kfold
+test_timeseries_split
+```
+
+## Hyperparameter tuning
+
+```text
+test_grid_search
+test_random_search
+test_search_configuration
+```
+
+## Experiments
+
+```text
+test_experiment_creation
+test_experiment_persistence
+test_experiment_status
+test_experiment_comparison
+test_experiment_reproduction
+```
+
+## Artifacts
+
+```text
+test_artifact_creation
+test_artifact_metadata
+test_artifact_reload
+test_artifact_pipeline_integrity
+```
+
+## Regression
+
+Run regression tests covering Phases 2–12.
+
+---
+
+# 47. FRONTEND TESTING
+
+Test:
+
+* target selection
+* problem-type selection
+* feature selection
+* split configuration
+* preprocessing configuration
+* model selection
+* CV configuration
+* tuning configuration
+* final review
+* training state display
+* experiment list
+* experiment comparison
+* reproduction action
+* error handling
+
+Build must succeed without errors.
+
+---
+
+# 48. ERROR HANDLING
+
+Use proper API responses.
+
+Examples:
+
+```text
+404
+Dataset/version not found
+
+400
+Invalid training configuration
+
+422
+Invalid target/problem type
+
+409
+Experiment cannot be reproduced due to incompatible version/artifact state
+
+500
+Unexpected training failure
+```
+
+Never expose stack traces or internal filesystem paths to the frontend.
+
+Store useful server-side logs.
+
+---
+
+# 49. LEARNING PRINCIPLES
+
+The platform must explicitly teach:
+
+```text
+Training ≠ Evaluation
+
+Training data ≠ Test data
+
+Cross-validation ≠ Final test evaluation
+
+Baseline ≠ Production model
+
+High CV score ≠ Guaranteed real-world performance
+
+Hyperparameter tuning ≠ Guaranteed improvement
+
+Correlation ≠ Causation
+```
+
+Use the Phase 4 explanation engine.
+
+Do not use an LLM in Phase 13.
+
+---
+
+# 50. DO NOT IMPLEMENT IN PHASE 13
+
+Strictly do NOT implement:
+
+* detailed model evaluation dashboard
+* confusion matrix visualization
+* ROC curve visualization
+* PR curve visualization
+* residual analysis dashboard
+* SHAP
+* LIME
+* individual prediction explanations
+* AI chatbot
+* RAG
+* vector database
+* quizzes
+* deep learning
+* clustering
+* time-series forecasting
+* deployment
+* unrelated UI redesign
+
+Those belong to later phases.
+
+Phase 13 ends with:
+
+> **A reproducibly trained model, a tracked experiment, and a stored model artifact.**
+
+---
+
+# 51. ACCEPTANCE CRITERIA
+
+Phase 13 is complete only when:
+
+[ ] Target selection works.
+
+[ ] Automatic problem-type detection works.
+
+[ ] Manual problem-type override works.
+
+[ ] Feature selection works.
+
+[ ] Training readiness validation works.
+
+[ ] Train/test split works.
+
+[ ] Train/validation/test split works.
+
+[ ] Stratified splitting works.
+
+[ ] Temporal splitting support works where applicable.
+
+[ ] Random seed is stored.
+
+[ ] Leakage-safe preprocessing works.
+
+[ ] Numerical preprocessing works.
+
+[ ] Categorical preprocessing works.
+
+[ ] Baseline classification works.
+
+[ ] Baseline regression works.
+
+[ ] All supported classification models work.
+
+[ ] All supported regression models work.
+
+[ ] Model recommendation engine works.
+
+[ ] Cross-validation works.
+
+[ ] Hyperparameter tuning works.
+
+[ ] Experiment tracking works.
+
+[ ] Experiment comparison works.
+
+[ ] Experiment reproduction works.
+
+[ ] Model artifacts are stored safely.
+
+[ ] Model registry works.
+
+[ ] Educational explanations use Phase 4.
+
+[ ] Training workspace works.
+
+[ ] Training progress is truthful.
+
+[ ] All API endpoints work.
+
+[ ] Backend tests pass.
+
+[ ] Frontend tests/build pass.
+
+[ ] Phase 2–12 regression tests pass.
+
+[ ] Dataset is never mutated during training.
+
+[ ] No LLM/RAG/chatbot functionality is introduced.
+
+---
+
+# 52. END-TO-END VERIFICATION
+
+Before declaring Phase 13 complete:
+
+1. Start backend.
+2. Start frontend.
+3. Load a realistic dataset.
+4. Run Phase 3 profiling.
+5. Run Phases 5–10 preprocessing as required.
+6. Run Phase 11 comparison.
+7. Run Phase 12 validation.
+8. Select a target.
+9. Select or confirm problem type.
+10. Select features.
+11. Preview train/validation/test split.
+12. Verify target distributions.
+13. Configure preprocessing.
+14. Train baseline.
+15. Train at least three supported models.
+16. Run cross-validation.
+17. Run hyperparameter tuning.
+18. Create multiple experiments.
+19. Compare experiments.
+20. Save model artifacts.
+21. Reload a trained artifact.
+22. Reproduce an experiment.
+23. Verify configuration reproducibility.
+24. Run all backend tests.
+25. Run frontend tests/build.
+26. Run regression tests for Phases 2–12.
+27. Fix every failure.
+28. Verify previous functionality remains intact.
+
+---
+
+# 53. FINAL IMPLEMENTATION REPORT
+
+When implementation is complete, produce a concise report containing:
+
+## Implemented
+
+List all functionality implemented.
+
+## Supported Models
+
+Separate:
+
+* classification
+* regression
+* baseline models
+
+## Training Pipeline
+
+Explain the complete training flow.
+
+## Leakage Prevention
+
+Explain exactly how preprocessing leakage is prevented.
+
+## Cross-Validation
+
+List supported strategies.
+
+## Hyperparameter Tuning
+
+List supported search methods.
+
+## Experiments
+
+Explain experiment tracking and comparison.
+
+## Reproducibility
+
+Explain how an experiment can be reproduced.
+
+## Model Artifacts
+
+Explain artifact storage and metadata.
+
+## APIs
+
+List every endpoint.
+
+## Files Added
+
+List important files.
+
+## Files Modified
+
+List modified files.
+
+## Tests
+
+Report:
+
+```text
+Total:
+Passed:
+Failed:
+Skipped:
+```
+
+## Regression
+
+Confirm whether Phases 2–12 remain functional.
+
+## Known Limitations
+
+Clearly list anything intentionally deferred.
+
+Do not claim Phase 13 is complete until the acceptance criteria, tests, and end-to-end verification have actually passed.

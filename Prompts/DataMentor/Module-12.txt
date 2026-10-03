@@ -1,0 +1,1063 @@
+# DataMentor AI — Phase 12
+# Validation & Data Quality Assessment Engine
+
+## Project
+
+You are continuing development of:
+
+**DataMentor AI: An Intelligent Automated Data Preprocessing, Visualization & Learning Platform**
+
+Core philosophy:
+
+> Automate the work, but explain the learning.
+
+The application already contains:
+
+- Phase 1 — Project Setup
+- Phase 2 — Dataset Upload
+- Phase 3 — Dataset Profiling
+- Phase 4 — Learning/Explanation Engine
+- Phase 5 — Data Cleaning
+- Phase 6 — Outlier Detection
+- Phase 7 — Data Transformation
+- Phase 8 — Feature Engineering
+- Phase 9 — Feature Selection
+- Phase 10 — Visualization & EDA
+- Phase 11 — Before vs After Comparison
+
+These phases are already implemented.
+
+Your task is to implement **ONLY Phase 12 — Validation & Data Quality Assessment**.
+
+---
+
+# 1. PRIMARY OBJECTIVE
+
+Build a version-aware, deterministic Data Validation & Quality Assessment Engine.
+
+The engine must independently evaluate whether the current dataset version is:
+
+- structurally valid
+- complete
+- unique
+- valid
+- internally consistent
+- integrity-safe
+- numerically reasonable
+- categorically consistent
+- temporally valid
+- free from obvious data-quality issues
+- free from obvious/potential leakage signals
+- suitable for downstream ML preparation
+
+Important:
+
+Preprocessing does NOT automatically mean the dataset is good.
+
+Validation must independently measure the resulting state of the dataset.
+
+---
+
+# 2. CORE WORKFLOW
+
+Implement:
+
+DATASET VERSION
+→ SCHEMA VALIDATION
+→ COMPLETENESS
+→ UNIQUENESS
+→ VALIDITY
+→ CONSISTENCY
+→ INTEGRITY
+→ NUMERICAL VALIDATION
+→ CATEGORICAL VALIDATION
+→ DATETIME VALIDATION
+→ OUTLIER VALIDATION
+→ LEAKAGE CHECK
+→ TARGET/FEATURE VALIDATION
+→ QUALITY DIMENSIONS
+→ VERSION COMPARISON
+→ ML READINESS
+→ EDUCATIONAL EXPLANATION
+
+---
+
+# 3. CRITICAL RULE
+
+Validation must NEVER mutate the dataset.
+
+All validation functions must be read-only.
+
+Do not:
+
+- fill missing values
+- remove rows
+- change data types
+- modify categories
+- remove outliers
+- rename columns
+- modify feature values
+
+Validation only analyzes and reports.
+
+---
+
+# 4. VALIDATION DIMENSIONS
+
+Implement:
+
+1. Schema
+2. Completeness
+3. Uniqueness
+4. Validity
+5. Consistency
+6. Integrity
+7. Numerical quality
+8. Categorical quality
+9. Datetime quality
+10. Outlier status
+11. Leakage risk
+12. Target quality
+
+Each dimension must return:
+
+- PASS
+- WARNING
+- FAIL
+- NOT_EVALUATED
+
+---
+
+# 5. SCHEMA VALIDATOR
+
+Create:
+
+backend/app/validation/schema_validator.py
+
+Validate:
+
+- column existence
+- duplicate column names
+- data types
+- missing columns
+- unexpected columns
+- type mismatches
+- schema changes between versions
+
+Do not assume a type is wrong merely because it differs from an earlier version.
+
+Explain type changes using version history when possible.
+
+---
+
+# 6. COMPLETENESS VALIDATOR
+
+Create:
+
+backend/app/validation/completeness_validator.py
+
+Calculate:
+
+- total missing values
+- missing percentage
+- missing per column
+- rows containing missing values
+- completely missing columns
+- high-missingness columns
+
+Make thresholds configurable.
+
+Default rules:
+
+- warning at 5%
+- severe/error at 30%
+- special handling for 100%
+
+Do not hard-code these thresholds throughout the codebase.
+
+---
+
+# 7. UNIQUENESS VALIDATOR
+
+Create:
+
+backend/app/validation/uniqueness_validator.py
+
+Check:
+
+- duplicate rows
+- duplicate percentage
+- identifier uniqueness
+- unique-value count
+- constant columns
+- near-constant columns
+
+Reuse existing profiling infrastructure where possible.
+
+---
+
+# 8. VALIDITY VALIDATOR
+
+Create:
+
+backend/app/validation/validity_validator.py
+
+Detect:
+
+- NaN
+- infinity
+- invalid numerical values
+- suspicious ranges
+- invalid categorical values
+- invalid dates
+
+Do NOT assume universal domain rules.
+
+Domain constraints must be configurable.
+
+---
+
+# 9. CONSISTENCY VALIDATOR
+
+Create:
+
+backend/app/validation/consistency_validator.py
+
+Detect:
+
+- capitalization variations
+- whitespace variations
+- spelling/category representation inconsistencies
+- cross-column logical inconsistencies
+
+Examples:
+
+Male
+male
+MALE
+
+and:
+
+start_date > end_date
+
+Do not automatically modify anything.
+
+---
+
+# 10. INTEGRITY VALIDATOR
+
+Create:
+
+backend/app/validation/integrity_validator.py
+
+Support configurable:
+
+- column relationships
+- referential integrity
+- range constraints
+- comparison constraints
+
+Examples:
+
+A <= B
+
+start_date <= end_date
+
+quantity >= 0
+
+If no rule exists:
+
+return NOT_EVALUATED.
+
+Never pretend integrity was checked without a configured rule.
+
+---
+
+# 11. NUMERICAL VALIDATOR
+
+Create:
+
+backend/app/validation/numerical_validator.py
+
+Calculate:
+
+- count
+- missing
+- mean
+- median
+- standard deviation
+- variance
+- min
+- max
+- Q1
+- Q3
+- IQR
+- skewness
+- kurtosis
+- zero count
+- negative count
+- infinity count
+- unique count
+
+Compare against previous versions when available.
+
+---
+
+# 12. CATEGORICAL VALIDATOR
+
+Create:
+
+backend/app/validation/categorical_validator.py
+
+Calculate:
+
+- category count
+- unique values
+- missing values
+- top category
+- top category percentage
+- frequency distribution
+- rare categories
+- representation inconsistencies
+
+Do not automatically merge categories.
+
+---
+
+# 13. DATETIME VALIDATOR
+
+Create:
+
+backend/app/validation/datetime_validator.py
+
+Check:
+
+- invalid dates
+- missing dates
+- minimum date
+- maximum date
+- future dates
+- duplicate timestamps
+- temporal ordering
+- time span
+
+Future-date detection must be configurable because future dates can be legitimate in some datasets.
+
+---
+
+# 14. OUTLIER VALIDATOR
+
+Create:
+
+backend/app/validation/outlier_validator.py
+
+Reuse existing Phase 6 methods:
+
+- IQR
+- Z-score
+- Modified Z-score
+
+Report:
+
+- outlier count
+- outlier percentage
+- affected columns
+- before/after comparison
+
+Important:
+
+Never classify an outlier as automatically invalid.
+
+Use language such as:
+
+"Potential outlier detected."
+
+---
+
+# 15. LEAKAGE VALIDATOR
+
+Create:
+
+backend/app/validation/leakage_validator.py
+
+Detect potential:
+
+- target leakage
+- temporal leakage
+- post-outcome features
+- suspicious feature names
+- suspiciously strong target relationships
+- features derived from target-like columns
+
+Return:
+
+POTENTIAL_LEAKAGE
+
+not absolute claims.
+
+Every warning must explain why it was triggered.
+
+---
+
+# 16. TARGET VALIDATOR
+
+Create:
+
+backend/app/validation/target_validator.py
+
+Allow:
+
+target_column
+
+and:
+
+problem_type:
+
+- classification
+- regression
+- unspecified
+
+For classification calculate:
+
+- missing target
+- class count
+- class distribution
+- rare classes
+- imbalance warning
+
+For regression calculate:
+
+- missing target
+- numeric validity
+- distribution statistics
+- extreme values
+
+---
+
+# 17. QUALITY DIMENSIONS
+
+Create:
+
+backend/app/validation/quality_dimensions.py
+
+Return structured results for:
+
+- completeness
+- uniqueness
+- validity
+- consistency
+- integrity
+- numerical
+- categorical
+- datetime
+- outliers
+- leakage
+- target
+
+Each result must contain:
+
+- dimension
+- status
+- score if applicable
+- evidence
+- findings
+- affected columns
+- explanation
+
+---
+
+# 18. QUALITY SCORE
+
+Create:
+
+backend/app/validation/quality_score.py
+
+If implementing an aggregate score:
+
+- make the calculation transparent
+- expose every component
+- expose weights
+- allow configuration
+- never use a magic score
+
+Example:
+
+Completeness: 95
+Uniqueness: 100
+Validity: 88
+Consistency: 92
+
+If an aggregate is shown, the UI must make it possible to understand exactly how it was calculated.
+
+---
+
+# 19. ML READINESS
+
+Create:
+
+backend/app/validation/readiness_assessor.py
+
+Possible states:
+
+READY
+READY_WITH_WARNINGS
+NOT_READY
+INSUFFICIENT_INFORMATION
+
+Do not interpret readiness as model-performance prediction.
+
+It only evaluates data preparation and quality conditions.
+
+Examples of blocking conditions:
+
+- zero rows
+- no usable features
+- missing selected target
+- invalid dataset structure
+
+Examples of warnings:
+
+- class imbalance
+- remaining missing values
+- potential leakage
+- suspicious outliers
+
+---
+
+# 20. VALIDATION ENGINE
+
+Create:
+
+backend/app/validation/validation_engine.py
+
+The engine should orchestrate all validators.
+
+It should:
+
+1. load selected dataset version
+2. execute validators
+3. collect findings
+4. classify severity
+5. calculate dimension statuses
+6. calculate transparent score if enabled
+7. calculate ML readiness
+8. generate educational explanations
+9. persist validation result
+10. return structured response
+
+Do not duplicate validation logic inside API routes.
+
+---
+
+# 21. VALIDATION MODELS
+
+Create:
+
+backend/app/validation/validation_models.py
+
+Define structured models for:
+
+- ValidationResult
+- ValidationDimension
+- ValidationFinding
+- ValidationEvidence
+- QualityScore
+- ReadinessAssessment
+- ValidationHistory
+- ValidationComparison
+
+Use the project's existing Pydantic conventions.
+
+---
+
+# 22. CONFIGURABLE RULES
+
+Create:
+
+backend/app/validation/validation_rules.py
+
+Centralize configurable thresholds.
+
+Example:
+
+```python
+DEFAULT_RULES = {
+    "missingness_warning": 0.05,
+    "missingness_error": 0.30,
+    "duplicate_warning": 0.01,
+    "rare_category_threshold": 0.01,
+    "class_imbalance_threshold": 0.80,
+    "outlier_warning": 0.05
+}
+```
+
+Make the design extensible.
+
+---
+
+# 23. VERSION COMPARISON
+
+Integrate Phase 11.
+
+Support:
+
+raw → cleaned
+cleaned → outlier-treated
+outlier-treated → transformed
+transformed → feature-engineered
+feature-engineered → selected
+
+Compare:
+
+- missingness
+- duplicates
+- outliers
+- invalid values
+- category inconsistencies
+- numerical statistics
+- schema
+- leakage warnings
+- readiness state
+
+Example:
+
+```text
+Missing:
+18.2% → 0%
+
+Duplicates:
+342 → 0
+
+Outliers:
+87 → 21
+
+Leakage:
+WARNING → WARNING
+```
+
+---
+
+# 24. EDUCATIONAL EXPLANATIONS
+
+Reuse the existing Phase 4 Learning Engine.
+
+Every important finding should explain:
+
+1. What was detected?
+2. Why does it matter?
+3. How was it detected?
+4. What does the result mean?
+5. What could be done?
+6. What should the learner inspect next?
+
+No LLM.
+
+No RAG.
+
+No external AI call.
+
+---
+
+# 25. API ROUTES
+
+Create:
+
+backend/app/api/routes/validation.py
+
+Implement:
+
+POST
+/api/datasets/{dataset_id}/validation/run
+
+GET
+/api/datasets/{dataset_id}/validation/summary
+
+GET
+/api/datasets/{dataset_id}/validation/dimensions
+
+GET
+/api/datasets/{dataset_id}/validation/findings
+
+GET
+/api/datasets/{dataset_id}/validation/column/{column_name}
+
+GET
+/api/datasets/{dataset_id}/validation/readiness
+
+POST
+/api/datasets/{dataset_id}/validation/compare
+
+GET
+/api/datasets/{dataset_id}/validation/history
+
+Support filtering findings by:
+
+- severity
+- dimension
+- column
+- status
+
+---
+
+# 26. FRONTEND COMPONENTS
+
+Create:
+
+frontend/src/components/validation/
+
+- ValidationSummary.jsx
+- QualityDimensions.jsx
+- QualityScore.jsx
+- ValidationFindings.jsx
+- ValidationTable.jsx
+- ColumnValidation.jsx
+- MissingnessValidation.jsx
+- OutlierValidation.jsx
+- LeakageWarnings.jsx
+- TargetValidation.jsx
+- MLReadiness.jsx
+- ValidationTimeline.jsx
+- ValidationComparison.jsx
+- ValidationExplanation.jsx
+
+Create:
+
+frontend/src/pages/ValidationWorkspace.jsx
+
+Create:
+
+frontend/src/services/validationService.js
+
+Follow existing project UI conventions.
+
+---
+
+# 27. VALIDATION DASHBOARD
+
+Build a professional dashboard with:
+
+## Header
+
+Dataset name
+Version
+Validation timestamp
+
+## ML Readiness
+
+READY
+READY WITH WARNINGS
+NOT READY
+INSUFFICIENT INFORMATION
+
+## Quality Dimensions
+
+Display all dimensions with:
+
+PASS
+WARNING
+FAIL
+NOT EVALUATED
+
+## Findings
+
+Show:
+
+severity
+dimension
+column
+message
+evidence
+explanation
+recommendation
+
+## Before vs After
+
+Display validation improvements/regressions.
+
+## Learning Panel
+
+Explain important findings using Phase 4.
+
+---
+
+# 28. IMPORTANT UX RULE
+
+Never hide evidence behind a score.
+
+If the interface shows:
+
+"Quality = 89"
+
+the user must be able to immediately inspect:
+
+Why 89?
+
+Show:
+
+- dimension values
+- weights
+- failed rules
+- warnings
+- affected columns
+- evidence
+
+---
+
+# 29. TESTING
+
+Create backend tests for every validator.
+
+Test:
+
+- valid schema
+- invalid schema
+- duplicate columns
+- missing columns
+- type mismatch
+- missing values
+- complete missing column
+- duplicates
+- identifier duplication
+- constant columns
+- invalid numerical values
+- infinite values
+- invalid categories
+- inconsistent categories
+- invalid dates
+- future dates
+- integrity violations
+- IQR outliers
+- Z-score outliers
+- Modified Z-score
+- target leakage warnings
+- temporal leakage
+- classification target
+- regression target
+- class imbalance
+- missing target
+- readiness
+- version comparison
+
+Also create regression tests ensuring Phases 2–11 still work.
+
+---
+
+# 30. PERFORMANCE
+
+Support:
+
+- 1K rows
+- 10K rows
+- 100K rows
+- large datasets where practical
+
+Use:
+
+- vectorized Pandas operations
+- efficient aggregation
+- minimal dataset copies
+- caching where useful
+- chunking where required
+
+Never silently sample validation data.
+
+If sampling is absolutely necessary, expose:
+
+sample size
+sampling reason
+validation limitation
+
+---
+
+# 31. ERROR HANDLING
+
+Use proper HTTP errors.
+
+Examples:
+
+404:
+Dataset/version not found
+
+400:
+Invalid validation configuration
+
+422:
+Invalid target/problem type
+
+500:
+Unexpected validation failure
+
+Never expose stack traces to the frontend.
+
+---
+
+# 32. SECURITY
+
+Validate:
+
+- dataset IDs
+- version IDs
+- column names
+- user-supplied rules
+- target column
+- problem type
+
+Do not allow arbitrary code execution through validation rules.
+
+---
+
+# 33. DO NOT IMPLEMENT
+
+This phase must NOT implement:
+
+- LLM
+- LangChain
+- LangGraph
+- RAG
+- vector database
+- chatbot
+- quiz system
+- model training
+- AutoML
+- PDF reports
+- deployment
+- unrelated UI redesign
+
+Stay strictly within Phase 12.
+
+---
+
+# 34. ACCEPTANCE CRITERIA
+
+Phase 12 is complete only when:
+
+[ ] Validation is read-only.
+
+[ ] Schema validation works.
+
+[ ] Completeness validation works.
+
+[ ] Uniqueness validation works.
+
+[ ] Validity validation works.
+
+[ ] Consistency validation works.
+
+[ ] Integrity validation works.
+
+[ ] Numerical validation works.
+
+[ ] Categorical validation works.
+
+[ ] Datetime validation works.
+
+[ ] Outlier validation works.
+
+[ ] Leakage validation works.
+
+[ ] Target validation works.
+
+[ ] Quality dimensions work.
+
+[ ] Transparent quality scoring works if enabled.
+
+[ ] ML readiness works.
+
+[ ] Version comparison works.
+
+[ ] Phase 4 explanations are reused.
+
+[ ] Findings are filterable.
+
+[ ] Validation history works.
+
+[ ] Frontend dashboard works.
+
+[ ] Backend tests pass.
+
+[ ] Frontend tests/build pass.
+
+[ ] Existing Phases 2–11 regression tests pass.
+
+[ ] No dataset mutation occurs.
+
+[ ] No LLM/RAG/chatbot functionality is introduced.
+
+---
+
+# 35. FINAL VERIFICATION
+
+Before declaring completion:
+
+1. Start backend.
+2. Start frontend.
+3. Upload a realistic dataset.
+4. Run Phase 3 profiling.
+5. Execute several Phase 5–10 transformations.
+6. Run Phase 12 validation on multiple versions.
+7. Verify before/after validation.
+8. Verify findings.
+9. Verify ML readiness.
+10. Verify educational explanations.
+11. Test warning and blocking scenarios.
+12. Test large dataset behavior.
+13. Run all tests.
+14. Fix all failures.
+15. Verify no regression in previous phases.
+
+---
+
+# 36. FINAL REPORT
+
+At the end provide a concise implementation report containing:
+
+## Implemented
+
+List everything built.
+
+## Files Added
+
+List all important files.
+
+## Files Modified
+
+List existing files changed.
+
+## APIs
+
+List all endpoints.
+
+## Tests
+
+Report:
+
+- total
+- passed
+- failed
+
+## Validation Examples
+
+Show examples of:
+
+- PASS
+- WARNING
+- FAIL
+- NOT_EVALUATED
+
+## ML Readiness
+
+Show how readiness is calculated.
+
+## Quality Score
+
+Explain the exact calculation if implemented.
+
+## Regression
+
+Confirm whether Phases 2–11 still work.
+
+## Known Limitations
+
+Clearly list anything intentionally deferred.
+
+Do not claim completion until the acceptance criteria and tests have been verified.

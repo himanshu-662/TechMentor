@@ -1,0 +1,1700 @@
+# DataMentor AI — Phase 14
+
+# Model Evaluation & Interpretability Engine
+
+## PROJECT CONTEXT
+
+You are continuing development of:
+
+**DataMentor AI: An Intelligent Automated Data Preprocessing, Visualization & Learning Platform**
+
+Core philosophy:
+
+> **Automate the work, but explain the learning.**
+
+DataMentor AI allows a learner to:
+
+* upload raw datasets
+* profile data
+* clean data
+* detect and treat outliers
+* transform data
+* engineer features
+* select features
+* visualize data
+* compare dataset versions
+* validate data quality
+* train machine-learning models
+* evaluate and understand trained models
+
+The following phases have already been implemented:
+
+* Phase 1 — Project Setup
+* Phase 2 — Dataset Upload
+* Phase 3 — Dataset Profiling
+* Phase 4 — Learning / Explanation Engine
+* Phase 5 — Data Cleaning
+* Phase 6 — Outlier Detection
+* Phase 7 — Data Transformation
+* Phase 8 — Feature Engineering
+* Phase 9 — Feature Selection
+* Phase 10 — Visualization & EDA
+* Phase 11 — Before vs After Comparison
+* Phase 12 — Validation & Data Quality Assessment
+* Phase 13 — Model Training & Experimentation
+
+These phases must remain functional.
+
+---
+
+# PHASE 14 OBJECTIVE
+
+Implement:
+
+> **Model Evaluation & Interpretability Engine**
+
+Phase 13 creates trained models and experiments.
+
+Phase 14 must determine:
+
+* how the trained models perform on unseen data
+* how stable the models are
+* where the models make mistakes
+* which features the models rely on
+* how predictions behave
+* how different trained experiments compare
+* what the evaluation results mean
+* what limitations should be considered
+
+The platform must NOT treat a single metric as proof that a model is universally good.
+
+---
+
+# CORE BOUNDARY
+
+Phase 13:
+
+> TRAIN THE MODEL
+
+Phase 14:
+
+> EVALUATE AND UNDERSTAND THE MODEL
+
+Phase 15:
+
+> BUILD THE AI LEARNING CHATBOT
+
+Do not implement Phase 15 functionality during this phase.
+
+---
+
+# 1. CORE EVALUATION PIPELINE
+
+Implement:
+
+TRAINED MODEL
+↓
+LOAD MODEL ARTIFACT
+↓
+VERIFY DATASET/VERSION COMPATIBILITY
+↓
+VERIFY EVALUATION CONFIGURATION
+↓
+RECONSTRUCT TEST SET
+↓
+FINAL TEST EVALUATION
+↓
+METRICS
+↓
+ERROR ANALYSIS
+↓
+MODEL COMPARISON
+↓
+INTERPRETABILITY
+↓
+FEATURE IMPORTANCE
+↓
+PREDICTION ANALYSIS
+↓
+EDUCATIONAL EXPLANATIONS
+↓
+EVALUATION REPORT
+
+---
+
+# 2. CRITICAL TEST-SET RULE
+
+The final test set must not be used for:
+
+* hyperparameter tuning
+* model selection
+* feature selection
+* preprocessing fitting
+* repeated model optimization
+
+Correct lifecycle:
+
+TRAIN
+↓
+CROSS-VALIDATION
+↓
+HYPERPARAMETER TUNING
+↓
+MODEL SELECTION
+↓
+FINAL TEST EVALUATION
+
+The UI must explain this distinction.
+
+---
+
+# 3. MODEL ARTIFACT LOADING
+
+Consume artifacts produced by Phase 13.
+
+Load:
+
+* model artifact
+* preprocessing pipeline
+* model metadata
+* experiment configuration
+* dataset version
+* feature version
+* target column
+* problem type
+* selected features
+* split configuration
+* random seed
+
+Do not retrain the model merely to evaluate it.
+
+---
+
+# 4. EVALUATION READINESS
+
+Before evaluation verify:
+
+* dataset exists
+* dataset version exists
+* model exists
+* artifact exists
+* artifact is readable
+* target exists
+* target matches experiment
+* feature version matches
+* problem type matches
+* evaluation split is available
+* stored configuration is valid
+
+Return:
+
+```text
+READY
+READY_WITH_WARNINGS
+NOT_READY
+```
+
+Example:
+
+```text
+Evaluation Readiness
+
+✓ Model artifact available
+✓ Dataset version available
+✓ Test split available
+✓ Target matches
+
+Status:
+READY
+```
+
+Example failure:
+
+```text
+NOT_READY
+
+Model was trained using dataset version v6,
+but the requested evaluation dataset is v4.
+```
+
+---
+
+# 5. EVALUATION RESULT MODEL
+
+Create structured evaluation objects containing:
+
+* evaluation_id
+* experiment_id
+* model_id
+* dataset_id
+* dataset_version
+* feature_version
+* problem_type
+* evaluation_split
+* metrics
+* predictions_reference
+* error_analysis
+* interpretability
+* created_at
+
+Use the existing Pydantic/database conventions.
+
+---
+
+# 6. CLASSIFICATION METRICS
+
+Implement:
+
+## Accuracy
+
+```text
+Accuracy =
+Correct Predictions / Total Predictions
+```
+
+## Precision
+
+```text
+Precision =
+TP / (TP + FP)
+```
+
+## Recall
+
+```text
+Recall =
+TP / (TP + FN)
+```
+
+## F1 Score
+
+```text
+F1 =
+2 × Precision × Recall /
+(Precision + Recall)
+```
+
+Support:
+
+* binary classification
+* multiclass classification
+* macro averaging
+* micro averaging
+* weighted averaging
+
+Explain each metric through Phase 4.
+
+---
+
+# 7. CONFUSION MATRIX
+
+Implement confusion matrix generation.
+
+Binary:
+
+```text
+                  Predicted
+               Positive Negative
+
+Actual Positive    TP       FN
+
+Actual Negative    FP       TN
+```
+
+Multiclass:
+
+Generate the complete class-by-class matrix.
+
+Support:
+
+* raw counts
+* normalized percentages
+
+Allow UI switching:
+
+```text
+Count
+Percentage
+```
+
+---
+
+# 8. CLASSIFICATION REPORT
+
+Generate:
+
+* per-class precision
+* per-class recall
+* per-class F1
+* support
+* macro average
+* weighted average
+
+Return structured JSON.
+
+Do not rely only on a formatted text report.
+
+---
+
+# 9. ROC ANALYSIS
+
+For classification models with usable probability/decision scores:
+
+Implement:
+
+* ROC curve
+* ROC-AUC
+
+For binary classification primarily.
+
+Explain:
+
+> ROC-AUC measures how well the model separates the classes across different classification thresholds.
+
+Do not claim that a particular AUC guarantees production success.
+
+If ROC cannot be calculated:
+
+```text
+ROC analysis unavailable for this model.
+```
+
+Never fabricate values.
+
+---
+
+# 10. PRECISION-RECALL ANALYSIS
+
+For supported classification models implement:
+
+* Precision-Recall curve
+* PR-AUC
+
+Explain why Precision-Recall analysis can be especially informative when classes are imbalanced.
+
+---
+
+# 11. CLASSIFICATION THRESHOLD ANALYSIS
+
+For models that expose probabilities:
+
+Allow users to inspect different thresholds.
+
+Example:
+
+```text
+Threshold    Precision    Recall    F1
+
+0.30         0.71         0.91      0.80
+0.50         0.82         0.84      0.83
+0.70         0.91         0.68      0.78
+```
+
+Explain:
+
+> Changing the decision threshold changes the trade-off between false positives and false negatives.
+
+Do not automatically declare one threshold universally optimal.
+
+---
+
+# 12. MULTICLASS EVALUATION
+
+Support:
+
+* accuracy
+* precision
+* recall
+* F1
+* per-class metrics
+* macro averages
+* weighted averages
+* confusion matrix
+
+Example:
+
+```text
+Class A
+Precision: 0.82
+Recall: 0.79
+F1: 0.80
+
+Class B
+Precision: 0.91
+Recall: 0.88
+F1: 0.89
+```
+
+Highlight class-level differences without declaring a universal winner.
+
+---
+
+# 13. REGRESSION METRICS
+
+Implement:
+
+## MAE
+
+Mean Absolute Error.
+
+## MSE
+
+Mean Squared Error.
+
+## RMSE
+
+Root Mean Squared Error.
+
+## R²
+
+Coefficient of Determination.
+
+Where appropriate:
+
+## Adjusted R²
+
+Explain the meaning and limitations of each metric.
+
+Do not compare metrics from incompatible evaluation configurations without warning.
+
+---
+
+# 14. REGRESSION RESIDUAL ANALYSIS
+
+Calculate:
+
+```text
+Actual
+Predicted
+Residual
+Absolute Error
+Squared Error
+```
+
+Residual:
+
+```text
+Residual = Actual - Predicted
+```
+
+Generate:
+
+* actual vs predicted
+* residual vs predicted
+* residual distribution
+* residual vs selected important features
+
+Detect possible:
+
+* systematic patterns
+* heteroscedasticity
+* nonlinear patterns
+* unusually large errors
+
+Use cautious language:
+
+```text
+Potential pattern detected.
+Further investigation recommended.
+```
+
+Do not make unsupported statistical claims.
+
+---
+
+# 15. PREDICTION ERROR ANALYSIS
+
+For regression, provide:
+
+```text
+row_id
+actual
+predicted
+residual
+absolute_error
+squared_error
+```
+
+Allow sorting by:
+
+* highest absolute error
+* highest squared error
+* lowest error
+* feature value where applicable
+
+For classification:
+
+```text
+row_id
+actual
+predicted
+correct
+probability/confidence where available
+```
+
+Allow filtering:
+
+* incorrect predictions
+* class
+* confidence
+* actual class
+* predicted class
+
+---
+
+# 16. ERROR ANALYSIS ENGINE
+
+Create a dedicated error-analysis engine.
+
+Answer:
+
+* Where does the model make mistakes?
+* Which classes are confused?
+* Which observations have the largest errors?
+* Are errors concentrated in particular segments?
+* Are minority classes affected disproportionately?
+* Are errors associated with specific feature ranges?
+* Are errors associated with missingness?
+
+Do not infer causality.
+
+Use terminology:
+
+```text
+Observed pattern
+Potential explanation
+Requires further investigation
+```
+
+---
+
+# 17. CROSS-VALIDATION STABILITY
+
+Consume CV results generated by Phase 13.
+
+Display:
+
+```text
+Fold 1 = 0.81
+Fold 2 = 0.85
+Fold 3 = 0.83
+Fold 4 = 0.86
+Fold 5 = 0.82
+
+Mean = 0.834
+Std = 0.019
+```
+
+Explain:
+
+> Variation across folds provides information about performance consistency across the sampled partitions, but it does not guarantee real-world stability.
+
+Do not automatically classify a model as stable or unstable using an arbitrary threshold.
+
+---
+
+# 18. TRAIN / CV / VALIDATION / TEST COMPARISON
+
+Create a comparison view:
+
+```text
+Training
+Cross-Validation
+Validation
+Test
+```
+
+Example:
+
+```text
+Train F1       0.96
+CV F1          0.84
+Validation F1  0.82
+Test F1        0.81
+```
+
+Flag meaningful gaps as:
+
+```text
+Potential generalization gap
+```
+
+Do not automatically diagnose overfitting from a single comparison.
+
+Explain what the learner should investigate.
+
+---
+
+# 19. MODEL COMPARISON
+
+Allow comparison of trained experiments from Phase 13.
+
+Example:
+
+```text
+Model                  CV F1    Test F1    Train Time
+
+Logistic Regression    0.78     0.76       0.4s
+Random Forest          0.84     0.81       4.8s
+Gradient Boosting      0.85     0.82       6.2s
+```
+
+Display:
+
+* model
+* algorithm
+* dataset version
+* feature version
+* CV metric
+* CV standard deviation
+* test metrics
+* training time
+* inference time where available
+* feature count
+* relevant configuration
+
+DO NOT display:
+
+* Best Model
+* Winner
+* Rank 1
+* Universal ranking
+
+Present evidence and trade-offs only.
+
+---
+
+# 20. FEATURE IMPORTANCE
+
+Implement model-supported feature importance.
+
+For linear models:
+
+* coefficients
+* sign
+* magnitude
+
+For tree-based models:
+
+* feature importance
+
+Clearly distinguish:
+
+```text
+Feature importance
+```
+
+from:
+
+```text
+Causal importance
+```
+
+Explain:
+
+> Feature importance describes how the trained model uses features under a particular importance method. It does not prove that the feature causes the target.
+
+---
+
+# 21. PERMUTATION IMPORTANCE
+
+Implement model-agnostic permutation importance.
+
+Concept:
+
+```text
+Original performance
+        ↓
+Shuffle one feature
+        ↓
+Recalculate performance
+        ↓
+Measure performance change
+```
+
+Example:
+
+```text
+Feature        Importance
+
+income         0.182
+age            0.094
+experience     0.072
+education      0.041
+```
+
+Support configurable:
+
+* scoring metric
+* number of repeats
+* random seed
+* optional sample size
+
+Do not silently sample.
+
+If sampling is configured, display and persist it.
+
+---
+
+# 22. UNSUPPORTED INTERPRETABILITY
+
+Do not fabricate explanations.
+
+For models where a particular importance method is not appropriate:
+
+```text
+This interpretability method is not available for the selected model.
+```
+
+Provide alternative supported methods when available.
+
+---
+
+# 23. PREDICTION-LEVEL INSPECTION
+
+Allow the user to select an individual evaluated row.
+
+Display:
+
+```text
+Prediction
+
+Actual:
+Yes
+
+Predicted:
+No
+
+Probability:
+0.71
+
+Correct:
+No
+```
+
+Then display available deterministic/model-native explanation information.
+
+Do not implement SHAP or LIME in Phase 14 unless explicitly required.
+
+If no suitable explanation exists:
+
+```text
+Individual prediction explanation is unavailable for this model.
+```
+
+Never fabricate an explanation.
+
+---
+
+# 24. CALIBRATION
+
+For classifiers with probability outputs, support optional calibration analysis.
+
+Implement:
+
+* predicted probability
+* observed frequency
+* calibration curve
+
+Explain:
+
+> A probability estimate is better calibrated when predicted probabilities correspond reasonably closely to observed event frequencies.
+
+Do not force calibration analysis when probability outputs are unavailable.
+
+---
+
+# 25. EVALUATION EXPLANATION ENGINE
+
+Reuse Phase 4.
+
+Create:
+
+```text
+backend/app/evaluation/evaluation_explanations.py
+```
+
+Every important result should explain:
+
+1. What is this?
+2. How is it calculated?
+3. What does this value mean?
+4. Why does it matter?
+5. What are its limitations?
+6. What should the learner investigate next?
+
+No LLM.
+
+No RAG.
+
+No external AI calls.
+
+---
+
+# 26. EXAMPLE EDUCATIONAL EXPLANATIONS
+
+## Precision
+
+Explain:
+
+> Precision answers: Of all observations predicted as positive, how many were actually positive?
+
+## Recall
+
+Explain:
+
+> Recall answers: Of all actual positive observations, how many did the model correctly identify?
+
+## F1
+
+Explain:
+
+> F1 combines precision and recall into a single harmonic-mean metric.
+
+## RMSE
+
+Explain:
+
+> RMSE measures the typical magnitude of prediction error while giving larger errors greater influence.
+
+## R²
+
+Explain:
+
+> R² describes the proportion of variation in the target explained by the model relative to a baseline based on the mean.
+
+---
+
+# 27. STATISTICAL CAUTION
+
+Never make unsupported conclusions.
+
+Do NOT say:
+
+```text
+94% accuracy means the model is good.
+```
+
+Instead:
+
+```text
+The model achieved 94% accuracy on the evaluated test set.
+Interpretation depends on class distribution and application context.
+```
+
+Do NOT say:
+
+```text
+income causes churn.
+```
+
+Instead:
+
+```text
+income has high model importance under the selected method.
+This does not establish causation.
+```
+
+Do NOT say:
+
+```text
+The model will achieve 94% in production.
+```
+
+Instead:
+
+```text
+The model achieved 94% accuracy on this evaluated test set.
+Production performance may differ.
+```
+
+---
+
+# 28. BACKEND ARCHITECTURE
+
+Create:
+
+```text
+backend/app/evaluation/
+│
+├── __init__.py
+├── evaluation_engine.py
+├── evaluation_models.py
+├── evaluation_validation.py
+├── classification_metrics.py
+├── regression_metrics.py
+├── confusion_matrix.py
+├── roc_analysis.py
+├── precision_recall.py
+├── threshold_analysis.py
+├── residual_analysis.py
+├── error_analysis.py
+├── model_comparison.py
+├── cv_analysis.py
+├── feature_importance.py
+├── permutation_importance.py
+├── prediction_explanation.py
+├── calibration.py
+└── evaluation_explanations.py
+```
+
+Service:
+
+```text
+backend/app/services/evaluation_service.py
+```
+
+Routes:
+
+```text
+backend/app/api/routes/evaluation.py
+```
+
+---
+
+# 29. API ENDPOINTS
+
+Implement:
+
+## Evaluation readiness
+
+```http
+POST /api/datasets/{dataset_id}/evaluation/validate
+```
+
+## Run evaluation
+
+```http
+POST /api/datasets/{dataset_id}/evaluation/run
+```
+
+## Evaluation details
+
+```http
+GET /api/datasets/{dataset_id}/evaluation/{evaluation_id}
+```
+
+## Metrics
+
+```http
+GET /api/datasets/{dataset_id}/evaluation/{evaluation_id}/metrics
+```
+
+## Confusion matrix
+
+```http
+GET /api/datasets/{dataset_id}/evaluation/{evaluation_id}/confusion-matrix
+```
+
+## ROC
+
+```http
+GET /api/datasets/{dataset_id}/evaluation/{evaluation_id}/roc
+```
+
+## Precision-Recall
+
+```http
+GET /api/datasets/{dataset_id}/evaluation/{evaluation_id}/precision-recall
+```
+
+## Threshold analysis
+
+```http
+POST /api/datasets/{dataset_id}/evaluation/{evaluation_id}/threshold-analysis
+```
+
+## Residuals
+
+```http
+GET /api/datasets/{dataset_id}/evaluation/{evaluation_id}/residuals
+```
+
+## Error analysis
+
+```http
+GET /api/datasets/{dataset_id}/evaluation/{evaluation_id}/errors
+```
+
+## Feature importance
+
+```http
+GET /api/datasets/{dataset_id}/evaluation/{evaluation_id}/feature-importance
+```
+
+## Permutation importance
+
+```http
+POST /api/datasets/{dataset_id}/evaluation/{evaluation_id}/permutation-importance
+```
+
+## Individual prediction
+
+```http
+GET /api/datasets/{dataset_id}/evaluation/{evaluation_id}/prediction/{row_id}
+```
+
+## Model comparison
+
+```http
+POST /api/datasets/{dataset_id}/evaluation/compare
+```
+
+## Evaluation history
+
+```http
+GET /api/datasets/{dataset_id}/evaluation/history
+```
+
+---
+
+# 30. FRONTEND ARCHITECTURE
+
+Create:
+
+```text
+frontend/src/components/evaluation/
+│
+├── EvaluationSummary.jsx
+├── EvaluationReadiness.jsx
+├── ClassificationMetrics.jsx
+├── RegressionMetrics.jsx
+├── ConfusionMatrix.jsx
+├── ROCChart.jsx
+├── PrecisionRecallChart.jsx
+├── ThresholdAnalysis.jsx
+├── ClassificationReport.jsx
+├── ResidualAnalysis.jsx
+├── PredictionErrors.jsx
+├── ErrorAnalysis.jsx
+├── CVStability.jsx
+├── TrainValidationTest.jsx
+├── ModelComparison.jsx
+├── FeatureImportance.jsx
+├── PermutationImportance.jsx
+├── PredictionExplanation.jsx
+├── CalibrationChart.jsx
+├── EvaluationExplanation.jsx
+└── EvaluationHistory.jsx
+```
+
+Create:
+
+```text
+frontend/src/pages/EvaluationWorkspace.jsx
+```
+
+Create:
+
+```text
+frontend/src/services/evaluationService.js
+```
+
+Follow existing frontend architecture.
+
+Do not redesign unrelated modules.
+
+---
+
+# 31. EVALUATION DASHBOARD
+
+Create a professional evaluation workspace.
+
+Example:
+
+```text
+┌───────────────────────────────────────────────┐
+│ MODEL EVALUATION                              │
+├───────────────────────────────────────────────┤
+│ Model: Random Forest                          │
+│ Experiment: #12                               │
+│ Dataset: Customer Churn — v6                  │
+├───────────────────────────────────────────────┤
+│ TEST PERFORMANCE                              │
+│                                               │
+│ Accuracy     0.86                             │
+│ Precision    0.82                             │
+│ Recall       0.84                             │
+│ F1           0.83                             │
+│ ROC-AUC      0.91                             │
+├───────────────────────────────────────────────┤
+│ CONFUSION MATRIX                              │
+│                                               │
+│              Predicted                        │
+│             Yes      No                       │
+│ Actual Yes  420      80                       │
+│        No    60     440                       │
+├───────────────────────────────────────────────┤
+│ FEATURE IMPORTANCE                            │
+│                                               │
+│ income       █████████                        │
+│ age          ██████                           │
+│ tenure       █████                            │
+├───────────────────────────────────────────────┤
+│ ERROR ANALYSIS                                │
+│                                               │
+│ 140 incorrect predictions                     │
+├───────────────────────────────────────────────┤
+│ LEARN WHY                                     │
+│                                               │
+│ [Why is recall different from precision?]     │
+└───────────────────────────────────────────────┘
+```
+
+---
+
+# 32. CLASSIFICATION DASHBOARD
+
+Display:
+
+* accuracy
+* precision
+* recall
+* F1
+* ROC-AUC where applicable
+* PR-AUC where applicable
+* confusion matrix
+* classification report
+* ROC curve
+* Precision-Recall curve
+* threshold analysis
+* calibration where applicable
+
+Charts should be interactive.
+
+---
+
+# 33. REGRESSION DASHBOARD
+
+Display:
+
+* MAE
+* MSE
+* RMSE
+* R²
+* adjusted R² where applicable
+* actual vs predicted
+* residual distribution
+* residual vs predicted
+* highest-error observations
+
+---
+
+# 34. MODEL COMPARISON DASHBOARD
+
+Allow selecting multiple experiments.
+
+Display:
+
+* model
+* algorithm
+* CV mean
+* CV standard deviation
+* test metrics
+* training time
+* inference time where available
+* feature count
+
+Do not assign an overall winner.
+
+The user must be able to inspect the evidence and trade-offs.
+
+---
+
+# 35. EVALUATION HISTORY
+
+Store and display:
+
+* evaluation ID
+* model
+* experiment
+* dataset version
+* evaluation timestamp
+* problem type
+* key metrics
+
+Allow opening historical evaluation results.
+
+---
+
+# 36. PERSISTENCE
+
+Use the existing project's persistence layer.
+
+Persist:
+
+* evaluation metadata
+* metrics
+* predictions reference
+* error analysis
+* interpretability results
+* CV summary
+* explanation metadata
+
+Avoid unnecessary duplication of full datasets.
+
+---
+
+# 37. PERFORMANCE
+
+Support at least:
+
+* 1K rows
+* 10K rows
+* 100K rows
+
+where practical.
+
+Optimize:
+
+* metric calculations
+* confusion matrix
+* prediction analysis
+* feature importance
+* permutation importance
+
+Permutation importance must support configurable:
+
+```text
+n_repeats
+sample_size
+random_seed
+```
+
+If sampling is configured, clearly display it.
+
+Never silently sample.
+
+---
+
+# 38. SECURITY
+
+Protect:
+
+* model artifacts
+* evaluation IDs
+* dataset IDs
+* row identifiers
+* filesystem paths
+
+Never expose:
+
+* arbitrary artifact paths
+* internal filesystem paths
+* raw serialized objects
+* stack traces
+
+---
+
+# 39. BACKEND TESTING
+
+Create tests for:
+
+## Classification
+
+```text
+test_accuracy
+test_precision
+test_recall
+test_f1
+test_macro_metrics
+test_micro_metrics
+test_weighted_metrics
+test_confusion_matrix
+test_roc_auc
+test_precision_recall
+```
+
+## Regression
+
+```text
+test_mae
+test_mse
+test_rmse
+test_r2
+test_adjusted_r2
+```
+
+## Threshold
+
+```text
+test_threshold_analysis
+test_probability_validation
+```
+
+## Residuals
+
+```text
+test_residual_calculation
+test_absolute_error
+test_squared_error
+```
+
+## Error analysis
+
+```text
+test_classification_errors
+test_regression_errors
+test_high_error_rows
+```
+
+## CV
+
+```text
+test_cv_summary
+test_cv_variance
+```
+
+## Feature importance
+
+```text
+test_tree_feature_importance
+test_linear_coefficients
+test_unsupported_importance
+```
+
+## Permutation importance
+
+```text
+test_permutation_importance
+test_reproducibility
+```
+
+## Calibration
+
+```text
+test_calibration_data
+test_missing_probability_support
+```
+
+## Model comparison
+
+```text
+test_model_comparison
+test_metric_alignment
+test_incompatible_experiments
+```
+
+## Persistence
+
+```text
+test_evaluation_creation
+test_evaluation_retrieval
+test_evaluation_history
+```
+
+Also run regression tests for Phases 2–13.
+
+---
+
+# 40. FRONTEND TESTING
+
+Test:
+
+* evaluation readiness
+* classification metrics
+* regression metrics
+* confusion matrix
+* ROC chart
+* Precision-Recall chart
+* threshold analysis
+* residual charts
+* prediction errors
+* error analysis
+* CV stability
+* train/CV/validation/test comparison
+* feature importance
+* permutation importance
+* prediction inspection
+* calibration
+* model comparison
+* evaluation history
+* educational explanations
+* loading states
+* empty states
+* error states
+
+The frontend build must succeed.
+
+---
+
+# 41. ERROR HANDLING
+
+Use proper API errors.
+
+Examples:
+
+```text
+404
+Dataset/model/evaluation not found
+
+400
+Invalid evaluation configuration
+
+409
+Model artifact and dataset version are incompatible
+
+422
+Invalid evaluation configuration
+
+500
+Unexpected evaluation failure
+```
+
+Never expose stack traces to users.
+
+---
+
+# 42. DO NOT IMPLEMENT IN PHASE 14
+
+Strictly do NOT implement:
+
+* AI chatbot
+* LLM
+* RAG
+* vector database
+* LangChain
+* LangGraph
+* deep learning
+* clustering
+* AutoML
+* production monitoring
+* data drift monitoring
+* automated retraining
+* deployment
+* unrelated UI redesign
+
+These belong to later phases.
+
+---
+
+# 43. IMPORTANT INTERPRETABILITY RULES
+
+Never fabricate an interpretation.
+
+If a model supports:
+
+```text
+feature_importances_
+```
+
+use it appropriately.
+
+If a model supports coefficients:
+
+```text
+coef_
+```
+
+use them appropriately.
+
+If neither is suitable:
+
+```text
+Interpretability method unavailable for this model.
+```
+
+Do not manufacture importance values.
+
+---
+
+# 44. IMPORTANT EVALUATION PRINCIPLES
+
+The platform must teach:
+
+```text
+Training performance ≠ Test performance
+
+Cross-validation ≠ Final test evaluation
+
+High accuracy ≠ Guaranteed production success
+
+High feature importance ≠ Causation
+
+Correlation ≠ Causation
+
+One metric ≠ Complete model assessment
+
+Test data should remain unseen until final evaluation
+```
+
+---
+
+# 45. ACCEPTANCE CRITERIA
+
+Phase 14 is complete only when:
+
+[ ] Evaluation readiness works.
+
+[ ] Model artifacts can be loaded.
+
+[ ] Dataset/version compatibility is verified.
+
+[ ] Test-set integrity is protected.
+
+[ ] Classification metrics work.
+
+[ ] Regression metrics work.
+
+[ ] Confusion matrix works.
+
+[ ] ROC analysis works where applicable.
+
+[ ] Precision-Recall analysis works where applicable.
+
+[ ] Threshold analysis works where applicable.
+
+[ ] Classification report works.
+
+[ ] Regression residual analysis works.
+
+[ ] Prediction error analysis works.
+
+[ ] Cross-validation stability is displayed.
+
+[ ] Train/CV/validation/test comparison works.
+
+[ ] Feature importance works where supported.
+
+[ ] Unsupported importance methods are handled honestly.
+
+[ ] Permutation importance works.
+
+[ ] Individual prediction inspection works.
+
+[ ] Calibration analysis works where applicable.
+
+[ ] Model comparison works.
+
+[ ] Evaluation history works.
+
+[ ] Evaluation results are persisted.
+
+[ ] Phase 4 explanations are reused.
+
+[ ] Frontend evaluation workspace works.
+
+[ ] Backend tests pass.
+
+[ ] Frontend tests/build pass.
+
+[ ] Phase 2–13 regression tests pass.
+
+[ ] Model artifacts are never modified during evaluation.
+
+[ ] Test data is not used for model selection.
+
+[ ] No LLM/RAG/chatbot functionality is introduced.
+
+---
+
+# 46. END-TO-END VERIFICATION
+
+Before declaring Phase 14 complete:
+
+1. Start the backend.
+2. Start the frontend.
+3. Load a realistic dataset.
+4. Complete preprocessing.
+5. Run Phase 12 validation.
+6. Train multiple models using Phase 13.
+7. Select a completed experiment.
+8. Load its model artifact.
+9. Verify artifact compatibility.
+10. Run final test evaluation.
+11. Verify classification or regression metrics.
+12. Verify confusion matrix or residual analysis.
+13. Verify CV stability.
+14. Verify train/CV/validation/test comparison.
+15. Verify model comparison.
+16. Run feature importance.
+17. Run permutation importance.
+18. Inspect individual predictions.
+19. Verify calibration where applicable.
+20. Verify educational explanations.
+21. Verify evaluation persistence.
+22. Verify historical evaluation retrieval.
+23. Run all backend tests.
+24. Run frontend tests/build.
+25. Run regression tests for Phases 2–13.
+26. Fix every failure.
+27. Verify no previous functionality is broken.
+
+---
+
+# 47. FINAL IMPLEMENTATION REPORT
+
+When implementation is complete, provide:
+
+## Implemented
+
+List all implemented evaluation functionality.
+
+## Classification Metrics
+
+List all supported metrics.
+
+## Regression Metrics
+
+List all supported metrics.
+
+## Interpretability
+
+List all supported methods.
+
+## Error Analysis
+
+Explain implemented error-analysis capabilities.
+
+## Model Comparison
+
+Explain comparison functionality.
+
+## APIs
+
+List every endpoint.
+
+## Files Added
+
+List important files.
+
+## Files Modified
+
+List modified files.
+
+## Tests
+
+Report:
+
+```text
+Total:
+Passed:
+Failed:
+Skipped:
+```
+
+## Regression
+
+Confirm that Phases 2–13 remain functional.
+
+## Known Limitations
+
+Clearly list anything intentionally deferred.
+
+Do not claim completion until all acceptance criteria, tests, and end-to-end verification have actually passed.
+
+---
+
+# FINAL PHASE BOUNDARY
+
+Phase 13:
+
+> **Train reproducible models.**
+
+Phase 14:
+
+> **Evaluate and understand trained models.**
+
+Phase 15:
+
+> **Build the AI Learning Chatbot that can reason over the dataset, preprocessing history, validation findings, trained models, and evaluation results.**

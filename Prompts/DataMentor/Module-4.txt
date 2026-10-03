@@ -1,0 +1,539 @@
+PHASE 4 — LEARNING & EXPLANATION ENGINE
+
+Project:
+DataMentor AI
+
+IMPORTANT:
+
+DataMentor AI is a learning-first data preparation platform.
+
+Its purpose is not only to automate data preprocessing.
+
+It must help beginners understand:
+
+- what is happening
+- why it is happening
+- what the detected concept means
+- why it matters
+- what alternatives exist
+- when a technique is useful
+- what happens next in the data pipeline
+
+Phase 2 and Phase 3 are already implemented and working.
+
+DO NOT break existing functionality.
+
+==================================================
+PHASE 4 OBJECTIVE
+==================================================
+
+Build a structured educational knowledge and explanation
+engine that connects the profiling results from Phase 3
+with beginner-friendly learning content.
+
+IMPORTANT:
+
+Do NOT add the AI chatbot yet.
+
+Do NOT add an LLM.
+
+Do NOT add RAG.
+
+Use structured, deterministic educational content.
+
+The future chatbot will reuse this knowledge layer.
+
+==================================================
+1. EDUCATION MODULE
+==================================================
+
+Create:
+
+backend/app/education/
+
+Suggested structure:
+
+education/
+├── concepts/
+│   ├── dataset.py
+│   ├── rows_columns.py
+│   ├── features.py
+│   ├── data_types.py
+│   ├── missing_values.py
+│   ├── duplicates.py
+│   ├── constant_features.py
+│   ├── cardinality.py
+│   ├── identifiers.py
+│   ├── numerical_data.py
+│   ├── categorical_data.py
+│   ├── datetime.py
+│   ├── statistics.py
+│   ├── mean.py
+│   ├── median.py
+│   ├── standard_deviation.py
+│   ├── quartiles.py
+│   ├── iqr.py
+│   └── skewness.py
+│
+├── concept_registry.py
+└── explanation_service.py
+
+Keep educational content separate from API routes
+and React components.
+
+==================================================
+2. STANDARD CONCEPT STRUCTURE
+==================================================
+
+Every concept must contain:
+
+- concept_id
+- title
+- short_definition
+- beginner_explanation
+- intermediate_explanation
+- technical_explanation
+- why_it_matters
+- real_world_example
+- ml_impact
+- common_methods
+- when_to_use
+- when_not_to_use
+- common_mistakes
+- interview_tip
+- related_concepts
+
+Use structured Python models/dataclasses/Pydantic models.
+
+Do not put large educational content directly inside
+React components.
+
+==================================================
+3. REQUIRED CONCEPTS
+==================================================
+
+Implement educational content for:
+
+DATA FUNDAMENTALS:
+- dataset
+- row
+- column
+- feature
+- target
+- observation
+- data_type
+
+DATA QUALITY:
+- missing_values
+- duplicate_records
+- constant_features
+- near_constant_features
+
+DATA TYPES:
+- numerical_data
+- categorical_data
+- datetime_data
+- identifier
+
+STATISTICS:
+- mean
+- median
+- standard_deviation
+- variance
+- minimum
+- maximum
+- quartiles
+- iqr
+- skewness
+
+OTHER:
+- cardinality
+- outlier
+
+Keep explanations beginner-friendly while also providing
+intermediate and technical levels.
+
+==================================================
+4. LEARNING LEVELS
+==================================================
+
+Support:
+
+- beginner
+- intermediate
+- technical
+
+Default level:
+beginner
+
+The user should be able to switch levels.
+
+Do not make beginner explanations unnecessarily technical.
+
+==================================================
+5. REAL-WORLD EXAMPLES
+==================================================
+
+Each important concept must have a simple example.
+
+Example for missing values:
+
+Student | Age | Marks
+A       | 20  | 85
+B       | —   | 72
+C       | 21  | 91
+
+Explain that B's age is unavailable.
+
+Example for duplicates:
+
+ID | Name  | Age
+101| Rahul | 22
+102| Priya | 21
+101| Rahul | 22
+
+Example for outlier:
+
+30K
+32K
+35K
+38K
+40K
+900K
+
+==================================================
+6. EXPLANATION API
+==================================================
+
+Create:
+
+GET /api/education/concepts/{concept_id}
+
+Return the complete structured concept explanation.
+
+Also create:
+
+GET /api/education/concepts
+
+Return a list of available concepts.
+
+==================================================
+7. CONTEXTUAL EXPLANATION API
+==================================================
+
+Create:
+
+POST /api/education/explain
+
+Request:
+
+{
+  "concept_id": "...",
+  "dataset_id": "...",
+  "column": "...",
+  "level": "beginner"
+}
+
+The service should combine:
+
+1. General concept knowledge
+2. Actual dataset profiling information
+3. Current column information
+
+Return:
+
+- title
+- explanation
+- dataset evidence
+- why it matters
+- next step
+- related concepts
+
+IMPORTANT:
+
+Do not modify the dataset.
+
+==================================================
+8. DATASET EVIDENCE
+==================================================
+
+For contextual explanations, use real profiling results.
+
+Example:
+
+Concept:
+missing_values
+
+Column:
+income
+
+Dataset evidence:
+
+missing_count = 870
+missing_percentage = 8.7
+
+The explanation should say that the actual dataset
+contains 870 missing income values.
+
+Never fabricate dataset values.
+
+==================================================
+9. PIPELINE CONTEXT
+==================================================
+
+The learning system should know the user's current stage:
+
+1. Upload
+2. Profile
+3. Understand
+4. Clean
+5. Transform
+6. Feature Engineering
+7. Feature Selection
+8. Visualize
+9. Validate
+10. Export
+
+For Phase 4, the user is primarily in:
+
+PROFILE → UNDERSTAND
+
+Show this progress visually.
+
+==================================================
+10. FRONTEND LEARNING COMPONENT
+==================================================
+
+Create a reusable:
+
+LearningCard
+
+It should support:
+
+- title
+- concept
+- explanation level
+- definition
+- why it matters
+- real-world example
+- dataset evidence
+- ML impact
+- interview tip
+- related concepts
+
+Provide:
+
+[ Beginner ]
+[ Intermediate ]
+[ Technical ]
+
+==================================================
+11. ISSUE LEARNING
+==================================================
+
+Integrate LearningCard with the Phase 3 issue detection UI.
+
+Every important issue should have:
+
+[ What is this? ]
+[ Why does it matter? ]
+
+For example:
+
+"Income has 8.7% missing values"
+
+Clicking "What is this?" should explain missing values.
+
+Clicking "Why does it matter?" should explain the potential
+impact.
+
+==================================================
+12. COLUMN DETAIL INTEGRATION
+==================================================
+
+On the column detail page, show:
+
+Column information
+       +
+Detected issue
+       +
+Learning explanation
+
+Example:
+
+INCOME
+
+Type: Numerical
+Missing: 8.7%
+Skewness: 3.82
+
+Detected issue:
+Missing Values
+
+[ Learn about Missing Values ]
+
+==================================================
+13. CONCEPT RELATIONSHIPS
+==================================================
+
+Implement related concepts.
+
+Examples:
+
+Missing Values
+→ Mean
+→ Median
+→ Mode
+→ Imputation
+
+Outliers
+→ IQR
+→ Z-score
+→ Median
+→ Robust Scaling
+
+Categorical Data
+→ Encoding
+→ One-Hot Encoding
+→ Ordinal Encoding
+
+Use concept IDs rather than duplicated content.
+
+==================================================
+14. BASIC KNOWLEDGE CHECK
+==================================================
+
+Implement a small reusable KnowledgeCheck component.
+
+Example:
+
+Question:
+Which measure is generally more resistant to extreme
+values?
+
+A. Mean
+B. Median
+C. Standard deviation
+D. Range
+
+Allow the learner to select an answer.
+
+Show:
+
+- correct/incorrect
+- explanation
+- concept reference
+
+Do not build full gamification yet.
+
+==================================================
+15. LEARNING UI
+==================================================
+
+Use:
+
+- clean educational cards
+- expandable sections
+- badges
+- tooltips
+- simple examples
+- beginner-friendly language
+- clear hierarchy
+
+Avoid huge walls of text.
+
+Allow learners to progressively reveal details.
+
+==================================================
+16. DO NOT USE LLM
+==================================================
+
+Do not implement:
+
+- OpenAI API
+- Gemini API
+- LangChain
+- LangGraph
+- RAG
+- vector database
+- AI chatbot
+
+Those are future phases.
+
+The Phase 4 knowledge base must be deterministic.
+
+==================================================
+17. FUTURE COMPATIBILITY
+==================================================
+
+Design the education module so a future AI chatbot can
+retrieve:
+
+- concept explanations
+- definitions
+- examples
+- related concepts
+- common mistakes
+- interview tips
+
+without rewriting the education system.
+
+==================================================
+18. TESTING
+==================================================
+
+Add tests for:
+
+- concept registry
+- concept retrieval
+- invalid concept ID
+- beginner explanation
+- intermediate explanation
+- technical explanation
+- contextual explanation
+- dataset evidence injection
+- related concepts
+- knowledge check
+
+Test that contextual explanations use actual profile
+values and never fabricate them.
+
+==================================================
+19. README
+==================================================
+
+Update README with:
+
+- Phase 4 functionality
+- education architecture
+- learning levels
+- concept registry
+- contextual explanations
+- knowledge checks
+- future AI chatbot architecture
+
+==================================================
+IMPORTANT RULES
+==================================================
+
+1. Preserve Phase 2 and Phase 3.
+2. Do not modify the original dataset.
+3. Do not introduce an LLM.
+4. Do not introduce RAG.
+5. Do not hard-code educational content inside React.
+6. Keep educational knowledge structured and reusable.
+7. Use actual dataset evidence.
+8. Keep beginner explanations simple.
+9. Keep backend and frontend responsibilities separate.
+10. Run all existing tests.
+11. Add Phase 4 tests.
+12. Ensure frontend builds successfully.
+13. Ensure backend starts successfully.
+
+At the end, provide:
+
+- files created/modified
+- features implemented
+- tests passed
+- frontend build status
+- backend status

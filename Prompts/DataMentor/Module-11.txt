@@ -1,0 +1,714 @@
+We are continuing development of DataMentor AI.
+
+Project:
+DataMentor AI: An Intelligent Automated Data Preprocessing, Visualization & Learning Platform
+
+Core philosophy:
+"Automate the work, but explain the learning."
+
+Completed:
+Phase 2 — Dataset Ingestion
+Phase 3 — Dataset Profiling
+Phase 4 — Learning/Explanation Engine
+Phase 5 — Automated Data Cleaning
+Phase 6 — Outlier Detection & Treatment
+Phase 7 — Data Transformation
+Phase 8 — Feature Engineering
+Phase 9 — Feature Selection
+Phase 10 — Visualization & EDA
+
+Now implement ONLY:
+
+PHASE 11 — BEFORE vs AFTER COMPARISON ENGINE
+
+Do not implement:
+- validation quality scoring
+- AI chatbot
+- RAG
+- LLM
+- advanced reporting
+- model training
+- deployment
+
+==================================================
+1. CORE PURPOSE
+==================================================
+
+The purpose of this phase is to make every preprocessing change understandable.
+
+The system must answer:
+
+What changed?
+How much changed?
+Which columns changed?
+Which rows changed?
+Why did they change?
+Which operation caused the change?
+What was the statistical effect?
+What should the learner understand?
+
+Workflow:
+
+SELECT BEFORE VERSION
+→ SELECT AFTER VERSION
+→ IDENTIFY DIFFERENCES
+→ CLASSIFY CHANGES
+→ CALCULATE METRICS
+→ VISUALIZE
+→ EXPLAIN
+→ LEARN
+
+==================================================
+2. VERSION COMPARISON
+==================================================
+
+Allow users to compare any two versions of the same dataset.
+
+Example:
+
+v1 Raw
+v2 Cleaned
+v3 Outliers Treated
+v4 Transformed
+v5 Feature Engineered
+v6 Feature Selected
+
+UI:
+
+Before:
+[version]
+
+After:
+[version]
+
+[Compare]
+
+Reject:
+- different datasets
+- invalid versions
+- same version
+
+==================================================
+3. DATASET-LEVEL METRICS
+==================================================
+
+Compare:
+
+rows
+columns
+memory usage
+missing cells
+duplicate rows
+numerical columns
+categorical columns
+datetime columns
+constant columns
+near-constant columns
+outliers where available
+
+For each:
+
+absolute change
+percentage change
+
+==================================================
+4. COLUMN-LEVEL COMPARISON
+==================================================
+
+Identify:
+
+added columns
+removed columns
+modified columns
+unchanged columns
+
+Example:
+
+Added:
+sales_per_employee
+
+Removed:
+employee_id
+
+Modified:
+income
+
+Unchanged:
+age
+
+==================================================
+5. NUMERICAL STATISTICS
+==================================================
+
+For numerical columns compare:
+
+count
+missing
+mean
+median
+std
+min
+max
+Q1
+Q3
+IQR
+variance
+skewness
+
+Show:
+
+Before | After | Change
+
+Do not interpret every change as improvement.
+
+==================================================
+6. CATEGORICAL COMPARISON
+==================================================
+
+Compare:
+
+unique count
+missing count
+top category
+category frequencies
+category percentages
+
+Show before/after distributions.
+
+==================================================
+7. ROW-LEVEL COMPARISON
+==================================================
+
+Identify:
+
+added rows
+removed rows
+modified rows
+unchanged rows
+
+Use stable row/version identifiers where possible.
+
+Do not rely only on dataframe index if it can become unstable across operations.
+
+For modified rows show:
+
+row
+column
+before value
+after value
+
+==================================================
+8. CHANGED VALUES
+==================================================
+
+Create:
+
+[View Changed Values]
+
+Example:
+
+Row | Column | Before | After
+
+42 | income | NaN | 48000
+83 | income | 2500000 | 175000
+
+Show the operation responsible where available.
+
+==================================================
+9. DISTRIBUTION COMPARISON
+==================================================
+
+Reuse Phase 10 visualization infrastructure.
+
+Support:
+
+Before histogram
+After histogram
+
+Before box plot
+After box plot
+
+Before/after categorical bar charts
+
+Allow:
+side-by-side
+overlay
+
+Do not duplicate visualization logic.
+
+==================================================
+10. CORRELATION COMPARISON
+==================================================
+
+For numerical relationships show:
+
+Before correlation
+After correlation
+
+Example:
+
+Before:
+0.82
+
+After:
+0.68
+
+Explain that transformations can change measured relationships.
+
+Do not label changes as inherently good or bad.
+
+==================================================
+11. OPERATION-AWARE EXPLANATIONS
+==================================================
+
+Use transformation history from previous phases.
+
+If operation was:
+
+Median imputation
+
+Explain:
+
+What changed?
+Missing values were replaced.
+
+Why?
+User selected median imputation.
+
+Evidence:
+Missing count before/after.
+
+If operation was:
+
+IQR capping
+
+Explain:
+Values above the upper bound were capped.
+
+If operation was:
+
+Log1p
+
+Explain:
+Large values were compressed and distribution statistics changed.
+
+If operation was:
+
+Feature engineering
+
+Explain:
+New feature created from source columns.
+
+If operation was:
+
+Feature selection
+
+Explain:
+Selected feature subset created a new dataset version.
+
+Do not use an LLM.
+
+Use deterministic metadata + Phase 4 education engine.
+
+==================================================
+12. CHANGE CLASSIFICATION
+==================================================
+
+Classify changes:
+
+EXPECTED
+REVIEW
+UNEXPECTED
+
+Use deterministic validation rules.
+
+Examples:
+
+EXPECTED:
+missing values decrease after imputation.
+
+REVIEW:
+distribution changes substantially after transformation.
+
+UNEXPECTED:
+unrelated categorical column changed during numerical transformation.
+
+Do not make subjective judgments.
+
+==================================================
+13. COMPARISON TIMELINE
+==================================================
+
+Create:
+
+v1 Raw
+ ↓
+v2 Cleaned
+ ↓
+v3 Outliers Treated
+ ↓
+v4 Transformed
+ ↓
+v5 Feature Engineered
+ ↓
+v6 Feature Selected
+
+Click a transition to open the comparison.
+
+Use existing transformation history.
+
+==================================================
+14. LEARNING PANEL
+==================================================
+
+Every comparison must contain:
+
+WHAT CHANGED?
+WHY DID IT CHANGE?
+HOW WAS IT CHANGED?
+WHAT SHOULD I CHECK?
+WHAT ARE THE LIMITATIONS?
+
+Example:
+
+Before:
+Skewness = 4.72
+
+After:
+Skewness = 0.31
+
+Explain:
+The log transformation compressed large values and reduced positive skewness.
+
+Do not state that lower skewness is always better.
+
+==================================================
+15. COMPARISON FILTERS
+==================================================
+
+Allow:
+
+Added columns
+Removed columns
+Modified columns
+Unchanged columns
+
+Added rows
+Removed rows
+Modified rows
+Unchanged rows
+
+Numerical
+Categorical
+Datetime
+
+==================================================
+16. COMPARISON DASHBOARD
+==================================================
+
+Create:
+
+BEFORE vs AFTER
+
+Version A
+Version B
+
+Summary cards:
+
+Rows
+Columns
+Missing
+Duplicates
+Outliers
+
+Then:
+
+Column Changes
+Statistics Comparison
+Distribution Comparison
+Changed Values
+Learning Explanation
+Operation History
+
+==================================================
+17. LARGE DATASETS
+==================================================
+
+Do not load millions of changed rows into the frontend.
+
+Use:
+
+pagination
+chunked comparison
+server-side filtering
+
+Summary statistics should use the complete dataset.
+
+Detailed changed rows should be paginated.
+
+If sampling is used for visualizations, clearly indicate it.
+
+Never silently sample.
+
+==================================================
+18. API
+==================================================
+
+Implement:
+
+GET
+/api/datasets/{dataset_id}/comparison/versions
+
+POST
+/api/datasets/{dataset_id}/comparison/analyze
+
+GET
+/api/datasets/{dataset_id}/comparison/summary
+
+GET
+/api/datasets/{dataset_id}/comparison/column/{column}
+
+GET
+/api/datasets/{dataset_id}/comparison/changes
+
+Support pagination for changes.
+
+==================================================
+19. DATA MODEL
+==================================================
+
+Create a comparison structure containing:
+
+comparison_id
+dataset_id
+before_version
+after_version
+operation
+summary
+added_columns
+removed_columns
+modified_columns
+unchanged_columns
+row_change_summary
+statistics_comparison
+created_at
+
+Example:
+
+{
+  "comparison_id": "cmp_001",
+  "dataset_id": "dataset_001",
+  "before_version": "v3",
+  "after_version": "v4",
+  "operation": {
+    "type": "log_transformation",
+    "column": "income"
+  },
+  "summary": {
+    "rows_before": 10000,
+    "rows_after": 10000,
+    "columns_before": 25,
+    "columns_after": 25
+  },
+  "modified_columns": [
+    "income"
+  ]
+}
+
+==================================================
+20. BACKEND ARCHITECTURE
+==================================================
+
+Create:
+
+backend/app/comparison/
+
+    dataset_comparison.py
+    column_comparison.py
+    row_comparison.py
+    statistics_comparison.py
+    distribution_comparison.py
+    change_classifier.py
+    explanations.py
+    validation.py
+    comparison_engine.py
+
+Create:
+
+backend/app/services/comparison_service.py
+
+Create:
+
+backend/app/api/routes/comparison.py
+
+Reuse:
+- version service
+- profiling service
+- visualization service
+- education service
+- operation history
+
+==================================================
+21. FRONTEND ARCHITECTURE
+==================================================
+
+Create:
+
+frontend/src/components/comparison/
+
+    VersionSelector.jsx
+    ComparisonSummary.jsx
+    MetricComparison.jsx
+    ColumnComparison.jsx
+    ChangedValues.jsx
+    DistributionComparison.jsx
+    ComparisonExplanation.jsx
+    ComparisonTimeline.jsx
+    ComparisonFilters.jsx
+
+Create:
+
+frontend/src/pages/ComparisonWorkspace.jsx
+
+Integrate into the existing pipeline navigation.
+
+==================================================
+22. VALIDATION
+==================================================
+
+Validate:
+
+same dataset
+valid before version
+valid after version
+versions exist
+before != after
+
+If schemas differ:
+show added/removed columns.
+
+Do not crash on schema changes.
+
+==================================================
+23. TESTS
+==================================================
+
+Test:
+
+Dataset metrics:
+- rows
+- columns
+- missing
+- duplicates
+- outliers
+
+Column:
+- added
+- removed
+- modified
+- unchanged
+
+Numerical:
+- mean
+- median
+- std
+- min
+- max
+- Q1
+- Q3
+- IQR
+- skewness
+
+Categorical:
+- unique count
+- frequencies
+
+Rows:
+- added
+- removed
+- modified
+- unchanged
+
+Versions:
+- valid
+- invalid
+- same version rejection
+- different dataset rejection
+
+Operation explanations:
+- cleaning
+- outlier treatment
+- transformation
+- feature engineering
+- feature selection
+
+Performance:
+- large dataset
+- pagination
+- chunking
+
+==================================================
+24. REGRESSION
+==================================================
+
+Run all previous tests:
+
+Phase 2
+Phase 3
+Phase 4
+Phase 5
+Phase 6
+Phase 7
+Phase 8
+Phase 9
+Phase 10
+
+Verify:
+
+Upload
+→ Profile
+→ Clean
+→ Outliers
+→ Transform
+→ Feature Engineering
+→ Feature Selection
+→ Visualization
+→ Before/After Comparison
+
+==================================================
+25. DO NOT OVERBUILD
+==================================================
+
+Do not implement:
+
+- quality scoring
+- AI chatbot
+- RAG
+- LLM
+- model training
+- model evaluation
+- PDF reporting
+- deployment
+
+Those belong to later phases.
+
+Focus only on making version comparison educational, accurate, performant, and reusable.
+
+==================================================
+FINAL REPORT
+==================================================
+
+After implementation provide:
+
+1. Files created
+2. Files modified
+3. APIs added
+4. Comparison features implemented
+5. Educational explanations added
+6. Tests added
+7. Test results
+8. Frontend build result
+9. Backend startup result
+10. Known limitations
+11. Confirmation large datasets are handled safely
+12. Confirmation version comparisons work

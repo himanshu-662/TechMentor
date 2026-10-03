@@ -1,0 +1,728 @@
+We are continuing development of DataMentor AI.
+
+Project title:
+DataMentor AI: An Intelligent Automated Data Preprocessing, Visualization & Learning Platform
+
+Core philosophy:
+"Automate the work, but explain the learning."
+
+Phase 5 (Automated Data Cleaning Engine) has already been implemented and tested.
+
+Now implement ONLY:
+
+PHASE 6 — OUTLIER DETECTION & TREATMENT
+
+Do not implement future phases such as:
+- data transformation/scaling
+- normalization
+- categorical encoding
+- feature engineering
+- feature selection
+- AI chatbot
+- RAG
+- LLM integration
+- quizzes beyond simple existing educational components
+
+The goal of this phase is to detect, explain, visualize, preview, and optionally treat numerical outliers while teaching beginners what outliers are and why different methods are used.
+
+==================================================
+1. CORE PRINCIPLE
+==================================================
+
+An outlier is NOT automatically an error.
+
+The system must never silently delete or modify detected outliers.
+
+Use this workflow:
+
+DETECT
+→ EXPLAIN
+→ RECOMMEND
+→ CONFIGURE
+→ VISUALIZE
+→ PREVIEW
+→ USER CONFIRMS
+→ APPLY
+→ COMPARE BEFORE/AFTER
+→ RECORD HISTORY
+→ LEARN
+
+Original dataset must remain unchanged.
+
+Use the existing dataset versioning system from Phase 5.
+
+==================================================
+2. DETECTION METHODS
+==================================================
+
+Implement:
+
+A. IQR
+B. Z-score
+C. Modified Z-score
+
+IQR:
+
+IQR = Q3 - Q1
+
+Lower Bound = Q1 - 1.5 × IQR
+Upper Bound = Q3 + 1.5 × IQR
+
+Make multiplier configurable, default 1.5.
+
+Z-score:
+
+Z = (x - mean) / standard_deviation
+
+Default threshold:
+abs(Z) > 3
+
+Make threshold configurable.
+
+Modified Z-score:
+
+Modified Z = 0.6745 × (x - median) / MAD
+
+Default threshold:
+abs(Modified Z) > 3.5
+
+Make threshold configurable.
+
+Handle edge cases safely:
+- empty columns
+- all NaN
+- constant columns
+- zero standard deviation
+- MAD = 0
+- very small datasets
+
+==================================================
+3. METHOD RECOMMENDATION
+==================================================
+
+Create deterministic recommendation logic.
+
+Recommendations must use actual dataset statistics.
+
+Example:
+
+If numerical column is strongly skewed:
+recommend IQR.
+
+If approximately symmetric and appropriate for mean/std:
+recommend Z-score.
+
+If the data contains strong extreme values or is highly non-robust:
+allow Modified Z-score as an advanced robust option.
+
+Every recommendation must contain:
+- recommended method
+- reason
+- evidence
+- alternative methods
+
+Do NOT use an LLM for recommendations.
+
+Do not fabricate statistics.
+
+==================================================
+4. OUTLIER SUMMARY
+==================================================
+
+Create a dataset-level summary.
+
+Show for each numerical column:
+
+- column name
+- selected/recommended method
+- outlier count
+- outlier percentage
+- lower bound if applicable
+- upper bound if applicable
+- skewness
+- distribution information where available
+
+Example:
+
+Column | Method | Outliers | Percentage
+income | IQR | 127 | 1.27%
+age | IQR | 4 | 0.04%
+
+Allow the user to click a column for detailed analysis.
+
+==================================================
+5. OUTLIER DETAIL
+==================================================
+
+For a selected column show:
+
+Column:
+income
+
+Data type:
+float64
+
+Method:
+IQR
+
+Q1:
+...
+
+Q3:
+...
+
+IQR:
+...
+
+Lower Bound:
+...
+
+Upper Bound:
+...
+
+Outlier Count:
+...
+
+Outlier Percentage:
+...
+
+Provide:
+
+[View Outliers]
+[Visualize]
+[Configure]
+[Why?]
+[Show Calculation]
+
+==================================================
+6. OUTLIER RECORDS
+==================================================
+
+Allow users to inspect actual rows flagged as outliers.
+
+Show:
+
+- row/index
+- relevant column value
+- other important columns
+
+Provide:
+
+[View Full Row]
+
+Clearly explain:
+
+"Statistical detection identifies unusual observations, but domain knowledge is required to decide whether they are actually incorrect."
+
+==================================================
+7. VISUALIZATION
+==================================================
+
+Implement educational visualizations for numerical columns.
+
+At minimum:
+
+- box plot
+- histogram
+
+Where appropriate:
+
+- scatter plot
+
+Highlight detected outliers.
+
+Use the existing frontend charting architecture if available.
+
+Do not introduce unnecessary chart libraries if an existing library can handle the requirement.
+
+==================================================
+8. TREATMENT OPTIONS
+==================================================
+
+Implement:
+
+A. Keep
+B. Remove
+C. Cap/Winsorize
+D. Custom Bounds
+
+KEEP:
+Do not change the dataset.
+
+REMOVE:
+Remove rows containing selected outlier values.
+
+CAP:
+Replace values outside the selected bounds with the corresponding boundary.
+
+CUSTOM BOUNDS:
+Allow the user to specify lower and upper bounds.
+
+All treatments must require explicit user confirmation.
+
+==================================================
+9. PREVIEW SYSTEM
+==================================================
+
+Preview must NOT modify the dataset.
+
+For each treatment show:
+
+Before:
+- row count
+- column count
+- outlier count
+- min
+- max
+
+After:
+- row count
+- column count
+- expected outlier count
+- min
+- max
+- affected rows
+
+Also show a sample of changed records.
+
+Provide:
+
+[Cancel]
+[Apply Changes]
+
+==================================================
+10. BEFORE/AFTER COMPARISON
+==================================================
+
+Reuse the existing BeforeAfter component from Phase 5 if available.
+
+Show:
+
+Rows
+Columns
+Outliers
+Minimum
+Maximum
+Mean
+Median
+Standard deviation
+
+For removal:
+show number of rows removed.
+
+For capping:
+show how many values were capped.
+
+==================================================
+11. EDUCATIONAL SYSTEM
+==================================================
+
+Integrate Phase 4 Learning/Explanation Engine.
+
+Create concepts for:
+
+- outliers
+- IQR
+- quartiles
+- Z-score
+- standard deviation
+- MAD
+- modified Z-score
+- winsorization/capping
+- outlier removal
+
+Every outlier explanation should contain:
+
+WHAT?
+WHY?
+HOW?
+WHEN SHOULD I USE IT?
+WHEN SHOULD I AVOID IT?
+ALTERNATIVES
+COMMON MISTAKES
+ML IMPACT
+INTERVIEW TIP
+
+Use beginner/intermediate/technical levels from the existing education architecture.
+
+No LLM is required.
+
+==================================================
+12. SHOW CALCULATION
+==================================================
+
+Add a "Show Calculation" option.
+
+For IQR:
+
+Q1 = ...
+Q3 = ...
+
+IQR = Q3 - Q1
+
+Lower Bound = Q1 - 1.5 × IQR
+Upper Bound = Q3 + 1.5 × IQR
+
+For Z-score:
+
+Z = (x - mean) / standard deviation
+
+Show the calculation using REAL dataset values.
+
+Never fabricate numbers.
+
+Keep calculations beginner-friendly.
+
+==================================================
+13. BACKEND ARCHITECTURE
+==================================================
+
+Create:
+
+backend/app/outliers/
+
+    detectors/
+        iqr.py
+        zscore.py
+        modified_zscore.py
+
+    treatments/
+        remove.py
+        cap.py
+        keep.py
+
+    recommendations.py
+    validation.py
+    outlier_engine.py
+
+Add:
+
+backend/app/services/outlier_service.py
+
+Add API routes:
+
+backend/app/api/routes/outliers.py
+
+Follow the existing architecture and coding style.
+
+Do not duplicate version-management logic.
+
+==================================================
+14. API ENDPOINTS
+==================================================
+
+Implement:
+
+GET
+/api/datasets/{dataset_id}/outliers
+
+GET
+/api/datasets/{dataset_id}/outliers/{column}
+
+GET
+/api/datasets/{dataset_id}/outliers/recommendations
+
+POST
+/api/datasets/{dataset_id}/outliers/preview
+
+POST
+/api/datasets/{dataset_id}/outliers/apply
+
+GET
+/api/datasets/{dataset_id}/outliers/history
+
+Use appropriate request/response schemas.
+
+Validate all inputs.
+
+==================================================
+15. APPLY OPERATION
+==================================================
+
+Applying an outlier treatment must:
+
+1. Validate request.
+2. Validate dataset version.
+3. Create a new dataset version.
+4. Preserve original dataset.
+5. Calculate before metrics.
+6. Apply treatment.
+7. Calculate after metrics.
+8. Record transformation history.
+9. Return new version information.
+10. Return before/after summary.
+
+Require:
+
+confirmed = true
+
+Reject apply requests without explicit confirmation.
+
+==================================================
+16. HISTORY
+==================================================
+
+Record:
+
+operation_id
+operation
+column
+detection_method
+treatment
+parameters
+before metrics
+after metrics
+affected rows
+reason
+timestamp
+source version
+new version
+
+Example:
+
+{
+  "operation_id": "outlier_op_001",
+  "operation": "outlier_treatment",
+  "column": "income",
+  "detection_method": "iqr",
+  "treatment": "cap",
+  "parameters": {
+    "multiplier": 1.5
+  },
+  "before": {
+    "rows": 10000,
+    "outliers": 127
+  },
+  "after": {
+    "rows": 10000,
+    "outliers": 0
+  }
+}
+
+==================================================
+17. FRONTEND
+==================================================
+
+Create:
+
+frontend/src/components/outliers/
+
+    OutlierSummary.jsx
+    OutlierDetail.jsx
+    OutlierRecords.jsx
+    OutlierVisualization.jsx
+    TreatmentSelector.jsx
+    OutlierPreview.jsx
+    OutlierLearningCard.jsx
+
+Create:
+
+frontend/src/pages/OutlierWorkspace.jsx
+
+Add the workspace to the existing pipeline navigation.
+
+Do not redesign unrelated pages.
+
+==================================================
+18. USER EXPERIENCE
+==================================================
+
+The workspace should feel educational rather than like a black-box cleaning tool.
+
+Suggested UI:
+
+OUTLIER ANALYSIS
+
+[Dataset summary]
+
+Outlier Summary
+
+Column cards
+
+------------------------------
+
+Column: income
+
+⚠ 127 potential outliers
+1.27% of values
+
+Recommended method:
+IQR
+
+Why?
+[Explain]
+
+[View Outliers]
+[Visualize]
+[Configure]
+
+------------------------------
+
+Treatment:
+
+○ Keep
+○ Remove
+○ Cap
+○ Custom Bounds
+
+[Preview Changes]
+
+------------------------------
+
+Learning:
+
+"What is an Outlier?"
+
+[Beginner] [Intermediate] [Technical]
+
+==================================================
+19. IMPORTANT EDUCATIONAL WARNING
+==================================================
+
+Display a clear warning:
+
+"An outlier is not automatically an error."
+
+Also explain:
+
+Before removing an outlier, consider:
+- data-entry errors
+- measurement errors
+- legitimate rare events
+- business/domain context
+- whether the model is sensitive to extreme values
+
+==================================================
+20. VALIDATION
+==================================================
+
+Reject:
+
+- categorical column for numerical outlier detection
+- invalid method
+- invalid treatment
+- invalid threshold
+- invalid bounds
+- invalid column
+- invalid dataset ID
+- invalid dataset version
+
+Return clear educational error messages.
+
+Example:
+
+"Z-score cannot be calculated because this column has zero standard deviation. All values are identical."
+
+==================================================
+21. TESTS
+==================================================
+
+Create tests for:
+
+IQR:
+- correct Q1/Q3
+- correct IQR
+- correct bounds
+- correct outlier detection
+
+Z-score:
+- correct mean/std
+- correct scores
+- threshold behavior
+- zero std handling
+
+Modified Z-score:
+- correct median
+- MAD handling
+- threshold behavior
+
+Recommendations:
+- skewed dataset
+- approximately symmetric dataset
+- evidence-based reason
+
+Treatments:
+- keep
+- remove
+- cap
+- custom bounds
+
+Preview:
+- does not modify dataset
+
+Versioning:
+- original remains unchanged
+- new version created
+- history recorded
+- undo works
+
+Validation:
+- categorical columns rejected
+- invalid methods rejected
+- invalid treatments rejected
+- invalid thresholds rejected
+
+CRITICAL REGRESSION TEST:
+
+After every outlier operation, the original dataset must remain byte-for-byte unchanged.
+
+==================================================
+22. RUN FULL VALIDATION
+==================================================
+
+After implementation:
+
+1. Run backend tests.
+2. Run frontend tests if available.
+3. Run frontend build.
+4. Start backend.
+5. Start frontend.
+6. Verify APIs.
+7. Verify upload → profile → cleaning → outlier flow.
+8. Verify Phase 5 functionality still works.
+9. Verify original dataset is preserved.
+10. Verify preview does not modify data.
+11. Verify apply creates a new version.
+12. Verify history is displayed.
+13. Verify undo works.
+
+Do not mark Phase 6 complete until these checks pass.
+
+==================================================
+23. DO NOT OVERBUILD
+==================================================
+
+Do NOT implement:
+
+- Isolation Forest
+- Local Outlier Factor
+- One-Class SVM
+- advanced anomaly detection
+- AI chatbot
+- RAG
+- LLM recommendations
+- feature engineering
+- feature selection
+- scaling
+- normalization
+
+Those belong to later phases.
+
+Focus on making IQR, Z-score, Modified Z-score, visualization, treatment, versioning, and educational explanations reliable and polished.
+
+==================================================
+FINAL REQUIREMENT
+==================================================
+
+When finished, provide a concise implementation report containing:
+
+1. Files created
+2. Files modified
+3. APIs added
+4. Features implemented
+5. Tests added
+6. Test results
+7. Frontend build result
+8. Backend startup result
+9. Any known limitations
+10. Confirmation that original datasets remain unchanged

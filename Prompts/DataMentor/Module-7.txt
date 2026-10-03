@@ -1,0 +1,713 @@
+We are continuing development of DataMentor AI.
+
+Project:
+DataMentor AI: An Intelligent Automated Data Preprocessing, Visualization & Learning Platform
+
+Core philosophy:
+"Automate the work, but explain the learning."
+
+Phase 2 — Dataset Ingestion is complete.
+Phase 3 — Dataset Profiling is complete.
+Phase 4 — Learning/Explanation Engine is complete.
+Phase 5 — Automated Data Cleaning is complete.
+Phase 6 — Outlier Detection & Treatment is complete.
+
+Now implement ONLY:
+
+PHASE 7 — DATA TRANSFORMATION ENGINE
+
+Do not implement:
+- feature engineering
+- feature selection
+- visualization phase as a separate global module
+- AI chatbot
+- RAG
+- LLM integration
+- advanced anomaly detection
+- model training
+
+Use existing architecture, components, versioning, education engine, and design system wherever possible.
+
+==================================================
+1. CORE PHILOSOPHY
+==================================================
+
+Data transformation must follow:
+
+ANALYZE
+→ EXPLAIN
+→ RECOMMEND
+→ CONFIGURE
+→ PREVIEW
+→ COMPARE
+→ USER CONFIRMS
+→ APPLY
+→ VERSION
+→ RECORD HISTORY
+→ LEARN
+
+Never silently transform data.
+
+Never overwrite the original dataset.
+
+==================================================
+2. SUPPORTED TRANSFORMATIONS
+==================================================
+
+Implement:
+
+1. Standardization
+2. Min-Max Scaling
+3. Robust Scaling
+4. Log/Log1p Transformation
+5. Yeo-Johnson Power Transformation
+6. Box-Cox Power Transformation where valid
+
+Use scikit-learn implementations where appropriate.
+
+Standardization:
+StandardScaler
+
+Min-Max:
+MinMaxScaler
+
+Robust:
+RobustScaler
+
+Yeo-Johnson:
+PowerTransformer(method="yeo-johnson")
+
+Box-Cox:
+PowerTransformer(method="box-cox")
+
+Log:
+NumPy log/log1p as appropriate.
+
+==================================================
+3. STANDARDIZATION
+==================================================
+
+Formula:
+
+z = (x - mean) / standard_deviation
+
+Explain:
+- what it does
+- why it is useful
+- when to use it
+- when not to use it
+- ML algorithms affected by scale
+- limitations
+
+Show real dataset calculations when requested.
+
+==================================================
+4. MIN-MAX SCALING
+==================================================
+
+Formula:
+
+x' = (x - min) / (max - min)
+
+Default range:
+0 to 1
+
+Allow configurable feature range.
+
+Example:
+[0, 1]
+[-1, 1]
+
+Validate constant columns safely.
+
+==================================================
+5. ROBUST SCALING
+==================================================
+
+Concept:
+
+x' = (x - median) / IQR
+
+Use RobustScaler.
+
+Explain connection with Phase 6:
+Robust scaling is less sensitive to extreme values because it uses median and IQR.
+
+==================================================
+6. LOG TRANSFORMATION
+==================================================
+
+Support log1p for non-negative values.
+
+Explain:
+
+log1p(x) = log(1 + x)
+
+Use it to reduce strong positive/right skewness where appropriate.
+
+Handle:
+- zero
+- negative values
+- NaN
+
+Do not blindly apply log to negative values.
+
+If negative values exist, provide a clear educational error and suggest considering Yeo-Johnson.
+
+==================================================
+7. POWER TRANSFORMATION
+==================================================
+
+Implement Yeo-Johnson.
+
+Yeo-Johnson must support:
+- positive
+- zero
+- negative
+
+Implement Box-Cox only when all non-missing values are strictly positive.
+
+If zero or negative values exist, reject Box-Cox with a clear educational explanation.
+
+==================================================
+8. TRANSFORMATION ANALYSIS
+==================================================
+
+For every numerical column calculate:
+
+- count
+- missing count
+- min
+- max
+- mean
+- median
+- standard deviation
+- Q1
+- Q3
+- IQR
+- skewness
+- zero count
+- negative count
+- outlier percentage if available from Phase 6
+
+Use real dataset statistics.
+
+Never fabricate values.
+
+==================================================
+9. RECOMMENDATION ENGINE
+==================================================
+
+Create deterministic recommendations.
+
+Examples:
+
+Strong positive skew:
+→ consider log1p
+
+Many extreme values:
+→ consider RobustScaler
+
+Approximately symmetric numerical feature:
+→ consider StandardScaler depending on downstream algorithm
+
+Need bounded range:
+→ consider MinMaxScaler
+
+Positive/zero/negative and non-normal distribution:
+→ consider Yeo-Johnson
+
+Recommendations must contain:
+
+method
+reason
+evidence
+alternative methods
+
+Do not automatically apply recommendations.
+
+Do not use an LLM.
+
+==================================================
+10. IMPORTANT CONCEPT
+==================================================
+
+Teach:
+
+"Not every feature needs transformation."
+
+Explain that transformation choice depends on:
+
+- distribution
+- skewness
+- scale
+- outliers
+- algorithm
+- domain meaning
+- interpretability
+
+==================================================
+11. FIT VS TRANSFORM
+==================================================
+
+Create an educational concept explaining:
+
+Training:
+fit transformation → transform training data
+
+Test:
+transform using the SAME fitted transformation
+
+Never fit a separate scaler on test data.
+
+Explain data leakage.
+
+Store fitted transformation parameters in transformation metadata.
+
+==================================================
+12. TRANSFORMATION WORKSPACE
+==================================================
+
+Create:
+
+Transformation Workspace
+
+For each numerical column show:
+
+Column
+Data type
+Mean
+Median
+Std
+Skewness
+Min
+Max
+Outlier percentage
+
+Recommendation card:
+
+Recommended transformation
+Why
+Evidence
+
+Transformation selector:
+
+None
+Standardization
+Min-Max
+Robust
+Log1p
+Yeo-Johnson
+Box-Cox where valid
+
+Buttons:
+
+[Why?]
+[Show Formula]
+[Preview]
+[Apply]
+
+==================================================
+13. VISUALIZATION
+==================================================
+
+For each preview provide:
+
+Before histogram
+After histogram
+
+Before box plot
+After box plot
+
+Show distribution statistics before and after.
+
+Reuse existing chart infrastructure if possible.
+
+Do not build a completely separate chart system.
+
+==================================================
+14. PREVIEW
+==================================================
+
+Preview must NOT modify the dataset.
+
+Show:
+
+BEFORE
+- mean
+- median
+- std
+- min
+- max
+- skewness
+
+AFTER
+- mean
+- median
+- std
+- min
+- max
+- skewness
+
+Also show a sample:
+
+Original | Transformed
+
+==================================================
+15. APPLY
+==================================================
+
+Applying a transformation must:
+
+1. Validate dataset
+2. Validate column
+3. Validate method
+4. Validate parameters
+5. Create a new version
+6. Preserve original
+7. Fit transformation
+8. Transform data
+9. Save transformation parameters
+10. Calculate before metrics
+11. Calculate after metrics
+12. Record history
+13. Return new version information
+
+Require:
+
+confirmed = true
+
+==================================================
+16. VERSIONING
+==================================================
+
+Reuse existing version service.
+
+Example:
+
+v1 Raw
+v2 Cleaned
+v3 Outliers treated
+v4 Transformation applied
+
+Never overwrite original.
+
+Support undo through the existing versioning architecture.
+
+==================================================
+17. TRANSFORMATION HISTORY
+==================================================
+
+Record:
+
+operation_id
+operation
+column
+method
+parameters
+before metrics
+after metrics
+reason
+source version
+new version
+timestamp
+
+Example:
+
+{
+  "operation_id": "transform_001",
+  "operation": "data_transformation",
+  "column": "income",
+  "method": "log1p",
+  "before": {
+    "skewness": 4.72
+  },
+  "after": {
+    "skewness": 0.31
+  },
+  "reason": "Strong positive skewness",
+  "source_version": "v3",
+  "new_version": "v4"
+}
+
+==================================================
+18. MULTI-COLUMN SUPPORT
+==================================================
+
+Allow users to select multiple numerical columns.
+
+However, each column must have an independent transformation configuration.
+
+Do not force the same transformation on all columns.
+
+Categorical, text, identifier, and datetime columns must not be transformed by numerical scalers.
+
+==================================================
+19. EDUCATIONAL CONTENT
+==================================================
+
+Integrate the existing Phase 4 education engine.
+
+Add concepts:
+
+- data_transformation
+- feature_scaling
+- standardization
+- min_max_scaling
+- robust_scaling
+- log_transformation
+- power_transformation
+- yeo_johnson
+- box_cox
+- data_leakage
+- fit_vs_transform
+
+Every concept should include:
+
+WHAT?
+WHY?
+HOW?
+WHEN TO USE?
+WHEN NOT TO USE?
+ALTERNATIVES
+COMMON MISTAKES
+ML IMPACT
+INTERVIEW TIP
+
+Support:
+
+Beginner
+Intermediate
+Technical
+
+==================================================
+20. FORMULAS
+==================================================
+
+Show formulas using real values.
+
+Standardization:
+
+z = (x - μ) / σ
+
+Min-Max:
+
+x' = (x - min) / (max - min)
+
+Robust:
+
+x' = (x - median) / IQR
+
+Log:
+
+x' = log(1 + x)
+
+For Yeo-Johnson and Box-Cox, provide beginner-friendly conceptual explanations and technical details where appropriate.
+
+==================================================
+21. BACKEND ARCHITECTURE
+==================================================
+
+Create:
+
+backend/app/transformations/
+
+    scalers/
+        standard.py
+        minmax.py
+        robust.py
+
+    distributions/
+        log.py
+        power.py
+
+    recommendations.py
+    validation.py
+    transformation_engine.py
+
+Create:
+
+backend/app/services/transformation_service.py
+
+Create:
+
+backend/app/api/routes/transformations.py
+
+Follow existing project architecture.
+
+Reuse:
+- dataset services
+- version services
+- profiling services
+- education engine
+- validation patterns
+
+==================================================
+22. FRONTEND ARCHITECTURE
+==================================================
+
+Create:
+
+frontend/src/components/transformations/
+
+    TransformationSummary.jsx
+    TransformationDetail.jsx
+    TransformationSelector.jsx
+    TransformationPreview.jsx
+    DistributionComparison.jsx
+    FormulaCard.jsx
+    RecommendationCard.jsx
+    TransformationHistory.jsx
+
+Create:
+
+frontend/src/pages/TransformationWorkspace.jsx
+
+Integrate into existing pipeline navigation.
+
+Do not redesign unrelated pages.
+
+==================================================
+23. API ENDPOINTS
+==================================================
+
+Implement:
+
+GET
+/api/datasets/{dataset_id}/transformations
+
+GET
+/api/datasets/{dataset_id}/transformations/{column}
+
+GET
+/api/datasets/{dataset_id}/transformations/recommendations
+
+POST
+/api/datasets/{dataset_id}/transformations/preview
+
+POST
+/api/datasets/{dataset_id}/transformations/apply
+
+GET
+/api/datasets/{dataset_id}/transformations/history
+
+Use request/response schemas.
+
+==================================================
+24. VALIDATION
+==================================================
+
+Reject or safely handle:
+
+- categorical columns
+- text columns
+- invalid columns
+- invalid methods
+- invalid feature ranges
+- zero-range MinMax columns
+- negative values for direct log
+- zero/negative values for Box-Cox
+- invalid dataset IDs
+- invalid versions
+
+Provide educational error messages.
+
+==================================================
+25. TESTS
+==================================================
+
+Create tests for:
+
+StandardScaler
+MinMaxScaler
+RobustScaler
+Log1p
+Yeo-Johnson
+Box-Cox
+
+Test:
+- mathematical correctness
+- edge cases
+- invalid inputs
+- negative values
+- zero values
+- constant columns
+
+Recommendation tests:
+- skewed data
+- symmetric data
+- extreme-value data
+
+Preview:
+- must not modify dataset
+
+Apply:
+- creates new version
+- original unchanged
+- history recorded
+- parameters stored
+- undo works
+
+Regression:
+Run all existing tests from Phases 2–6.
+
+CRITICAL:
+Original dataset must remain byte-for-byte unchanged.
+
+==================================================
+26. VALIDATION AFTER IMPLEMENTATION
+==================================================
+
+Run:
+
+1. Backend tests
+2. Frontend tests
+3. Frontend build
+4. Backend startup
+5. API verification
+6. Upload → Profile → Clean → Outlier → Transform flow
+7. Preview verification
+8. Apply verification
+9. Version verification
+10. History verification
+11. Undo verification
+12. Original dataset integrity verification
+
+Do not declare Phase 7 complete until the full pipeline works.
+
+==================================================
+27. DO NOT OVERBUILD
+==================================================
+
+Do not implement:
+
+- feature engineering
+- feature selection
+- categorical encoding
+- AI chatbot
+- RAG
+- LLM
+- model training
+- advanced anomaly detection
+
+Those belong to later phases.
+
+Focus exclusively on a reliable, educational, versioned Data Transformation Engine.
+
+==================================================
+FINAL REPORT
+==================================================
+
+After implementation, provide:
+
+1. Files created
+2. Files modified
+3. APIs added
+4. Transformations implemented
+5. Educational concepts added
+6. Tests added
+7. Test results
+8. Frontend build result
+9. Backend startup result
+10. Known limitations
+11. Confirmation that original data remains unchanged

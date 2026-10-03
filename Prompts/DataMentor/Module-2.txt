@@ -1,0 +1,214 @@
+PHASE 2 — DATASET UPLOAD & INGESTION
+
+We are building DataMentor AI, an AI-powered data preparation
+and learning platform.
+
+IMPORTANT PRODUCT PRINCIPLE:
+
+DataMentor AI is learning-first.
+
+It must automate data preparation while helping beginners
+understand what is happening and why.
+
+In this phase, implement ONLY dataset upload and ingestion.
+
+DO NOT implement:
+- missing-value handling
+- duplicate removal
+- outlier detection
+- encoding
+- scaling
+- feature engineering
+- feature selection
+- advanced visualization
+- AI chatbot
+- RAG
+- automatic preprocessing
+
+Those will be implemented in later phases.
+
+GOAL:
+
+Allow a user to upload a raw dataset and inspect its basic
+structure before preprocessing.
+
+SUPPORTED FILE TYPES:
+
+- CSV
+- XLSX
+- XLS
+
+FRONTEND:
+
+Create a polished beginner-friendly upload page.
+
+The page should contain:
+
+1. DataMentor AI branding
+2. Short description:
+   "Turn raw data into ML-ready data while learning every step."
+3. Drag-and-drop upload area
+4. Browse Files button
+5. Supported file format information
+6. Upload progress state
+7. Error state
+8. Successful upload state
+
+After successful upload, display a Dataset Overview page.
+
+Dataset Overview must show:
+
+- filename
+- file type
+- file size
+- number of rows
+- number of columns
+- column names
+- first 10 rows as a preview
+- detected basic data types
+
+Add a small educational card:
+
+Title:
+"What is Dataset Profiling?"
+
+Explain in beginner-friendly language that dataset
+profiling means examining the structure and quality of data
+before modifying it.
+
+BACKEND:
+
+Create a FastAPI dataset ingestion API.
+
+Suggested endpoint:
+
+POST /api/datasets/upload
+
+The backend should:
+
+1. Receive uploaded file
+2. Validate extension
+3. Validate file size
+4. Generate a safe unique dataset ID
+5. Store the uploaded file safely
+6. Read CSV using Pandas
+7. Read XLSX/XLS using Pandas
+8. Extract:
+   - filename
+   - file type
+   - file size
+   - row count
+   - column count
+   - column names
+   - basic Pandas data types
+   - first 10 rows
+9. Return structured JSON
+10. Handle errors cleanly
+
+Create:
+
+backend/app/api/routes/datasets.py
+
+backend/app/services/ingestion_service.py
+
+backend/app/models/dataset.py
+
+backend/app/core/config.py
+
+Update main.py to register the dataset router.
+
+ARCHITECTURE:
+
+Keep route handling separate from business logic.
+
+The route should not contain all the Pandas processing.
+
+Use the ingestion service for dataset processing.
+
+SECURITY:
+
+- Maximum upload size: 50 MB
+- Validate supported extensions
+- Do not trust original filenames for filesystem paths
+- Generate server-side unique IDs
+- Prevent path traversal
+- Never execute uploaded files
+- Return safe, useful error messages
+- Clean up invalid uploads where appropriate
+
+FRONTEND API:
+
+Create a dedicated service for communicating with the backend.
+
+Do not put API calls directly throughout UI components.
+
+UI STATES:
+
+Implement:
+
+1. Empty state
+2. Drag-over state
+3. Uploading state
+4. Processing state
+5. Success state
+6. Error state
+
+DATASET PREVIEW:
+
+Use a clean responsive table.
+
+If the dataset contains many columns, make the
+preview horizontally scrollable.
+
+DO NOT implement advanced preprocessing yet.
+
+DO NOT create fake/mock dataset analysis.
+
+Use the actual uploaded dataset.
+
+LEARNING-FIRST REQUIREMENT:
+
+The UI should begin introducing the learner to the process.
+
+Clearly show:
+
+Raw Dataset
+      ↓
+Dataset Profiling
+      ↓
+Next: Identify Data Quality Issues
+
+The next phase will implement actual profiling.
+
+README:
+
+Update README.md with:
+
+- Phase 2 implementation
+- API endpoint
+- supported file formats
+- architecture
+- how to run frontend
+- how to run backend
+- security considerations
+- what is intentionally NOT implemented yet
+
+TESTING:
+
+Add basic backend tests for:
+
+- valid CSV upload
+- valid XLSX upload
+- unsupported file type
+- oversized file
+- malformed CSV
+- empty dataset
+- successful metadata extraction
+
+Make sure the frontend builds successfully
+and the backend starts successfully.
+
+Do not generate unnecessary abstractions.
+
+Keep the code clean, modular, typed where practical,
+and ready for Phase 3.

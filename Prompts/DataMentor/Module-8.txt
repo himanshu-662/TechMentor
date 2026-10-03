@@ -1,0 +1,825 @@
+We are continuing development of DataMentor AI.
+
+Project:
+DataMentor AI: An Intelligent Automated Data Preprocessing, Visualization & Learning Platform
+
+Core philosophy:
+"Automate the work, but explain the learning."
+
+Completed:
+Phase 2 — Dataset Ingestion
+Phase 3 — Dataset Profiling
+Phase 4 — Learning/Explanation Engine
+Phase 5 — Automated Data Cleaning
+Phase 6 — Outlier Detection & Treatment
+Phase 7 — Data Transformation
+
+Now implement ONLY:
+
+PHASE 8 — FEATURE ENGINEERING ENGINE
+
+Do not implement:
+- feature selection
+- advanced feature selection algorithms
+- model training
+- AI chatbot
+- RAG
+- LLM
+- embeddings
+- advanced NLP
+- model evaluation
+
+==================================================
+1. CORE PRINCIPLE
+==================================================
+
+Feature engineering must follow:
+
+ANALYZE
+→ IDENTIFY OPPORTUNITY
+→ EXPLAIN
+→ RECOMMEND
+→ CONFIGURE
+→ PREVIEW
+→ VALIDATE
+→ USER CONFIRMS
+→ CREATE FEATURE
+→ VERSION
+→ RECORD HISTORY
+→ LEARN
+
+Never silently create features.
+
+Never overwrite the original dataset.
+
+==================================================
+2. SUPPORTED FEATURE ENGINEERING
+==================================================
+
+Implement:
+
+1. Mathematical features
+2. Interaction features
+3. Ratio features
+4. Date/time features
+5. Date differences
+6. Aggregation features
+7. Binning
+8. Boolean/indicator features
+9. Frequency/count features
+10. Basic text-derived features
+
+==================================================
+3. MATHEMATICAL FEATURES
+==================================================
+
+Support:
+
+addition
+subtraction
+multiplication
+division
+absolute value
+square
+square root
+log1p
+
+Example:
+
+price × quantity
+→ total_price
+
+Use a controlled expression system.
+
+NEVER use eval() or execute arbitrary user-provided Python.
+
+==================================================
+4. INTERACTION FEATURES
+==================================================
+
+Allow:
+
+A × B
+
+Example:
+
+experience × salary
+→ experience_salary_interaction
+
+Explain:
+- what interaction means
+- why it may help
+- when it can be useful
+- risk of feature explosion
+- risk of overfitting
+
+Do not automatically generate every possible interaction.
+
+==================================================
+5. RATIO FEATURES
+==================================================
+
+Support:
+
+A / B
+
+Example:
+
+sales / employees
+→ sales_per_employee
+
+Handle division by zero safely.
+
+Never silently create infinity values.
+
+Allow a configurable policy:
+- NaN
+- 0
+- user-defined handling
+
+Default to a safe non-destructive behavior.
+
+==================================================
+6. DATE/TIME FEATURES
+==================================================
+
+Detect datetime columns using existing semantic typing.
+
+Allow extraction of:
+
+year
+month
+day
+day_of_week
+day_of_year
+week_of_year
+quarter
+hour
+minute
+second
+
+Example:
+
+transaction_date
+→ transaction_date_year
+→ transaction_date_month
+→ transaction_date_day
+→ transaction_date_day_of_week
+
+==================================================
+7. CYCLICAL FEATURES
+==================================================
+
+Implement optional advanced cyclical encoding.
+
+For hour:
+
+sin_hour = sin(2π × hour / 24)
+cos_hour = cos(2π × hour / 24)
+
+For month:
+
+sin_month = sin(2π × month / 12)
+cos_month = cos(2π × month / 12)
+
+Explain why cyclical encoding is useful.
+
+Do not make this the default.
+
+==================================================
+8. DATE DIFFERENCES
+==================================================
+
+Allow date difference features.
+
+Example:
+
+approval_date - application_date
+→ processing_days
+
+Support:
+- days
+- hours
+- minutes
+
+Validate date columns before operation.
+
+==================================================
+9. AGGREGATION FEATURES
+==================================================
+
+Support grouped aggregations.
+
+Example:
+
+customer_id + purchase_amount
+
+Generate:
+
+customer_purchase_amount_sum
+customer_purchase_amount_mean
+customer_purchase_amount_median
+customer_purchase_amount_min
+customer_purchase_amount_max
+customer_purchase_amount_count
+customer_purchase_amount_std
+
+Allow users to choose:
+- grouping column
+- aggregation column
+- aggregation method
+- new feature name
+
+IMPORTANT:
+Show a data leakage warning.
+
+Explain that aggregations must only use information available at prediction time.
+
+==================================================
+10. BINNING
+==================================================
+
+Support numerical binning.
+
+Methods:
+
+Equal-width
+Custom boundaries
+
+Example:
+
+Age:
+0–17
+18–30
+31–45
+46–60
+60+
+
+Create:
+
+age_group
+
+Allow custom labels.
+
+Warn:
+Binning reduces numerical detail.
+
+==================================================
+11. BOOLEAN / INDICATOR FEATURES
+==================================================
+
+Allow rules such as:
+
+age >= 18
+income > 100000
+score >= 80
+
+Create:
+
+is_adult
+high_income
+high_score
+
+Support:
+
+>
+<
+>=
+<=
+==
+!=
+
+Allow output as:
+- boolean
+- 0/1
+
+==================================================
+12. FREQUENCY FEATURES
+==================================================
+
+For categorical columns support:
+
+frequency count
+frequency ratio
+
+Example:
+
+city
+
+city_frequency_count
+city_frequency_ratio
+
+Use actual dataset frequencies.
+
+==================================================
+13. BASIC TEXT FEATURES
+==================================================
+
+For text columns support only basic deterministic features:
+
+character_count
+word_count
+sentence_count
+uppercase_count
+digit_count
+
+Do not implement:
+- embeddings
+- TF-IDF
+- transformers
+- semantic search
+- LLM processing
+
+==================================================
+14. FEATURE OPPORTUNITY DETECTION
+==================================================
+
+Analyze dataset structure and identify useful opportunities.
+
+Examples:
+
+Datetime column:
+→ date component features
+
+Numerical columns:
+→ ratio/interactions where meaningful
+
+Categorical column:
+→ frequency feature
+
+Group identifier + numerical column:
+→ aggregation opportunity
+
+Text column:
+→ basic text statistics
+
+Do not generate unlimited suggestions.
+
+Keep recommendations explainable and conservative.
+
+==================================================
+15. FEATURE RECOMMENDATION
+==================================================
+
+Every recommendation must contain:
+
+feature type
+suggested feature name
+source columns
+formula or rule
+reason
+potential benefit
+potential limitation
+
+Example:
+
+Suggested:
+sales_per_employee
+
+Formula:
+sales / employees
+
+Reason:
+Normalizes sales by workforce size.
+
+Limitation:
+Requires handling zero employee counts.
+
+==================================================
+16. MANUAL FEATURE BUILDER
+==================================================
+
+Create:
+
+CREATE FEATURE
+
+Feature Name:
+[___________]
+
+Feature Type:
+[Ratio ▼]
+
+Column A:
+[sales ▼]
+
+Operation:
+[/]
+
+Column B:
+[employees ▼]
+
+Result:
+sales_per_employee
+
+Buttons:
+
+[Explain]
+[Preview]
+[Create Feature]
+
+Support mathematical expression building through controlled UI.
+
+Do not allow arbitrary Python execution.
+
+==================================================
+17. PREVIEW
+==================================================
+
+Preview must NOT modify the dataset.
+
+Show:
+
+Current columns
+New columns
+Sample generated values
+Data type
+Missing values
+Infinite values
+Unique values
+Constant status
+
+Example:
+
+Current columns:
+25
+
+New:
+sales_per_employee
+
+After:
+26 columns
+
+==================================================
+18. FEATURE VALIDATION
+==================================================
+
+Validate every generated feature for:
+
+NaN
+inf
+-inf
+dtype
+constant values
+unexpected cardinality
+duplicate feature names
+
+If invalid values occur:
+
+show affected rows
+explain the cause
+allow the user to configure handling
+
+Never silently hide invalid values.
+
+==================================================
+19. FEATURE EXPLANATION
+==================================================
+
+For every generated feature provide:
+
+WHAT?
+WHY?
+HOW?
+WHEN SHOULD I USE IT?
+WHEN SHOULD I AVOID IT?
+LIMITATIONS
+DATA LEAKAGE RISK
+ML IMPACT
+INTERVIEW TIP
+
+Example:
+
+Why create sales_per_employee?
+
+It normalizes sales relative to workforce size.
+
+Potential benefit:
+Organizations of different sizes can be compared more meaningfully.
+
+Potential limitation:
+Division by zero and very small denominators can create unstable values.
+
+==================================================
+20. LEARNING CONCEPTS
+==================================================
+
+Add to existing education engine:
+
+feature_engineering
+mathematical_features
+interaction_features
+ratio_features
+datetime_features
+cyclical_encoding
+date_difference
+aggregation_features
+feature_binning
+indicator_features
+frequency_features
+text_features
+feature_leakage
+data_leakage
+
+Support:
+Beginner
+Intermediate
+Technical
+
+==================================================
+21. VERSIONING
+==================================================
+
+Reuse existing version service.
+
+Example:
+
+v1 Raw
+v2 Cleaned
+v3 Outliers treated
+v4 Transformed
+v5 Feature engineered
+
+Never overwrite original.
+
+Support undo using existing version architecture.
+
+==================================================
+22. HISTORY
+==================================================
+
+Record:
+
+operation_id
+operation
+source_columns
+new_feature
+formula/rule
+parameters
+before metrics
+after metrics
+validation results
+reason
+source version
+new version
+timestamp
+
+==================================================
+23. BACKEND ARCHITECTURE
+==================================================
+
+Create:
+
+backend/app/feature_engineering/
+
+    mathematical.py
+    interactions.py
+    ratios.py
+    datetime_features.py
+    aggregations.py
+    binning.py
+    indicators.py
+    frequency.py
+    text_features.py
+    recommendations.py
+    validation.py
+    feature_engine.py
+
+Create:
+
+backend/app/services/feature_engineering_service.py
+
+Create:
+
+backend/app/api/routes/feature_engineering.py
+
+Reuse existing:
+- dataset service
+- profile service
+- version service
+- education service
+- validation patterns
+
+==================================================
+24. FRONTEND ARCHITECTURE
+==================================================
+
+Create:
+
+frontend/src/components/feature-engineering/
+
+    FeatureOpportunityCard.jsx
+    FeatureBuilder.jsx
+    FeaturePreview.jsx
+    FeatureExplanation.jsx
+    FeatureValidation.jsx
+    FeatureHistory.jsx
+
+Create:
+
+frontend/src/pages/FeatureEngineeringWorkspace.jsx
+
+Integrate with existing pipeline navigation.
+
+Do not redesign unrelated pages.
+
+==================================================
+25. API ENDPOINTS
+==================================================
+
+GET
+/api/datasets/{dataset_id}/feature-engineering/opportunities
+
+GET
+/api/datasets/{dataset_id}/feature-engineering/recommendations
+
+POST
+/api/datasets/{dataset_id}/feature-engineering/preview
+
+POST
+/api/datasets/{dataset_id}/feature-engineering/apply
+
+GET
+/api/datasets/{dataset_id}/feature-engineering/history
+
+==================================================
+26. APPLY
+==================================================
+
+Require:
+
+confirmed = true
+
+On apply:
+
+1. Validate dataset.
+2. Validate operation.
+3. Validate source columns.
+4. Generate feature.
+5. Validate resulting feature.
+6. Create new dataset version.
+7. Preserve original.
+8. Record metadata.
+9. Record history.
+10. Return before/after summary.
+
+==================================================
+27. TESTS
+==================================================
+
+Test:
+
+Mathematical:
+- add
+- subtract
+- multiply
+- divide
+- square
+- sqrt
+- log1p
+
+Interactions:
+- correct values
+- feature naming
+
+Ratios:
+- normal division
+- zero denominator
+- NaN/inf handling
+
+Datetime:
+- year
+- month
+- day
+- weekday
+- quarter
+- hour
+
+Cyclical:
+- correct sin/cos values
+
+Date differences:
+- days
+- hours
+- minutes
+
+Aggregations:
+- sum
+- mean
+- median
+- min
+- max
+- count
+- std
+
+Binning:
+- equal-width
+- custom bins
+
+Indicators:
+- all comparison operators
+
+Frequency:
+- count
+- ratio
+
+Text:
+- character count
+- word count
+- sentence count
+- uppercase
+- digit count
+
+Validation:
+- duplicate feature name
+- invalid columns
+- invalid operation
+- invalid expressions
+- division by zero
+- invalid date columns
+
+Preview:
+- must not modify dataset
+
+Apply:
+- creates new version
+- original remains unchanged
+- history recorded
+- undo works
+
+CRITICAL:
+Original dataset must remain byte-for-byte unchanged.
+
+==================================================
+28. SECURITY
+==================================================
+
+Do not use eval().
+
+Do not execute arbitrary expressions.
+
+Use a controlled expression parser or explicit operation registry.
+
+Only allow whitelisted operations and validated columns.
+
+==================================================
+29. FULL VALIDATION
+==================================================
+
+After implementation:
+
+1. Run backend tests.
+2. Run frontend tests.
+3. Run frontend build.
+4. Start backend.
+5. Start frontend.
+6. Test APIs.
+7. Test upload → profile → clean → outlier → transform → feature engineering.
+8. Test preview.
+9. Test apply.
+10. Test versioning.
+11. Test history.
+12. Test undo.
+13. Verify original dataset integrity.
+14. Run all previous phase regression tests.
+
+Do not declare Phase 8 complete until all checks pass.
+
+==================================================
+30. DO NOT OVERBUILD
+==================================================
+
+Do not implement:
+
+- feature selection
+- PCA
+- RFE
+- mutual information selection
+- model-based feature selection
+- embeddings
+- TF-IDF
+- LLM
+- chatbot
+- RAG
+- model training
+
+These belong to later phases.
+
+Focus only on a reliable, educational, explainable Feature Engineering Engine.
+
+==================================================
+FINAL REPORT
+==================================================
+
+After implementation report:
+
+1. Files created
+2. Files modified
+3. APIs added
+4. Feature engineering techniques implemented
+5. Educational concepts added
+6. Tests added
+7. Test results
+8. Frontend build result
+9. Backend startup result
+10. Known limitations
+11. Confirmation that original data remains unchanged

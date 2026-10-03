@@ -1,0 +1,779 @@
+We are continuing development of DataMentor AI.
+
+Project:
+DataMentor AI: An Intelligent Automated Data Preprocessing, Visualization & Learning Platform
+
+Core philosophy:
+"Automate the work, but explain the learning."
+
+Completed:
+Phase 2 — Dataset Ingestion
+Phase 3 — Dataset Profiling
+Phase 4 — Learning/Explanation Engine
+Phase 5 — Automated Data Cleaning
+Phase 6 — Outlier Detection & Treatment
+Phase 7 — Data Transformation
+Phase 8 — Feature Engineering
+Phase 9 — Feature Selection
+
+Now implement ONLY:
+
+PHASE 10 — VISUALIZATION & EXPLORATORY DATA ANALYSIS ENGINE
+
+Do not implement:
+- AI chatbot
+- RAG
+- LLM
+- model training
+- model evaluation
+- automated ML
+- report generation
+- deployment
+
+==================================================
+1. CORE PRINCIPLE
+==================================================
+
+Every important statistical observation should have an appropriate visual explanation when meaningful.
+
+Do not generate charts simply because they are technically possible.
+
+Every chart should answer a question.
+
+Workflow:
+
+DATA
+→ PROFILE
+→ UNDERSTAND TYPES
+→ SELECT VARIABLES
+→ RECOMMEND VISUALIZATION
+→ GENERATE
+→ INTERPRET
+→ LEARN
+
+==================================================
+2. VISUALIZATION TYPES
+==================================================
+
+Implement:
+
+Numerical:
+- histogram
+- box plot
+- density plot where appropriate
+
+Categorical:
+- bar chart
+- pie/donut for small cardinality only
+
+Relationships:
+- scatter plot
+- grouped bar
+- grouped box plot
+
+Time:
+- line chart
+- aggregated time series
+
+Correlation:
+- Pearson heatmap
+- Spearman heatmap
+
+Data quality:
+- missingness bar chart
+- missingness matrix
+
+Multivariate:
+- pair plot with strict feature-count limit
+
+Before/After:
+- distribution comparison
+- box plot comparison
+
+==================================================
+3. NUMERICAL ANALYSIS
+==================================================
+
+For numerical columns calculate:
+
+count
+missing_count
+missing_percentage
+mean
+median
+std
+min
+max
+Q1
+Q3
+IQR
+skewness
+zero_count
+negative_count
+
+Show these alongside charts.
+
+==================================================
+4. HISTOGRAM
+==================================================
+
+Support:
+
+- configurable bins
+- default 30 bins
+- reasonable limits to prevent unusable charts
+
+Explain:
+- distribution
+- center
+- spread
+- skewness
+
+==================================================
+5. BOX PLOT
+==================================================
+
+Show:
+
+median
+Q1
+Q3
+IQR
+outliers
+
+Reuse Phase 6 outlier information where available.
+
+Provide link to outlier explanation.
+
+==================================================
+6. CATEGORICAL ANALYSIS
+==================================================
+
+For categorical columns show:
+
+category
+count
+percentage
+unique_count
+
+Bar charts should be the default.
+
+Only recommend pie/donut when category count is small, default <= 6.
+
+For high cardinality:
+
+allow:
+Top 10
+Top 20
+All
+
+Show a warning when too many categories exist.
+
+==================================================
+7. SCATTER PLOT
+==================================================
+
+For two numerical columns:
+
+X
+Y
+
+Optional:
+color by category
+size by numerical feature
+trend line
+
+Do not enable all advanced options by default.
+
+Calculate Pearson correlation when appropriate.
+
+Clearly state:
+correlation is association, not causation.
+
+==================================================
+8. GROUPED ANALYSIS
+==================================================
+
+For:
+
+categorical + numerical
+
+support:
+
+- mean
+- median
+- min
+- max
+- count
+
+Visualizations:
+- grouped bar
+- grouped box plot
+
+Example:
+Average salary by department.
+
+==================================================
+9. TIME SERIES
+==================================================
+
+Detect datetime columns.
+
+Support:
+
+date + numerical value
+
+Use line chart.
+
+Allow aggregation:
+
+sum
+mean
+median
+min
+max
+count
+
+Allow:
+daily
+weekly
+monthly
+quarterly
+
+Explain that aggregation can hide short-term patterns.
+
+==================================================
+10. CORRELATION
+==================================================
+
+Implement:
+
+Pearson
+Spearman
+
+Create interactive heatmap.
+
+Allow threshold highlighting.
+
+Explain:
+
+Pearson:
+mainly linear association.
+
+Spearman:
+rank-based monotonic relationship.
+
+Do not imply causation.
+
+==================================================
+11. PAIR PLOT
+==================================================
+
+Support pair plots for numerical columns.
+
+Strict limit:
+maximum 6 selected features.
+
+Warn users when too many features are selected.
+
+==================================================
+12. MISSINGNESS VISUALIZATION
+==================================================
+
+Implement:
+
+Missingness bar chart
+
+Show:
+column
+missing count
+missing percentage
+
+Implement a missingness matrix.
+
+Also identify columns that frequently have missing values in the same rows.
+
+Do not infer causation.
+
+==================================================
+13. CHART RECOMMENDATION ENGINE
+==================================================
+
+Create deterministic chart recommendations.
+
+Inputs:
+- data type
+- number of selected columns
+- cardinality
+- datetime status
+- missingness
+- numerical/categorical type
+
+Examples:
+
+One numerical:
+→ histogram
+
+One categorical:
+→ bar chart
+
+Two numerical:
+→ scatter plot
+
+Categorical + numerical:
+→ box plot or grouped bar
+
+Datetime + numerical:
+→ line chart
+
+Multiple numerical:
+→ correlation heatmap
+
+Recommendations must contain:
+- chart
+- reason
+- alternatives
+
+==================================================
+14. AUTO VISUALIZE
+==================================================
+
+Create:
+
+[Auto Visualize]
+
+Generate only a small set of high-value charts.
+
+Examples:
+- important numerical distributions
+- categorical distributions
+- correlation heatmap
+- missingness chart
+- important numerical relationships
+
+Do not generate dozens of charts.
+
+==================================================
+15. MANUAL CHART BUILDER
+==================================================
+
+Create:
+
+Chart Type
+X Axis
+Y Axis
+Color
+Size
+Aggregation
+Filters
+Trend Line
+
+Only show controls compatible with selected chart type.
+
+Example:
+
+Scatter:
+X
+Y
+Color
+Size
+Trend line
+
+Bar:
+Category
+Value
+Aggregation
+
+Line:
+Date
+Value
+Aggregation
+
+==================================================
+16. CHART EXPLANATION
+==================================================
+
+Every generated chart must provide:
+
+What am I looking at?
+Why was this chart selected?
+What can I observe?
+What should I be careful about?
+Related concepts
+
+Use existing education engine.
+
+Do not generate unsupported conclusions.
+
+Example:
+
+GOOD:
+"The income distribution is strongly right-skewed. Skewness = 4.72."
+
+BAD:
+"High income causes employee retention."
+
+==================================================
+17. DESCRIPTIVE INSIGHTS
+==================================================
+
+Create deterministic insight generation.
+
+Use actual computed statistics.
+
+Examples:
+
+"Income is strongly right-skewed."
+
+"Salary and experience have a Pearson correlation of 0.82."
+
+"8.7% of income values are missing."
+
+Always include evidence.
+
+Never fabricate observations.
+
+==================================================
+18. BEFORE/AFTER VISUALIZATION
+==================================================
+
+Allow comparison between dataset versions.
+
+Example:
+
+Original:
+v1
+
+Current:
+v4
+
+Show:
+- histogram comparison
+- box plot comparison
+- summary statistics
+
+Reuse version service.
+
+==================================================
+19. VERSION-AWARE VISUALIZATION
+==================================================
+
+Allow selecting:
+
+v1 Raw
+v2 Cleaned
+v3 Outliers Treated
+v4 Transformed
+v5 Feature Engineered
+v6 Feature Selected
+
+Visualize the selected version.
+
+==================================================
+20. CHART METADATA
+==================================================
+
+Store:
+
+chart_id
+chart_type
+dataset_version
+columns
+configuration
+created_at
+
+Example:
+
+{
+  "chart_id": "chart_001",
+  "chart_type": "histogram",
+  "dataset_version": "v4",
+  "columns": ["income"],
+  "configuration": {
+    "bins": 30
+  }
+}
+
+==================================================
+21. EXPORT
+==================================================
+
+Allow chart export:
+
+PNG
+SVG
+
+Optionally store chart configuration JSON.
+
+Do not implement PDF reports here.
+
+==================================================
+22. FRONTEND ARCHITECTURE
+==================================================
+
+Create:
+
+frontend/src/components/visualization/
+
+    VisualizationDashboard.jsx
+    ChartBuilder.jsx
+    ChartRenderer.jsx
+    ChartRecommendation.jsx
+    ChartExplanation.jsx
+    NumericalSummary.jsx
+    CorrelationHeatmap.jsx
+    MissingnessChart.jsx
+    BeforeAfterChart.jsx
+    ChartExport.jsx
+
+Create:
+
+frontend/src/pages/VisualizationWorkspace.jsx
+
+Use the existing chart library if already installed.
+
+Do not introduce unnecessary libraries.
+
+==================================================
+23. BACKEND ARCHITECTURE
+==================================================
+
+Create:
+
+backend/app/visualization/
+
+    analysis/
+        numerical.py
+        categorical.py
+        datetime.py
+        correlation.py
+        missingness.py
+
+    recommendations.py
+    insights.py
+    validation.py
+    visualization_engine.py
+
+Create:
+
+backend/app/services/visualization_service.py
+
+Create:
+
+backend/app/api/routes/visualization.py
+
+Reuse:
+- profiling service
+- version service
+- education service
+
+==================================================
+24. API
+==================================================
+
+Implement:
+
+GET
+/api/datasets/{dataset_id}/visualization/profile
+
+GET
+/api/datasets/{dataset_id}/visualization/recommendations
+
+POST
+/api/datasets/{dataset_id}/visualization/chart
+
+GET
+/api/datasets/{dataset_id}/visualization/correlation
+
+GET
+/api/datasets/{dataset_id}/visualization/missingness
+
+GET
+/api/datasets/{dataset_id}/visualization/history
+
+==================================================
+25. VALIDATION
+==================================================
+
+Reject:
+
+- invalid columns
+- incompatible chart types
+- invalid aggregation
+- too many pair-plot features
+- invalid dataset version
+- invalid correlation method
+
+Provide educational errors.
+
+==================================================
+26. PERFORMANCE
+==================================================
+
+Datasets may contain many rows.
+
+Do not render millions of points directly in the browser.
+
+Implement reasonable sampling/downsampling for large visualizations.
+
+Clearly indicate when sampling is being used.
+
+Example:
+
+"Displaying a representative sample of 50,000 rows from 2,000,000 rows."
+
+Never silently sample.
+
+==================================================
+27. EDUCATIONAL CONCEPTS
+==================================================
+
+Add:
+
+data_visualization
+exploratory_data_analysis
+histogram
+box_plot
+bar_chart
+scatter_plot
+line_chart
+correlation
+pearson_correlation
+spearman_correlation
+heatmap
+distribution
+skewness
+cardinality
+missingness_visualization
+time_series_visualization
+data_sampling
+
+Each should contain:
+
+WHAT?
+WHY?
+HOW?
+WHEN TO USE?
+WHEN NOT TO USE?
+LIMITATIONS
+COMMON MISTAKES
+ML IMPACT
+INTERVIEW TIP
+
+Support:
+Beginner
+Intermediate
+Technical
+
+==================================================
+28. TESTS
+==================================================
+
+Test:
+
+Numerical:
+- histogram data
+- box plot statistics
+- summary statistics
+
+Categorical:
+- counts
+- percentages
+- cardinality
+
+Scatter:
+- valid numerical columns
+- invalid columns
+- correlation
+
+Time series:
+- datetime detection
+- aggregation
+
+Correlation:
+- Pearson
+- Spearman
+
+Missingness:
+- counts
+- percentages
+- co-occurrence
+
+Recommendations:
+- correct chart type
+- alternatives
+
+Insights:
+- deterministic
+- evidence-based
+- no fabricated statistics
+
+Versioning:
+- selected version visualized correctly
+
+Large datasets:
+- sampling behavior
+- sampling clearly indicated
+
+==================================================
+29. REGRESSION
+==================================================
+
+Run all tests from:
+
+Phase 2
+Phase 3
+Phase 4
+Phase 5
+Phase 6
+Phase 7
+Phase 8
+Phase 9
+
+Verify:
+
+Upload
+→ Profile
+→ Clean
+→ Outliers
+→ Transform
+→ Feature Engineering
+→ Feature Selection
+→ Visualization
+
+==================================================
+30. DO NOT OVERBUILD
+==================================================
+
+Do not implement:
+
+- AI chatbot
+- RAG
+- LLM
+- automated model training
+- automated ML
+- model evaluation
+- advanced BI dashboards
+- PDF reporting
+
+Keep Phase 10 focused on educational EDA and visualization.
+
+==================================================
+FINAL REPORT
+==================================================
+
+After implementation provide:
+
+1. Files created
+2. Files modified
+3. APIs added
+4. Visualization types implemented
+5. Recommendation engine details
+6. Insight engine details
+7. Educational concepts added
+8. Tests added
+9. Test results
+10. Frontend build result
+11. Backend startup result
+12. Known limitations
+13. Confirmation that version-aware visualization works

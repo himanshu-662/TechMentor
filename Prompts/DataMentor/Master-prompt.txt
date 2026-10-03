@@ -1,0 +1,1958 @@
+# DataMentor AI — Master Refactoring Prompt
+## Exact 13-Step ML Preprocessing Workflow
+
+Below is the **copy-paste-ready Antigravity master prompt** for modifying the **existing DataMentor AI project**.
+
+The key instruction is: **do not redesign the workflow based on a generic ML preprocessing order. The handwritten 13-step sequence is the source of truth and must be implemented in that exact order.**
+
+```markdown
+# MASTER PROMPT — DATAMENTOR AI
+## Refactor the Entire Existing Project to the Exact 13-Step ML Preprocessing Workflow
+
+---
+
+# 1. ROLE
+
+You are the lead software architect, senior ML engineer, backend engineer,
+frontend engineer, and technical educator responsible for modifying the
+existing DataMentor AI project.
+
+Your task is NOT to build a new project from scratch.
+
+Your task is to:
+
+1. Inspect the entire existing DataMentor AI repository.
+2. Understand the current architecture and implementation.
+3. Preserve useful existing functionality.
+4. Refactor the project architecture where necessary.
+5. Reorganize the preprocessing workflow.
+6. Implement the EXACT 13-STEP ML PROCESSING WORKFLOW defined below.
+7. Remove, merge, rename, or relocate existing modules when required.
+8. Ensure the frontend, backend, ML engine, learning engine, APIs,
+   persistence, visualizations, and documentation all follow the new workflow.
+
+The handwritten workflow provided by the project owner is the SOURCE OF TRUTH.
+
+DO NOT replace it with your own preferred ML workflow.
+
+DO NOT reorder the 13 steps.
+
+DO NOT add preprocessing steps between these 13 steps.
+
+Additional technical functionality may exist internally, but the
+USER-FACING WORKFLOW must remain exactly these 13 steps.
+
+---
+
+# 2. PROJECT OBJECTIVE
+
+DataMentor AI is a learning-first intelligent data preprocessing platform.
+
+The platform must do two things simultaneously:
+
+### A. AUTOMATE DATA PREPROCESSING
+
+The system should inspect a dataset, identify relevant data problems,
+apply appropriate preprocessing techniques, and generate an ML-ready dataset.
+
+### B. TEACH THE USER
+
+Every preprocessing operation must explain:
+
+- What is happening?
+- Why is it happening?
+- What technique is being used?
+- Why was this technique selected?
+- What changed?
+- What are the advantages?
+- What are the limitations?
+- When should this technique be used?
+- When should it NOT be used?
+- What happened to the dataset after the operation?
+
+The platform must therefore behave as:
+
+DATA PREPROCESSING ENGINE
++
+ML EDUCATION PLATFORM
++
+VISUAL ANALYTICS PLATFORM
+
+---
+
+# 3. IMPORTANT — MODIFY THE EXISTING PROJECT
+
+Before writing or modifying code:
+
+## FIRST inspect the repository.
+
+Analyze:
+
+- Existing folder structure
+- Frontend architecture
+- Backend architecture
+- API routes
+- Database models
+- Dataset processing services
+- ML services
+- Existing preprocessing modules
+- Visualization modules
+- Learning/explanation engine
+- AI/RAG components
+- Existing UI components
+- Existing state management
+- Existing workflow/navigation
+- Existing tests
+- Existing documentation
+- Existing environment configuration
+- Existing deployment configuration
+
+Create an internal architecture map before making modifications.
+
+DO NOT immediately create duplicate modules.
+
+DO NOT create a second preprocessing engine if one already exists.
+
+DO NOT duplicate existing APIs.
+
+DO NOT duplicate existing services.
+
+Reuse and refactor existing components wherever possible.
+
+---
+
+# 4. EXISTING TECHNOLOGY STACK
+
+Preserve the existing project stack unless a technical change is genuinely
+required by the new architecture.
+
+Expected existing stack includes:
+
+## Frontend
+
+- React
+- Vite
+- Tailwind CSS
+- Existing chart/visualization libraries
+
+## Backend
+
+- Python
+- FastAPI
+- Pandas
+- NumPy
+- SciPy
+- Scikit-learn
+
+## AI / Learning Layer
+
+- LLM integration
+- LangChain
+- LangGraph
+- RAG
+- Vector database where already implemented
+
+Do not replace the stack merely for architectural preference.
+
+---
+
+# 5. ABSOLUTE WORKFLOW RULE
+
+The following 13 steps MUST be implemented in exactly this order.
+
+# DATAMENTOR AI — EXACT 13 STEPS
+
+---
+
+# STEP 1 — DATA COLLECTION
+
+Purpose:
+
+Collect or obtain the dataset.
+
+Supported conceptual sources may include:
+
+- Kaggle
+- UCI repositories
+- Public datasets
+- Uploaded datasets
+- Other supported data sources already implemented
+
+The initial implementation must support the existing upload/data ingestion
+mechanism.
+
+The system should record:
+
+- Dataset source
+- Dataset name
+- File name
+- File type
+- Upload timestamp
+- Dataset size
+- Number of rows
+- Number of columns
+
+### Learning Layer
+
+Explain:
+
+- What data collection means
+- Why data quality begins at collection
+- Examples of structured datasets
+- Common data sources
+
+### UI
+
+Create/retain a Data Collection stage.
+
+Display:
+
+- Source
+- Dataset
+- File information
+- Dataset summary
+
+---
+
+# STEP 2 — DATA LOADING
+
+Purpose:
+
+Load the collected dataset into the DataMentor processing environment.
+
+Supported formats should follow the existing implementation, including:
+
+- CSV
+- Excel
+- JSON
+- PDF/table extraction where already supported
+
+Convert structured tabular data into the internal DataFrame
+representation.
+
+### Backend
+
+Create/reuse the existing data loading service.
+
+Responsibilities:
+
+- Detect file type
+- Load dataset
+- Validate basic readability
+- Create internal dataset object
+- Return dataset metadata
+
+### Learning Layer
+
+Explain:
+
+- What a DataFrame is
+- Why tabular data is represented as a DataFrame
+- Difference between CSV, Excel, JSON, etc.
+
+### UI
+
+Show:
+
+- File type
+- Loading status
+- Number of rows
+- Number of columns
+- Column names
+- Data preview
+
+---
+
+# STEP 3 — EDA PROCESS
+
+EDA = Exploratory Data Analysis.
+
+This step must happen BEFORE the preprocessing operations defined in later
+steps.
+
+Implement/retain:
+
+- head()
+- tail()
+- info()
+- describe()
+- duplicate detection/inspection
+- statistical summaries
+- visualization techniques
+
+### Required EDA Components
+
+#### Dataset overview
+
+- Shape
+- Columns
+- Data types
+- Memory information
+
+#### Numerical analysis
+
+- Mean
+- Median
+- Standard deviation
+- Min
+- Max
+- Quartiles
+
+#### Categorical analysis
+
+- Unique values
+- Value counts
+- Cardinality
+
+#### Visualization
+
+Support appropriate visualizations such as:
+
+- Histograms
+- Box plots
+- Bar charts
+- Scatter plots
+- Correlation heatmaps
+- Distribution plots
+
+### Learning Layer
+
+For every EDA operation explain:
+
+- What it shows
+- Why it matters
+- How to interpret it
+- What a beginner should look for
+
+---
+
+# STEP 4 — DATA CLEANING
+
+This step must specifically focus on cleaning.
+
+Do NOT merge outlier processing into this step.
+
+## 4.1 Missing Value Detection
+
+Detect:
+
+- Missing values
+- Missing percentage
+- Missing values by column
+- Missing values by row where useful
+
+Display:
+
+Column | Missing Count | Missing %
+
+---
+
+## 4.2 Missing Value Handling
+
+The system must support the techniques represented in the
+handwritten workflow.
+
+### Numerical columns
+
+Support:
+
+- Mean
+- Median
+
+### Categorical columns
+
+Support:
+
+- Mode
+
+### Data Imputation
+
+Support:
+
+- SimpleImputer
+- KNNImputer
+
+The recommendation engine may determine which technique is appropriate.
+
+But the user must be able to understand and inspect the recommendation.
+
+---
+
+## 4.3 Duplicate Handling
+
+Detect duplicate records.
+
+Show:
+
+- Number of duplicate rows
+- Duplicate percentage
+- Duplicate examples
+
+Allow the appropriate duplicate-handling action.
+
+---
+
+## 4.4 Invalid Data
+
+Detect obvious invalid values where rules can be inferred safely.
+
+Examples:
+
+- Invalid numeric values
+- Invalid categories
+- Impossible ranges
+- Wrong data types
+
+Do not silently modify questionable values.
+
+Show the issue and explain the proposed correction.
+
+---
+
+## Learning Layer
+
+For each cleaning operation provide:
+
+- Definition
+- Reason
+- Technique
+- Example
+- Before/after
+- Risks
+- Best practices
+
+---
+
+# STEP 5 — OUTLIERS
+
+This step is dedicated specifically to:
+
+DETECT + ANALYZE + HANDLE OUTLIERS
+
+Do not move this into Data Cleaning.
+
+---
+
+## 5.1 Outlier Visualization
+
+Support:
+
+- Box plot
+- Scatter plot
+
+---
+
+## 5.2 Numerical Analysis
+
+Calculate/display:
+
+- Skewness
+- Kurtosis
+
+Explain what each metric means.
+
+---
+
+## 5.3 Outlier Detection
+
+Support:
+
+### IQR method
+
+Use:
+
+Q1
+Q3
+IQR = Q3 - Q1
+
+Lower Bound:
+Q1 - 1.5 × IQR
+
+Upper Bound:
+Q3 + 1.5 × IQR
+
+### Z-score method
+
+Support configurable threshold,
+with 3 as the standard default where appropriate.
+
+---
+
+## 5.4 Outlier Handling
+
+The platform should allow appropriate handling based on the dataset.
+
+Possible actions:
+
+- Keep
+- Remove
+- Cap/Winsorize
+- Transform
+- Robust scaling where appropriate
+
+The system must NOT automatically delete outliers without explaining
+the consequence.
+
+---
+
+## Learning Layer
+
+Explain:
+
+- What an outlier is
+- Why outliers occur
+- Difference between valid and erroneous outliers
+- IQR
+- Z-score
+- Skewness
+- Kurtosis
+- When outliers should be retained
+- When outliers may be removed
+
+---
+
+# STEP 6 — DATA ENCODING
+
+Purpose:
+
+Convert categorical/text-based values into numerical representations.
+
+The handwritten workflow specifies:
+
+- One-Hot Encoding
+- Label Encoding
+- Ordinal Encoding
+
+Implement all three.
+
+---
+
+## 6.1 One-Hot Encoding
+
+Use for nominal categorical variables.
+
+Example:
+
+Red
+Blue
+Green
+
+becomes separate binary/dummy columns.
+
+Support:
+
+```python
+OneHotEncoder
+```
+
+---
+
+## 6.2 Label Encoding
+
+Use appropriate binary/target-label situations.
+
+Example:
+
+Yes → 1
+No → 0
+
+Do not blindly apply label encoding to nominal feature categories when
+that would introduce a false numerical ordering.
+
+---
+
+## 6.3 Ordinal Encoding
+
+Use when categories have meaningful order.
+
+Example:
+
+Low
+Medium
+High
+
+becomes:
+
+0
+1
+2
+
+---
+
+## Learning Layer
+
+Explain:
+
+- Why encoding is required
+- Nominal vs ordinal data
+- One-hot encoding
+- Label encoding
+- Ordinal encoding
+- Advantages
+- Limitations
+- Common mistakes
+
+Show before/after examples.
+
+---
+
+# STEP 7 — FEATURE SCALING / NORMALIZATION
+
+Purpose:
+
+Normalize numerical feature ranges where required.
+
+The handwritten workflow specifies:
+
+- StandardScaler
+- MinMaxScaler
+- RobustScaler
+
+---
+
+## 7.1 StandardScaler
+
+Explain:
+
+z = (x - mean) / standard deviation
+
+---
+
+## 7.2 MinMaxScaler
+
+Explain:
+
+Transformation into a selected range,
+commonly 0 to 1.
+
+---
+
+## 7.3 RobustScaler
+
+Use median and IQR based scaling.
+
+Explain why it is less sensitive to extreme values.
+
+---
+
+## Recommendation Engine
+
+The system should analyze:
+
+- Feature distributions
+- Outliers
+- Feature ranges
+- Intended modeling context where available
+
+Then explain the recommended scaler.
+
+Do not silently select a scaler.
+
+---
+
+# STEP 8 — DIMENSIONALITY REDUCTION
+
+This step must be implemented as a dedicated module.
+
+Purpose:
+
+Reduce the number of dimensions/features while attempting to preserve
+important information.
+
+The handwritten workflow explicitly references:
+
+- PCA
+- LDA
+- SVD
+
+and reducing a larger number of columns/features to a smaller number.
+
+---
+
+## 8.1 PCA
+
+Support:
+
+```python
+PCA(n_components=...)
+```
+
+Provide:
+
+- Number of original features
+- Number of selected components
+- Explained variance
+- Cumulative explained variance
+- Component visualization where appropriate
+
+---
+
+## 8.2 LDA
+
+Support Linear Discriminant Analysis where the problem/data conditions
+make LDA applicable.
+
+Clearly explain that LDA is supervised and requires class labels.
+
+---
+
+## 8.3 SVD
+
+Support Singular Value Decomposition where applicable.
+
+---
+
+## Important
+
+Do not apply dimensionality reduction automatically just because the
+dataset has many columns.
+
+Explain:
+
+- Why reduction may help
+- Information trade-offs
+- Interpretability trade-offs
+- When it is useful
+- When it may not be appropriate
+
+---
+
+# STEP 9 — FEATURE SELECTION
+
+This is DISTINCT from dimensionality reduction.
+
+Do not merge Step 8 and Step 9.
+
+The handwritten workflow specifies:
+
+### SelectKBest
+
+Example:
+
+```python
+SelectKBest(k=3)
+```
+
+The platform should support selecting the top K features.
+
+The default demonstration/configuration should support:
+
+```text
+Top 3 Features
+```
+
+but K must be configurable.
+
+---
+
+## Feature Selection Engine
+
+Support appropriate scoring functions based on the problem type.
+
+Examples:
+
+- Classification
+- Regression
+
+Display:
+
+- Selected features
+- Removed features
+- Feature scores
+- Ranking
+- Selection reason
+
+---
+
+## Learning Layer
+
+Clearly explain:
+
+### Feature Selection
+
+"Choose important original features."
+
+versus:
+
+### Dimensionality Reduction
+
+"Transform the feature space into fewer dimensions/components."
+
+This distinction is mandatory.
+
+---
+
+# STEP 10 — TRAIN / TEST SPLIT
+
+This step must remain exactly here in the user-facing workflow.
+
+Support:
+
+### Training
+
+- 80%
+- 70%
+
+### Testing
+
+- 20%
+- 30%
+
+Provide a configurable split ratio.
+
+Example:
+
+```text
+Training = 80%
+Testing  = 20%
+```
+
+or:
+
+```text
+Training = 70%
+Testing  = 30%
+```
+
+Support:
+
+- random_state
+- stratification where appropriate
+
+---
+
+## UI
+
+Display a visual split:
+
+```text
+DATASET
+│
+├── Training Data — 80%
+└── Testing Data  — 20%
+```
+
+Show:
+
+- Number of training rows
+- Number of testing rows
+- Target distribution
+- Feature count
+
+---
+
+# STEP 11 — MODEL FITTING
+
+Train the selected ML model using:
+
+```python
+model.fit(X_train, y_train)
+```
+
+The handwritten workflow explicitly specifies:
+
+```text
+X_train
+y_train
+```
+
+Do not use test data during model fitting.
+
+---
+
+## Model Layer
+
+Reuse the existing DataMentor model experimentation architecture.
+
+Support appropriate model families for:
+
+- Classification
+- Regression
+
+The current phase should focus on connecting preprocessing output
+to the model training stage.
+
+---
+
+## UI
+
+Display:
+
+- Selected model
+- Training data size
+- Feature count
+- Training status
+- Training completion
+- Model metadata
+
+---
+
+# STEP 12 — PREDICTION
+
+Use the test dataset for prediction.
+
+The handwritten workflow specifies:
+
+```python
+y_pred = model.predict(X_test)
+```
+
+Implement this explicitly.
+
+The system should produce:
+
+```text
+X_test
+   ↓
+Model
+   ↓
+y_pred
+```
+
+Store:
+
+- Predictions
+- Actual values
+- Prediction metadata
+
+For classification models, support probability predictions where the
+selected model provides them.
+
+---
+
+# STEP 13 — EVALUATION / METRICS
+
+The final handwritten step compares:
+
+```text
+y_pred
+vs
+y_test
+```
+
+This is mandatory.
+
+---
+
+# 13.1 REGRESSION METRICS
+
+Support:
+
+- RMSE
+- R²
+- MSE
+- MAE
+
+Display them clearly.
+
+---
+
+## RMSE
+
+Root Mean Squared Error.
+
+Explain:
+
+- Meaning
+- Formula
+- Interpretation
+- Effect of large errors
+
+---
+
+## R²
+
+Coefficient of determination.
+
+Explain:
+
+- Meaning
+- Interpretation
+- Limitations
+
+---
+
+## MSE
+
+Mean Squared Error.
+
+---
+
+## MAE
+
+Mean Absolute Error.
+
+---
+
+# 13.2 CLASSIFICATION METRICS
+
+Support:
+
+- Accuracy
+- F1-score
+- Precision
+- Recall
+- Confusion Matrix
+- Classification Report
+
+---
+
+## Accuracy
+
+Show percentage and explanation.
+
+---
+
+## Precision
+
+Explain:
+
+Of predicted positives, how many were actually positive?
+
+---
+
+## Recall
+
+Explain:
+
+Of actual positives, how many were correctly detected?
+
+---
+
+## F1-score
+
+Explain the balance between precision and recall.
+
+---
+
+## Confusion Matrix
+
+Display a visual confusion matrix.
+
+---
+
+## Classification Report
+
+Display class-level:
+
+- Precision
+- Recall
+- F1-score
+- Support
+
+---
+
+# 6. EXACT USER-FACING NAVIGATION
+
+The application navigation MUST display exactly:
+
+```text
+01  Data Collection
+02  Data Loading
+03  EDA Process
+04  Data Cleaning
+05  Outliers
+06  Data Encoding
+07  Feature Scaling
+08  Dimensionality Reduction
+09  Feature Selection
+10  Train-Test Split
+11  Model Fitting
+12  Prediction
+13  Evaluation
+```
+
+Do not rename these into generic names.
+
+Do not reorder them.
+
+Do not hide them behind unrelated workflow names.
+
+---
+
+# 7. LEARNING-FIRST DESIGN
+
+Every step must have two synchronized experiences.
+
+## PROCESS MODE
+
+Shows:
+
+- Dataset
+- Analysis
+- Recommendation
+- Transformation
+- Result
+
+## LEARN MODE
+
+Shows:
+
+- Definition
+- Why it matters
+- Formula
+- Example
+- Python implementation
+- Visualization
+- Before/after
+- Common mistakes
+- Interview point
+- Practical use case
+
+The user should be able to switch between:
+
+```text
+PROCESS
+LEARN
+```
+
+without losing their current dataset state.
+
+---
+
+# 8. STEP STATE MANAGEMENT
+
+Each step must have a state.
+
+Example:
+
+```text
+LOCKED
+   ↓
+AVAILABLE
+   ↓
+ANALYZING
+   ↓
+RECOMMENDATION_READY
+   ↓
+APPLIED
+   ↓
+VALIDATED
+```
+
+The interface should clearly show progress.
+
+Example:
+
+```text
+✓ Data Collection
+✓ Data Loading
+✓ EDA Process
+✓ Data Cleaning
+→ Outliers
+○ Data Encoding
+○ Feature Scaling
+...
+```
+
+Do not allow the user to accidentally destroy previous results.
+
+---
+
+# 9. DATA VERSIONING
+
+Every transformation should create a traceable dataset state.
+
+Example:
+
+```text
+Dataset v1
+   ↓
+After Cleaning → v2
+   ↓
+After Outliers → v3
+   ↓
+After Encoding → v4
+   ↓
+After Scaling → v5
+   ↓
+After Dimensionality Reduction → v6
+   ↓
+After Feature Selection → v7
+```
+
+Store transformation metadata.
+
+For each transformation record:
+
+```text
+Step
+Timestamp
+Technique
+Columns affected
+Rows affected
+Parameters
+Before statistics
+After statistics
+```
+
+---
+
+# 10. BEFORE / AFTER COMPARISON
+
+Every transformation that changes data must support comparison.
+
+Example:
+
+```text
+                 BEFORE       AFTER
+
+Rows             10,000       9,850
+Columns             15           15
+Missing Values      430            0
+Duplicates          150            0
+Outliers            120           65
+Features             15           10
+```
+
+Also provide visual comparison where applicable.
+
+---
+
+# 11. RECOMMENDATION ENGINE
+
+The recommendation engine must NEVER blindly execute every technique.
+
+It should inspect the data and generate recommendations.
+
+Example:
+
+```text
+Column: Salary
+
+Detected:
+- Numerical
+- Missing values: 8%
+- Strong right skew
+- Outliers detected
+
+Recommendation:
+Median imputation
+
+Reason:
+Median is less sensitive to extreme values.
+```
+
+The recommendation must be explainable.
+
+---
+
+# 12. AI / LEARNING ENGINE
+
+Integrate the existing AI/learning architecture.
+
+The AI should answer questions such as:
+
+- Why did DataMentor recommend median imputation?
+- What is an outlier?
+- Why use RobustScaler?
+- What is PCA?
+- PCA vs feature selection?
+- Why is one-hot encoding used?
+- What does RMSE mean?
+- Why did the model receive this metric?
+
+The AI must use the current dataset context when generating explanations.
+
+Do not allow the AI explanation layer to modify data without explicit
+processing-engine authorization.
+
+---
+
+# 13. BACKEND ARCHITECTURE
+
+Refactor the backend into clear responsibilities.
+
+Suggested logical architecture:
+
+```text
+backend/
+│
+├── api/
+│   ├── data_collection/
+│   ├── data_loading/
+│   ├── eda/
+│   ├── cleaning/
+│   ├── outliers/
+│   ├── encoding/
+│   ├── scaling/
+│   ├── dimensionality_reduction/
+│   ├── feature_selection/
+│   ├── train_test_split/
+│   ├── model_fitting/
+│   ├── prediction/
+│   └── evaluation/
+│
+├── services/
+│   ├── ingestion_service
+│   ├── profiling_service
+│   ├── eda_service
+│   ├── cleaning_service
+│   ├── outlier_service
+│   ├── encoding_service
+│   ├── scaling_service
+│   ├── dimensionality_service
+│   ├── feature_selection_service
+│   ├── split_service
+│   ├── model_service
+│   ├── prediction_service
+│   └── evaluation_service
+│
+├── learning/
+│
+├── recommendations/
+│
+├── visualization/
+│
+├── schemas/
+│
+├── models/
+│
+└── utils/
+```
+
+IMPORTANT:
+
+If equivalent modules already exist, REFACTOR/REUSE THEM.
+
+Do not create duplicate implementations simply to match the above names.
+
+---
+
+# 14. FRONTEND ARCHITECTURE
+
+Refactor the frontend around the 13-step workflow.
+
+Suggested conceptual structure:
+
+```text
+src/
+│
+├── pages/
+│
+├── components/
+│   ├── workflow/
+│   ├── dataset/
+│   ├── eda/
+│   ├── cleaning/
+│   ├── outliers/
+│   ├── encoding/
+│   ├── scaling/
+│   ├── dimensionality/
+│   ├── feature-selection/
+│   ├── split/
+│   ├── modeling/
+│   ├── prediction/
+│   └── evaluation/
+│
+├── learning/
+│
+├── charts/
+│
+├── services/
+│
+├── hooks/
+│
+├── state/
+│
+└── utils/
+```
+
+Again:
+
+REUSE existing components wherever possible.
+
+---
+
+# 15. API DESIGN
+
+Each step should have clean API boundaries.
+
+Conceptually:
+
+```text
+POST /data/collect
+POST /data/load
+GET  /eda/profile
+POST /cleaning/analyze
+POST /cleaning/apply
+POST /outliers/analyze
+POST /outliers/apply
+POST /encoding/analyze
+POST /encoding/apply
+POST /scaling/analyze
+POST /scaling/apply
+POST /dimensionality/analyze
+POST /dimensionality/apply
+POST /feature-selection/analyze
+POST /feature-selection/apply
+POST /split
+POST /model/fit
+POST /model/predict
+POST /model/evaluate
+```
+
+Adapt these to existing API conventions instead of blindly duplicating
+routes.
+
+---
+
+# 16. DATA PROCESSING CONTRACT
+
+Every preprocessing operation should return structured information.
+
+Example:
+
+```json
+{
+  "step": "data_cleaning",
+  "operation": "median_imputation",
+  "status": "success",
+  "columns_affected": ["salary"],
+  "rows_affected": 143,
+  "parameters": {
+    "strategy": "median"
+  },
+  "before": {},
+  "after": {},
+  "explanation": {},
+  "warnings": []
+}
+```
+
+The exact schema may be adapted to the existing project architecture.
+
+---
+
+# 17. DATA LEAKAGE HANDLING
+
+IMPORTANT:
+
+The USER-FACING workflow must remain exactly the 13 handwritten steps.
+
+However, internally implement safeguards so the system does not allow
+test-set information to contaminate model training.
+
+When Step 10 creates X_train/X_test:
+
+- Model fitting must use X_train/y_train.
+- Prediction must use X_test.
+- Evaluation must compare y_pred with y_test.
+
+Where preprocessing transformations require fitting, preserve the
+appropriate fitted transformation objects and apply them consistently.
+
+The system must clearly identify any operation that could introduce
+data leakage.
+
+Never silently leak test information into model fitting.
+
+---
+
+# 18. ERROR HANDLING
+
+Every step must have robust error handling.
+
+Examples:
+
+- Unsupported file
+- Empty dataset
+- Missing target
+- Invalid column type
+- Encoding failure
+- Scaling failure
+- PCA not applicable
+- LDA not applicable
+- SelectKBest K greater than available features
+- Model fitting failure
+- Prediction failure
+- Evaluation failure
+
+Show human-readable explanations.
+
+Do not expose raw stack traces to normal users.
+
+---
+
+# 19. DATA SAFETY
+
+Never overwrite the original uploaded dataset.
+
+Maintain:
+
+```text
+Original Dataset
+        +
+Transformation History
+        +
+Current Dataset Version
+```
+
+The user must be able to understand how the final dataset was produced.
+
+---
+
+# 20. UI REQUIREMENTS
+
+The main application should have:
+
+### LEFT / TOP
+
+13-step workflow navigation.
+
+### MAIN AREA
+
+Current step processing interface.
+
+### RIGHT / SIDE PANEL
+
+Learning/AI explanation.
+
+### BOTTOM
+
+Before/after statistics and transformation history.
+
+---
+
+# 21. PROGRESS INDICATOR
+
+Display:
+
+```text
+Step 1 / 13
+Step 2 / 13
+...
+Step 13 / 13
+```
+
+And:
+
+```text
+Completed: X / 13
+```
+
+---
+
+# 22. VISUAL DESIGN
+
+Keep the existing DataMentor AI visual identity.
+
+The interface should feel:
+
+- Modern
+- Technical
+- Educational
+- Clean
+- Professional
+- Beginner-friendly
+
+Avoid unnecessary visual complexity.
+
+Charts must be readable.
+
+Tables must be interactive where appropriate.
+
+---
+
+# 23. TESTING REQUIREMENTS
+
+After refactoring, create/update tests for every step.
+
+Minimum coverage:
+
+### Step 1
+Data collection validation
+
+### Step 2
+CSV/Excel/JSON loading
+
+### Step 3
+EDA calculations
+
+### Step 4
+Missing value and duplicate handling
+
+### Step 5
+IQR/Z-score detection
+
+### Step 6
+Encoding
+
+### Step 7
+Scaling
+
+### Step 8
+PCA/LDA/SVD
+
+### Step 9
+SelectKBest
+
+### Step 10
+Train/test split
+
+### Step 11
+Model fitting
+
+### Step 12
+Prediction
+
+### Step 13
+Evaluation
+
+Also test:
+
+- Empty datasets
+- Missing columns
+- Invalid data
+- Small datasets
+- Categorical-only datasets
+- Numerical-only datasets
+- Mixed datasets
+- High-dimensional datasets
+- Classification
+- Regression
+
+---
+
+# 24. REGRESSION TESTING
+
+Before changing existing functionality:
+
+1. Run existing tests.
+2. Record current status.
+3. Perform refactoring.
+4. Run tests again.
+5. Fix regressions.
+6. Run frontend build.
+7. Run backend tests.
+8. Test end-to-end workflow.
+
+Do not declare the refactor complete until the application builds
+successfully.
+
+---
+
+# 25. DO NOT DO THESE THINGS
+
+DO NOT:
+
+- Build the project from scratch.
+- Delete working features unnecessarily.
+- Create duplicate services.
+- Create duplicate API routes.
+- Replace the existing stack without reason.
+- Reorder the 13 steps.
+- Merge Dimensionality Reduction with Feature Selection.
+- Merge Outliers with Data Cleaning.
+- Skip EDA.
+- Skip the learning layer.
+- Hide preprocessing decisions.
+- Silently modify the dataset.
+- Silently remove outliers.
+- Silently drop missing rows.
+- Hide transformation parameters.
+- Use test data for model fitting.
+- Allow AI-generated explanations to directly mutate datasets.
+- Break existing working functionality.
+
+---
+
+# 26. REQUIRED FINAL PROJECT STATE
+
+After the refactor, DataMentor AI must operate as:
+
+```text
+DATA COLLECTION
+      ↓
+DATA LOADING
+      ↓
+EDA PROCESS
+      ↓
+DATA CLEANING
+      ↓
+OUTLIERS
+      ↓
+DATA ENCODING
+      ↓
+FEATURE SCALING
+      ↓
+DIMENSIONALITY REDUCTION
+      ↓
+FEATURE SELECTION
+      ↓
+TRAIN-TEST SPLIT
+      ↓
+MODEL FITTING
+      ↓
+PREDICTION
+      ↓
+EVALUATION
+```
+
+This exact sequence must be visible and understandable to the user.
+
+---
+
+# 27. FINAL ACCEPTANCE CRITERIA
+
+The implementation is complete only when:
+
+[ ] Existing repository has been fully inspected.
+
+[ ] Existing architecture has been documented.
+
+[ ] Existing useful modules have been reused.
+
+[ ] Duplicate functionality has been removed.
+
+[ ] The workflow contains exactly 13 user-facing steps.
+
+[ ] Step ordering exactly matches the handwritten workflow.
+
+[ ] Data Collection works.
+
+[ ] Data Loading works.
+
+[ ] EDA works.
+
+[ ] Data Cleaning works.
+
+[ ] Outlier analysis works.
+
+[ ] Encoding works.
+
+[ ] Feature scaling works.
+
+[ ] Dimensionality Reduction works.
+
+[ ] Feature Selection works.
+
+[ ] Train/Test Split works.
+
+[ ] Model Fitting works.
+
+[ ] Prediction works.
+
+[ ] Evaluation works.
+
+[ ] Regression metrics work.
+
+[ ] Classification metrics work.
+
+[ ] Before/after comparison works.
+
+[ ] Transformation history works.
+
+[ ] Learning explanations work.
+
+[ ] AI explanation layer works with dataset context.
+
+[ ] Error handling works.
+
+[ ] Data leakage safeguards exist.
+
+[ ] Original dataset is preserved.
+
+[ ] Tests pass.
+
+[ ] Backend builds/runs successfully.
+
+[ ] Frontend builds/runs successfully.
+
+[ ] End-to-end workflow works.
+
+---
+
+# 28. EXECUTION STRATEGY
+
+Do not attempt to rewrite the entire repository in one uncontrolled
+operation.
+
+Follow this execution sequence:
+
+## PHASE A — AUDIT
+
+Inspect the repository and identify:
+
+- Existing modules
+- Existing workflow
+- Existing dependencies
+- Existing APIs
+- Existing database/storage
+- Existing UI
+- Existing tests
+
+Then create an architecture/refactor plan.
+
+---
+
+## PHASE B — WORKFLOW RESTRUCTURING
+
+Modify navigation/state management so the exact 13-step workflow becomes
+the primary workflow.
+
+---
+
+## PHASE C — BACKEND REFACTOR
+
+Map existing processing functionality into the 13 exact steps.
+
+Reuse existing services where possible.
+
+---
+
+## PHASE D — FRONTEND REFACTOR
+
+Create/update the UI to expose the 13-step workflow.
+
+---
+
+## PHASE E — LEARNING ENGINE INTEGRATION
+
+Ensure every step has educational explanations and contextual guidance.
+
+---
+
+## PHASE F — VALIDATION
+
+Run:
+
+- Unit tests
+- Integration tests
+- End-to-end tests
+- Frontend build
+- Backend startup
+- Dataset workflow tests
+
+---
+
+## PHASE G — CLEANUP
+
+Remove:
+
+- Dead code
+- Duplicate modules
+- Duplicate APIs
+- Obsolete workflow components
+- Unused imports
+- Broken references
+
+Do not remove functionality that is still required elsewhere.
+
+---
+
+# 29. FINAL RESPONSE REQUIRED FROM ANTIGRAVITY
+
+After implementation, provide a concise engineering report containing:
+
+## 1. Repository Audit
+
+What existed before?
+
+## 2. Architecture Changes
+
+What was modified?
+
+## 3. 13-Step Mapping
+
+Show:
+
+```text
+Step → Existing Module → Modified Module
+```
+
+## 4. Files Created
+
+List them.
+
+## 5. Files Modified
+
+List them.
+
+## 6. Files Removed
+
+List them and explain why.
+
+## 7. API Changes
+
+List changed/new endpoints.
+
+## 8. UI Changes
+
+Describe workflow changes.
+
+## 9. ML Changes
+
+Describe preprocessing implementation.
+
+## 10. Learning Engine Changes
+
+Describe educational functionality.
+
+## 11. Testing
+
+Report:
+
+- Tests passed
+- Tests failed
+- Build status
+- Integration status
+
+## 12. Remaining Work
+
+Only list genuinely unfinished work.
+
+---
+
+# FINAL INSTRUCTION
+
+Treat the handwritten 13-step DataMentor AI workflow as the authoritative
+product requirement.
+
+Do not reinterpret the workflow.
+
+Do not optimize away any step.
+
+Do not reorder any step.
+
+Do not replace the workflow with a generic ML preprocessing pipeline.
+
+Refactor the EXISTING DataMentor AI project so that its entire architecture,
+frontend, backend, ML engine, learning engine, APIs, state management,
+visualizations, and documentation align with these exact 13 steps.
+
+The final product must remain:
+
+DATA PROCESSING ENGINE
++
+LEARNING PLATFORM
++
+EXPLAINABLE ML ASSISTANT
+
+while preserving existing working functionality wherever possible.
+
+START BY AUDITING THE EXISTING REPOSITORY.
+DO NOT MODIFY CODE UNTIL THE AUDIT AND REFACTOR PLAN ARE COMPLETE.
+```
+
+### Exact workflow captured from your images
+
+```text
+1.  Data Collection
+2.  Data Loading
+3.  EDA Process
+4.  Data Cleaning
+5.  Outliers
+6.  Data Encoding
+7.  Feature Scaling / Normalization
+8.  Dimensionality Reduction
+9.  Feature Selection
+10. Train-Test Split
+11. Model Fitting
+12. Prediction
+13. Evaluation
+```
+
+For **Step 8**, I preserved the handwritten techniques **PCA, LDA, and SVD**; for **Step 9**, I preserved **SelectKBest with the handwritten Top 3 / `k=3` example** rather than merging those two concepts. For Step 13, I preserved the handwritten **regression metrics (RMSE, R², MSE, MAE)** and **classification metrics (Accuracy, F1, Precision, Recall, Confusion Matrix, Classification Report)**. 
+
+This prompt is specifically designed as a **refactor of the existing DataMentor AI project**, consistent with the previous project structure rather than creating another independent preprocessing application.

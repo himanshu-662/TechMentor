@@ -1,0 +1,752 @@
+We are continuing development of DataMentor AI.
+
+Project:
+DataMentor AI: An Intelligent Automated Data Preprocessing, Visualization & Learning Platform
+
+Core philosophy:
+"Automate the work, but explain the learning."
+
+Completed:
+Phase 2 — Dataset Ingestion
+Phase 3 — Dataset Profiling
+Phase 4 — Learning/Explanation Engine
+Phase 5 — Automated Data Cleaning
+Phase 6 — Outlier Detection & Treatment
+Phase 7 — Data Transformation
+Phase 8 — Feature Engineering
+
+Now implement ONLY:
+
+PHASE 9 — FEATURE SELECTION ENGINE
+
+Do not implement:
+- model training pipelines
+- model evaluation
+- AI chatbot
+- RAG
+- LLM
+- advanced hyperparameter tuning
+- deployment
+
+==================================================
+1. CORE PRINCIPLE
+==================================================
+
+Feature selection is different from feature engineering.
+
+Feature engineering:
+creates or modifies features.
+
+Feature selection:
+chooses which existing features should remain.
+
+Use:
+
+PROFILE
+→ IDENTIFY TARGET
+→ ANALYZE RELEVANCE
+→ ANALYZE REDUNDANCY
+→ ANALYZE VARIANCE
+→ ANALYZE MISSINGNESS
+→ ANALYZE STATISTICAL RELATIONSHIPS
+→ ANALYZE MUTUAL INFORMATION
+→ ANALYZE MODEL IMPORTANCE
+→ DETECT POSSIBLE LEAKAGE
+→ EXPLAIN
+→ RECOMMEND
+→ USER REVIEWS
+→ PREVIEW
+→ CONFIRM
+→ APPLY
+→ VERSION
+→ RECORD HISTORY
+
+Never silently remove features.
+
+==================================================
+2. TARGET COLUMN
+==================================================
+
+Require explicit target selection for supervised feature selection.
+
+Automatically detect target type:
+
+- regression
+- binary classification
+- multiclass classification
+- categorical
+
+Allow user override.
+
+The target must never be included in the feature matrix.
+
+==================================================
+3. MISSINGNESS ANALYSIS
+==================================================
+
+Reuse Phase 3 profile information.
+
+For each feature calculate:
+
+missing_count
+missing_percentage
+
+Allow configurable threshold.
+
+Example:
+80%
+
+Flag features above threshold.
+
+Do not automatically remove them.
+
+Explain:
+High missingness may reduce usefulness, but domain context matters.
+
+==================================================
+4. CONSTANT FEATURES
+==================================================
+
+Reuse Phase 3 detection.
+
+Flag:
+- constant features
+- near-constant features
+
+Allow configurable near-constant threshold.
+
+Show evidence.
+
+Do not automatically remove without user confirmation.
+
+==================================================
+5. CORRELATION
+==================================================
+
+For numerical features implement Pearson correlation.
+
+Default high-correlation threshold:
+
+abs(correlation) >= 0.90
+
+Make threshold configurable.
+
+Create an interactive correlation matrix.
+
+Clicking a pair should show:
+
+feature A
+feature B
+correlation
+possible redundancy explanation
+
+Do not automatically choose which feature to remove.
+
+==================================================
+6. CORRELATION EDUCATION
+==================================================
+
+Teach:
+
+- correlation does not imply causation
+- low target correlation does not mean useless
+- Pearson captures linear relationships
+- nonlinear relationships may require other methods
+
+==================================================
+7. UNIVARIATE STATISTICAL TESTS
+==================================================
+
+Implement appropriate tests.
+
+Classification:
+- chi-square where appropriate
+- ANOVA F-test where appropriate
+
+Regression:
+- F-regression
+
+Return:
+- score
+- p-value where available
+
+Explain:
+These evaluate feature-target relationships independently.
+
+Do not treat p-value or score as universal feature importance.
+
+==================================================
+8. MUTUAL INFORMATION
+==================================================
+
+Implement:
+
+mutual_info_classif
+mutual_info_regression
+
+Return MI score per feature.
+
+Explain:
+
+Mutual information can identify nonlinear dependencies that ordinary Pearson correlation may miss.
+
+Do not describe MI as an absolute universal importance score.
+
+==================================================
+9. VARIANCE THRESHOLD
+==================================================
+
+Implement sklearn VarianceThreshold.
+
+Allow configurable threshold.
+
+Show:
+feature variance
+threshold
+flagged status
+
+Explain:
+Variance threshold is unsupervised.
+
+A low-variance feature is not automatically useless.
+
+==================================================
+10. MODEL-BASED IMPORTANCE
+==================================================
+
+Implement tree-based model importance using:
+
+RandomForestClassifier
+RandomForestRegressor
+
+Use the detected target type.
+
+Return:
+feature_importances_
+
+Allow configuration of:
+- n_estimators
+- random_state
+
+Use safe defaults.
+
+Explain:
+Model-based importance is model-dependent.
+
+Do not present it as absolute truth.
+
+==================================================
+11. DO NOT CREATE A MAGIC FEATURE SCORE
+==================================================
+
+Do NOT combine every metric into a single arbitrary score.
+
+Instead show evidence independently.
+
+Example:
+
+Feature:
+income
+
+Missingness:
+2.1%
+
+Variance:
+High
+
+Target correlation:
+0.62
+
+Mutual information:
+0.41
+
+Model importance:
+0.31
+
+Redundancy:
+Low
+
+Then provide a transparent recommendation with reasons.
+
+==================================================
+12. RECOMMENDATIONS
+==================================================
+
+Recommendations must be deterministic and evidence-based.
+
+Possible recommendations:
+
+KEEP / REVIEW / POTENTIAL REMOVAL
+
+But do not force a decision.
+
+Examples:
+
+Constant feature:
+Potential removal
+
+High missingness:
+Review
+
+Highly correlated:
+Review redundancy
+
+Strong relevance:
+Consider keeping
+
+Low variance:
+Review
+
+Possible leakage:
+Investigate immediately
+
+Every recommendation must contain:
+- evidence
+- explanation
+- limitation
+- alternative action
+
+==================================================
+13. LEAKAGE DETECTION
+==================================================
+
+Detect obvious leakage patterns.
+
+Examples:
+
+Feature name identical or nearly identical to target.
+
+Features containing target-like values.
+
+Post-outcome fields where metadata/name indicates this.
+
+Example:
+
+Target:
+loan_default
+
+Feature:
+loan_default_status
+
+Flag:
+
+Potential target leakage.
+
+Do not automatically remove.
+
+Show:
+
+Why this is suspicious
+Why leakage is dangerous
+How to investigate it
+
+==================================================
+14. FEATURE ANALYSIS TABLE
+==================================================
+
+Create:
+
+Feature
+Data Type
+Missing %
+Variance
+Target Correlation
+Mutual Information
+Statistical Score
+Model Importance
+Redundancy
+Recommendation
+
+Allow sorting and filtering.
+
+==================================================
+15. FEATURE DETAIL
+==================================================
+
+Click a feature.
+
+Show:
+
+Feature name
+Type
+Missingness
+Variance
+Correlation
+MI
+Statistical Test
+Model Importance
+Correlation partners
+Recommendation
+
+Add educational explanations for each metric.
+
+==================================================
+16. CORRELATED FEATURE COMPARISON
+==================================================
+
+When two features have high correlation:
+
+Show:
+
+Feature A
+Feature B
+Correlation
+
+Allow:
+
+Keep A
+Keep B
+Keep Both
+Investigate
+
+Do not automatically choose.
+
+Explain decision factors:
+- interpretability
+- missingness
+- domain meaning
+- target relationship
+- measurement quality
+- downstream algorithm
+
+==================================================
+17. PREVIEW
+==================================================
+
+Before applying selection:
+
+Show:
+
+Current columns
+Selected columns
+Removed columns
+Target column
+
+Example:
+
+Current:
+42
+
+Selected:
+31
+
+Removed:
+11
+
+Show complete lists.
+
+Preview must NOT modify dataset.
+
+==================================================
+18. APPLY
+==================================================
+
+Require:
+
+confirmed = true
+
+On apply:
+
+1. Validate target
+2. Validate selected features
+3. Ensure target is not removed
+4. Create new version
+5. Preserve original
+6. Create selected-feature dataset
+7. Record metadata
+8. Record history
+9. Return before/after summary
+
+==================================================
+19. VERSIONING
+==================================================
+
+Reuse existing version service.
+
+Example:
+
+v1 Raw
+v2 Cleaned
+v3 Outliers treated
+v4 Transformed
+v5 Feature engineered
+v6 Feature selected
+
+Never modify previous versions.
+
+Support undo.
+
+==================================================
+20. HISTORY
+==================================================
+
+Record:
+
+operation_id
+operation
+target_column
+target_type
+selection_method
+parameters
+selected_features
+removed_features
+before_column_count
+after_column_count
+source_version
+new_version
+timestamp
+
+==================================================
+21. EDUCATIONAL CONCEPTS
+==================================================
+
+Add to Phase 4 education engine:
+
+feature_selection
+feature_relevance
+feature_redundancy
+variance_threshold
+correlation
+pearson_correlation
+chi_square
+anova
+mutual_information
+model_based_importance
+multicollinearity
+target_variable
+target_leakage
+data_leakage
+
+Each must contain:
+
+WHAT?
+WHY?
+HOW?
+WHEN TO USE?
+WHEN NOT TO USE?
+LIMITATIONS
+ALTERNATIVES
+ML IMPACT
+INTERVIEW TIP
+
+Support:
+Beginner
+Intermediate
+Technical
+
+==================================================
+22. FRONTEND
+==================================================
+
+Create:
+
+frontend/src/components/feature-selection/
+
+    TargetSelector.jsx
+    FeatureAnalysisTable.jsx
+    FeatureDetail.jsx
+    CorrelationMatrix.jsx
+    SelectionMethodPanel.jsx
+    FeatureRecommendation.jsx
+    SelectionPreview.jsx
+    SelectionHistory.jsx
+
+Create:
+
+frontend/src/pages/FeatureSelectionWorkspace.jsx
+
+Integrate into pipeline navigation.
+
+Do not redesign unrelated pages.
+
+==================================================
+23. BACKEND
+==================================================
+
+Create:
+
+backend/app/feature_selection/
+
+    missingness.py
+    variance.py
+    correlation.py
+    statistical_tests.py
+    mutual_information.py
+    model_importance.py
+    leakage_detection.py
+    recommendations.py
+    validation.py
+    selection_engine.py
+
+Create:
+
+backend/app/services/feature_selection_service.py
+
+Create:
+
+backend/app/api/routes/feature_selection.py
+
+Reuse existing:
+- dataset service
+- profiling service
+- version service
+- education service
+
+==================================================
+24. API ENDPOINTS
+==================================================
+
+GET
+/api/datasets/{dataset_id}/feature-selection/profile
+
+POST
+/api/datasets/{dataset_id}/feature-selection/analyze
+
+GET
+/api/datasets/{dataset_id}/feature-selection/correlation
+
+GET
+/api/datasets/{dataset_id}/feature-selection/recommendations
+
+POST
+/api/datasets/{dataset_id}/feature-selection/preview
+
+POST
+/api/datasets/{dataset_id}/feature-selection/apply
+
+GET
+/api/datasets/{dataset_id}/feature-selection/history
+
+==================================================
+25. VALIDATION
+==================================================
+
+Reject:
+
+- invalid target
+- target not found
+- duplicate selected features
+- selected feature not found
+- target included incorrectly
+- invalid thresholds
+- invalid target type
+- incompatible statistical test
+- insufficient data
+
+Provide educational error messages.
+
+==================================================
+26. TESTS
+==================================================
+
+Test:
+
+Missingness:
+- correct counts
+- threshold behavior
+
+Variance:
+- constant
+- low variance
+- normal variance
+
+Correlation:
+- positive
+- negative
+- threshold
+
+Statistical tests:
+- classification
+- regression
+- incompatible data handling
+
+Mutual information:
+- classification
+- regression
+
+Model importance:
+- classification
+- regression
+
+Leakage:
+- obvious target leakage
+- safe features
+
+Preview:
+- dataset unchanged
+
+Apply:
+- new version created
+- selected columns correct
+- target preserved
+- original unchanged
+- history recorded
+
+Undo:
+- previous version restored
+
+CRITICAL:
+Original dataset must remain byte-for-byte unchanged.
+
+==================================================
+27. FULL REGRESSION TEST
+==================================================
+
+Run all previous phases:
+
+Phase 2
+Phase 3
+Phase 4
+Phase 5
+Phase 6
+Phase 7
+Phase 8
+
+Verify the complete pipeline:
+
+Upload
+→ Profile
+→ Clean
+→ Outliers
+→ Transform
+→ Feature Engineering
+→ Feature Selection
+
+==================================================
+28. DO NOT OVERBUILD
+==================================================
+
+Do not implement:
+
+- PCA
+- RFE
+- recursive feature elimination
+- advanced wrapper methods
+- SHAP
+- LIME
+- deep learning feature selection
+- model training pipelines
+- model evaluation
+- chatbot
+- RAG
+- LLM
+
+Keep Phase 9 focused on transparent, educational feature selection.
+
+==================================================
+FINAL REPORT
+==================================================
+
+After implementation report:
+
+1. Files created
+2. Files modified
+3. APIs added
+4. Selection techniques implemented
+5. Educational concepts added
+6. Tests added
+7. Test results
+8. Frontend build result
+9. Backend startup result
+10. Known limitations
+11. Confirmation original data remains unchanged

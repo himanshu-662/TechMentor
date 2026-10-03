@@ -1,0 +1,645 @@
+PHASE 5 — AUTOMATED DATA CLEANING ENGINE
+
+Project:
+DataMentor AI
+
+CORE PRINCIPLE:
+
+DataMentor AI is a learning-first data preparation platform.
+
+The system should never silently modify a user's dataset.
+
+Every cleaning operation must follow:
+
+DETECT
+  ↓
+EXPLAIN
+  ↓
+RECOMMEND
+  ↓
+CONFIGURE
+  ↓
+PREVIEW
+  ↓
+USER CONFIRMS
+  ↓
+APPLY
+  ↓
+COMPARE BEFORE/AFTER
+  ↓
+RECORD HISTORY
+
+Phase 2, Phase 3 and Phase 4 are already implemented.
+
+DO NOT break existing functionality.
+
+==================================================
+1. PHASE 5 OBJECTIVE
+==================================================
+
+Build the first real data transformation engine.
+
+Implement:
+
+1. Missing-value handling
+2. Duplicate-row handling
+3. Constant-feature handling
+
+Do NOT implement yet:
+
+- outlier treatment
+- scaling
+- normalization
+- encoding
+- feature engineering
+- feature selection
+- advanced invalid-value correction
+
+Those belong to future phases.
+
+==================================================
+2. DATA VERSIONING
+==================================================
+
+IMPORTANT:
+
+Never overwrite the original uploaded dataset.
+
+Maintain:
+
+original dataset
++
+processed versions
++
+transformation history
+
+Suggested structure:
+
+dataset_session/
+├── original/
+├── versions/
+└── history.json
+
+Every applied operation should create a new dataset version.
+
+==================================================
+3. CLEANING ENGINE
+==================================================
+
+Create:
+
+backend/app/cleaning/
+
+Suggested:
+
+cleaning/
+├── missing_values/
+│   ├── numerical.py
+│   └── categorical.py
+├── duplicates.py
+├── constants.py
+├── validation.py
+├── strategies.py
+└── cleaning_engine.py
+
+Also create:
+
+backend/app/services/cleaning_service.py
+
+backend/app/services/version_service.py
+
+backend/app/api/routes/cleaning.py
+
+Keep API routes separate from business logic.
+
+==================================================
+4. MISSING VALUE HANDLING
+==================================================
+
+Numerical strategies:
+
+- mean
+- median
+- constant
+
+Categorical strategies:
+
+- mode
+- constant
+
+Do not automatically choose and apply a method.
+
+Generate a recommendation based on the Phase 3 profile.
+
+Example:
+
+income:
+missing = 8.7%
+skewness = 3.82
+outliers detected
+
+Recommendation:
+median
+
+Reason:
+Median is generally less sensitive to extreme values
+than mean.
+
+IMPORTANT:
+
+Recommendation is not automatic execution.
+
+The user must explicitly apply the operation.
+
+==================================================
+5. RECOMMENDATION ENGINE
+==================================================
+
+Create a transparent recommendation system.
+
+Return:
+
+- recommended method
+- reason
+- supporting dataset evidence
+- alternatives
+- educational explanation
+
+Example:
+
+{
+  "column": "income",
+  "recommended_method": "median",
+  "reason": "Strong positive skew and extreme values",
+  "evidence": {
+    "missing_percentage": 8.7,
+    "skewness": 3.82
+  },
+  "alternatives": [
+    "mean",
+    "constant"
+  ]
+}
+
+Do not use an LLM for recommendations yet.
+
+Recommendations must be deterministic and explainable.
+
+==================================================
+6. DUPLICATE HANDLING
+==================================================
+
+Detect exact duplicate rows.
+
+Allow:
+
+remove duplicate rows
+
+Before applying:
+
+Show:
+
+- total rows
+- duplicate rows
+- rows after operation
+- percentage affected
+
+Example:
+
+Before:
+10,000
+
+Duplicates:
+127
+
+After:
+9,873
+
+The user must explicitly confirm.
+
+==================================================
+7. CONSTANT FEATURES
+==================================================
+
+Allow removal of constant columns.
+
+Example:
+
+country:
+unique values = 1
+
+Recommendation:
+Remove constant feature
+
+Explain:
+
+A constant feature has no variation and generally provides
+little or no predictive information for ML models.
+
+IMPORTANT:
+
+Never automatically remove the column.
+
+User confirmation required.
+
+==================================================
+8. PREVIEW SYSTEM
+==================================================
+
+Every operation must support preview before applying.
+
+Create:
+
+POST /api/datasets/{dataset_id}/cleaning/preview
+
+Example request:
+
+{
+  "operation": "impute_missing",
+  "column": "income",
+  "method": "median"
+}
+
+Return:
+
+- operation
+- affected rows
+- before values
+- after values
+- summary statistics
+- explanation
+
+For large datasets, only return a safe limited preview.
+
+Do not send the complete dataset to the frontend.
+
+==================================================
+9. APPLY SYSTEM
+==================================================
+
+Create:
+
+POST /api/datasets/{dataset_id}/cleaning/apply
+
+The request must explicitly specify:
+
+- operation
+- column if required
+- method if required
+- confirmation
+
+Reject invalid or incomplete operations.
+
+==================================================
+10. VALIDATION
+==================================================
+
+Before applying an operation validate:
+
+- dataset exists
+- column exists
+- semantic type is compatible
+- method is valid
+- operation is supported
+- dataset version is valid
+
+Examples:
+
+Do not allow mean imputation on categorical columns.
+
+Do not allow median imputation on text columns.
+
+Return clear educational errors.
+
+==================================================
+11. BEFORE / AFTER
+==================================================
+
+After applying an operation, calculate:
+
+- row count
+- column count
+- missing values
+- duplicate count
+- affected rows
+- changed columns
+
+Display before vs after.
+
+Example:
+
+BEFORE
+Missing income: 870
+
+AFTER
+Missing income: 0
+
+Changed rows: 870
+
+==================================================
+12. TRANSFORMATION HISTORY
+==================================================
+
+Every applied operation must be recorded.
+
+Example:
+
+{
+  "operation_id": "op_001",
+  "operation": "missing_value_imputation",
+  "column": "income",
+  "method": "median",
+  "before": {
+    "missing": 870
+  },
+  "after": {
+    "missing": 0
+  },
+  "reason": "Strong positive skew and extreme values",
+  "timestamp": "..."
+}
+
+Create:
+
+GET /api/datasets/{dataset_id}/cleaning/history
+
+==================================================
+13. UNDO
+==================================================
+
+Implement:
+
+POST /api/datasets/{dataset_id}/cleaning/undo
+
+The system should restore the previous dataset version.
+
+Do not delete the original dataset.
+
+==================================================
+14. CLEANING WORKSPACE
+==================================================
+
+Create a frontend cleaning page.
+
+Display:
+
+CLEANING WORKSPACE
+
+Issues detected:
+
+1. Income
+   Missing: 8.7%
+   Recommended: Median
+   [Configure] [Why?] [Preview]
+
+2. Age
+   Missing: 2.1%
+   Recommended: Median
+   [Configure] [Why?] [Preview]
+
+3. Duplicate rows
+   Count: 127
+   Recommended: Remove duplicates
+   [Why?] [Preview]
+
+4. Constant feature
+   Country
+   [Why?] [Preview]
+
+Allow the user to select operations.
+
+==================================================
+15. OPERATION CONFIGURATION
+==================================================
+
+For missing values:
+
+Method selector:
+
+Numerical:
+- Mean
+- Median
+- Constant
+
+Categorical:
+- Mode
+- Constant
+
+If Constant is selected:
+
+show a value input.
+
+Do not allow invalid values.
+
+==================================================
+16. LEARNING EXPERIENCE
+==================================================
+
+Every operation must show:
+
+WHAT?
+WHY?
+HOW?
+WHEN SHOULD I USE THIS?
+ALTERNATIVES?
+WHAT WILL CHANGE?
+
+Example:
+
+Median Imputation
+
+WHAT?
+Replace missing numerical values with the median.
+
+WHY?
+Your income column is strongly skewed.
+
+HOW?
+Sort the valid values and select the middle value.
+
+WHEN?
+Often useful when numerical data contains outliers
+or is skewed.
+
+ALTERNATIVES:
+Mean
+Constant
+More advanced model-based methods
+
+==================================================
+17. MATH / EDUCATIONAL DISPLAY
+==================================================
+
+Where appropriate, show simple calculations.
+
+For median:
+
+Sorted values:
+18, 20, 21, 22, 24
+
+Median:
+21
+
+For mean:
+
+Mean =
+(sum of values) / (number of values)
+
+Do not overwhelm the default view.
+
+Allow:
+[Show calculation]
+
+==================================================
+18. BEFORE / AFTER UI
+==================================================
+
+Create a reusable BeforeAfter component.
+
+Example:
+
+BEFORE:
+Missing values = 870
+
+AFTER:
+Missing values = 0
+
+Rows affected = 870
+
+Show a small data preview when useful.
+
+==================================================
+19. LEARNING PROGRESS
+==================================================
+
+Update the pipeline indicator:
+
+UPLOAD ✓
+PROFILE ✓
+UNDERSTAND ✓
+CLEAN ← CURRENT
+TRANSFORM ○
+FEATURE ENGINEERING ○
+FEATURE SELECTION ○
+VISUALIZE ○
+VALIDATE ○
+
+==================================================
+20. API ENDPOINTS
+==================================================
+
+Implement:
+
+GET
+/api/datasets/{dataset_id}/cleaning/recommendations
+
+POST
+/api/datasets/{dataset_id}/cleaning/preview
+
+POST
+/api/datasets/{dataset_id}/cleaning/apply
+
+GET
+/api/datasets/{dataset_id}/cleaning/history
+
+POST
+/api/datasets/{dataset_id}/cleaning/undo
+
+==================================================
+21. TESTING
+==================================================
+
+Test:
+
+Missing value:
+- numerical mean
+- numerical median
+- numerical constant
+- categorical mode
+- categorical constant
+
+Validation:
+- invalid column
+- invalid method
+- incompatible method
+- missing dataset
+
+Duplicates:
+- detect duplicates
+- remove duplicates
+- before/after counts
+
+Constants:
+- detect constant
+- remove constant
+
+Versioning:
+- original dataset unchanged
+- new version created
+- history recorded
+- undo works
+
+Preview:
+- preview does not modify dataset
+
+==================================================
+22. CRITICAL DATA SAFETY TEST
+==================================================
+
+After any cleaning operation verify:
+
+Original dataset remains unchanged.
+
+Example:
+
+original.csv
+must remain identical after:
+
+- imputation
+- duplicate removal
+- constant-column removal
+
+==================================================
+23. README
+==================================================
+
+Update README with:
+
+- Phase 5 architecture
+- cleaning workflow
+- supported cleaning strategies
+- recommendation logic
+- preview system
+- versioning
+- transformation history
+- undo
+- educational workflow
+
+==================================================
+IMPORTANT RULES
+==================================================
+
+1. Preserve all Phase 2-4 functionality.
+2. Never silently modify data.
+3. Never overwrite the original dataset.
+4. Require explicit user confirmation.
+5. Always provide preview before applying.
+6. Use deterministic recommendations.
+7. Never use an LLM yet.
+8. Never add chatbot/RAG yet.
+9. Keep educational explanations structured.
+10. Use actual dataset evidence.
+11. Validate every operation.
+12. Add comprehensive tests.
+13. Run existing tests.
+14. Run frontend build.
+15. Verify backend startup.
+
+At completion, report:
+
+- files created/modified
+- cleaning features implemented
+- tests passed
+- frontend build result
+- backend result
+- confirmation that original datasets remain unchanged
